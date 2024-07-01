@@ -1,0 +1,190 @@
+﻿<UserControl x:Class="SciChart.Examples.Examples.CreateRealtimeChart.EEGChannelsDemo.EEGExampleView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:ext="http://schemas.abtsoftware.co.uk/scichart/exampleExternals"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:s="http://schemas.abtsoftware.co.uk/scichart"
+             d:DesignHeight="400"
+             d:DesignWidth="600"
+             mc:Ignorable="d">
+
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding StartCommand}" />
+        </i:EventTrigger>
+
+        <i:EventTrigger EventName="Unloaded">
+            <i:InvokeCommandAction Command="{Binding StopCommand}" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+
+    <UserControl.Resources>
+        <!--  ItemTemplate for EEG Channels. Create a single SciChartSurface instance per EEGChannelViewModel  -->
+        <DataTemplate x:Key="ChannelItemTemplate">
+            <Grid IsHitTestVisible="False">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" SharedSizeGroup="Name" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Margin="10,0"
+                           Foreground="White"
+                           VerticalAlignment="Center"
+                           Text="{Binding ChannelName}" />
+
+                <!-- Declare the SciChartSurface. SciChartSurfaceEx enables hardware acceleration by default -->
+                <s:SciChartSurface Grid.Column="1"
+                                   Height="20"
+                                   Padding="0"
+                                   HorizontalAlignment="Stretch">
+
+                    <!--  Declare RenderableSeries, which are mapped to DataSet Series 1:1 and in order  -->
+                    <s:SciChartSurface.RenderableSeries>
+                        <s:FastLineRenderableSeries AntiAliasing="False"
+                                                    DataSeries="{Binding ChannelDataSeries}"
+                                                    ResamplingMode="None"
+                                                    Stroke="{Binding Stroke, Mode=OneWay}">
+                            <s:FastLineRenderableSeries.RolloverMarkerTemplate>
+                                <ControlTemplate>
+                                    <Ellipse Width="7" Height="7" Fill="White"/>
+                                </ControlTemplate>
+                            </s:FastLineRenderableSeries.RolloverMarkerTemplate>
+                        </s:FastLineRenderableSeries>
+                    </s:SciChartSurface.RenderableSeries>
+
+                    <!--  Axes are created implicitly when a dataset is created, but we override them here so we can style them  -->
+                    <s:SciChartSurface.XAxis>
+                        <s:NumericAxis AutoRange="Always"
+                                       DrawMajorGridLines="False"
+                                       DrawMinorGridLines="False"
+                                       DrawMajorBands="False"
+                                       Visibility="Collapsed">
+                        </s:NumericAxis>
+                    </s:SciChartSurface.XAxis>
+
+                    <s:SciChartSurface.YAxis>
+                        <s:NumericAxis AutoRange="Always"
+                                       DrawMajorGridLines="False"
+                                       DrawMinorGridLines="False"
+                                       DrawMajorBands="False"
+                                       Visibility="Collapsed"/>
+                    </s:SciChartSurface.YAxis>
+                </s:SciChartSurface>
+            </Grid>
+        </DataTemplate>
+        <!--  Style per ListBoxItem to ensure the chart stretches to fit  -->
+        <Style x:Key="ChannelListBoxItemStyle" TargetType="ListBoxItem">
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+            <Setter Property="Margin" Value="3,0,3,0"/>
+            <Setter Property="Padding" Value="0"/>
+        </Style>
+
+        <!--  Style for Stats  -->
+        <Style x:Key="StatsStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="26" />
+            <Setter Property="Margin" Value="0" />
+            <Setter Property="FontWeight" Value="Normal" />
+            <Setter Property="Foreground" Value="#BBFC9C29" />
+        </Style>
+
+        <s:InvertBooleanConverter x:Key="InvertBooleanConverter"/>
+    </UserControl.Resources>
+
+    <Grid x:Name="LayoutRoot">
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <ext:SciChartInteractionToolbar Grid.Column="0">
+            <ToggleButton x:Name="StartButton"
+                          Command="{Binding StartCommand}"
+                          Style="{StaticResource DefaultUncheckableToggleButtonStyle}"
+                          IsChecked="True"
+                          s:ToggleButtonExtensions.GroupName="RealTimeEEG">
+                <ext:ToolbarIcon Kind="Play" Height="14" Width="14" Style="{StaticResource ToolbarButtonIconStyle}"/>
+            </ToggleButton>
+
+            <ToggleButton x:Name="PauseButton"
+                          Command="{Binding PauseCommand}"
+                          IsEnabled="{Binding IsReset, Mode=OneWay, Converter={StaticResource InvertBooleanConverter}}"
+                          Style="{StaticResource DefaultUncheckableToggleButtonStyle}"
+                          s:ToggleButtonExtensions.GroupName="RealTimeEEG">
+                <ext:ToolbarIcon Kind="Pause" Height="14" Width="14" Style="{StaticResource ToolbarButtonIconStyle}"/>
+            </ToggleButton>
+
+            <ToggleButton x:Name="StopButton"
+                          Command="{Binding StopCommand}"
+                          Style="{StaticResource DefaultUncheckableToggleButtonStyle}"
+                          s:ToggleButtonExtensions.GroupName="RealTimeEEG">
+                <ext:ToolbarIcon Kind="Stop" Height="12" Width="12" Style="{StaticResource ToolbarButtonIconStyle}"/>
+            </ToggleButton>
+
+            <ext:FlyoutMenuButton IsEnabled="{Binding IsReset, Mode=OneWay}">
+                <ext:ToolbarIcon Kind="TuneVariant" Height="16" Width="16" Style="{StaticResource ToolbarButtonIconStyle}"/>
+                <ext:FlyoutMenuButton.PopupContent>
+                    <StackPanel Margin="5,5,5,10" MinWidth="150" Orientation="Vertical">
+                        <TextBlock Text="{Binding TimerInterval, Mode=OneWay, StringFormat='Interval: {0} ms'}"
+                                   Style="{StaticResource FlyoutMenuHeaderStyle}"/>
+                        <Slider Maximum="100" Minimum="10" Value="{Binding TimerInterval, Mode=TwoWay}"/>
+                        <TextBlock Text="{Binding BufferSize, Mode=OneWay, StringFormat='Points per tick: {0}'}"
+                                   Margin="0,10,0,5" Style="{StaticResource FlyoutMenuHeaderStyle}"/>
+                        <Slider Maximum="100" Minimum="10" Value="{Binding BufferSize, Mode=TwoWay}"/>
+                    </StackPanel>
+                </ext:FlyoutMenuButton.PopupContent>
+            </ext:FlyoutMenuButton>
+        </ext:SciChartInteractionToolbar>
+
+        <!--  Define the listbox which will host the N channels of the EEG  -->
+        <ListBox Grid.Column="1"
+                 Background="{StaticResource ThemedChartBackground}"
+                 BorderThickness="0"
+                 ItemContainerStyle="{StaticResource ChannelListBoxItemStyle}"
+                 ItemTemplate="{StaticResource ChannelItemTemplate}"
+                 ItemsSource="{Binding ChannelViewModels}"
+                 Grid.IsSharedSizeScope="True"
+                 ScrollViewer.HorizontalScrollBarVisibility="Disabled" />
+
+        <!--  Define the Stats Panel  -->
+        <Grid Grid.Column="1"
+              Margin="100,20,0,0"
+              HorizontalAlignment="Left"
+              VerticalAlignment="Top">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="60" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Column="0"
+                       HorizontalAlignment="Left"
+                       VerticalAlignment="Top"
+                       Style="{StaticResource StatsStyle}"
+                       Text="FPS: " />
+
+            <TextBlock Name="fpsCounter"
+                       Grid.Column="1"
+                       HorizontalAlignment="Left"
+                       VerticalAlignment="Top"
+                       Style="{StaticResource StatsStyle}" />
+
+            <TextBlock Grid.Column="2"
+                       Margin="10,0,0,0"
+                       HorizontalAlignment="Left"
+                       VerticalAlignment="Top"
+                       Style="{StaticResource StatsStyle}"
+                       Text="Point Count: " />
+
+            <TextBlock Name="pointCount"
+                       Grid.Column="3"
+                       HorizontalAlignment="Left"
+                       VerticalAlignment="Top"
+                       Style="{StaticResource StatsStyle}" />
+        </Grid>
+    </Grid>
+</UserControl>

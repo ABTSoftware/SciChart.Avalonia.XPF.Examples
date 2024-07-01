@@ -1,0 +1,17 @@
+﻿<Application x:Class="SciChart.Examples.Demo.Xpf.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             StartupUri="MainWindow.xaml">
+
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/SciChart.Examples;component/Themes/Navy.xaml"/>
+                <ResourceDictionary Source="/SciChart.Examples.ExternalDependencies;component/Themes/Navy.xaml"/>
+                <ResourceDictionary Source="/SciChart.Examples.ExternalDependencies;component/Resources/Styles/Controls.xaml"/>
+                <ResourceDictionary Source="/SciChart.Examples.Demo.Lib;component/Themes/Navy.xaml"/>
+                <ResourceDictionary Source="/SciChart.Examples.Demo.Lib;component/Resources/Styles/Controls.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

@@ -1,0 +1,28 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+    
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/SciChart.Examples.Demo.Lib;component/Resources/Styles/Icons.xaml"/>
+        <ResourceDictionary Source="/SciChart.Examples.Demo.Lib;component/Resources/Styles/OpacityMask.xaml"/>
+        <ResourceDictionary Source="/SciChart.Examples.Demo.Lib;component/Resources/Styles/TextBlock.xaml"/>
+        <ResourceDictionary Source="/SciChart.Examples.Demo.Lib;component/Resources/Styles/AnimatedImage.xaml"/>
+        <ResourceDictionary Source="/SciChart.Examples.Demo.Lib;component/Resources/Styles/Buttons.xaml"/>
+        <ResourceDictionary Source="/SciChart.Examples.Demo.Lib;component/Resources/Styles/Breadcrumb.xaml"/>
+        <ResourceDictionary Source="/SciChart.Examples.Demo.Lib;component/Resources/Styles/EndlessItemsControl.xaml"/>
+        <ResourceDictionary Source="/SciChart.Examples.Demo.Lib;component/Resources/Styles/Hyperlink.xaml"/>
+        <ResourceDictionary Source="/SciChart.Examples.Demo.Lib;component/Resources/Styles/ListBox.xaml"/>
+        <ResourceDictionary Source="/SciChart.Examples.Demo.Lib;component/Resources/Styles/LoadingIndicator.xaml"/>
+        <ResourceDictionary Source="/SciChart.Examples.Demo.Lib;component/Resources/Styles/NavigationTabControl.xaml"/>
+        <ResourceDictionary Source="/SciChart.Examples.Demo.Lib;component/Resources/Styles/Scrollbars.xaml"/>
+        <ResourceDictionary Source="/SciChart.Examples.Demo.Lib;component/Resources/Styles/ShowcaseControl.xaml"/>
+        <ResourceDictionary Source="/SciChart.Examples.Demo.Lib;component/Resources/Styles/TransitioningFrame.xaml"/>
+        <ResourceDictionary Source="/SciChart.Examples.Demo.Lib;component/Resources/Styles/WatermarkedAutocomplete.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
+
+    <Style TargetType="CheckBox" BasedOn="{StaticResource ToolbarPopupCheckBoxStyle}"/>
+    <Style TargetType="ComboBox" BasedOn="{StaticResource ToolbarPopupComboBoxStyle}"/>
+    <Style TargetType="DatePicker" BasedOn="{StaticResource ToolbarPopupDatePickerStyle}"/>
+    <Style TargetType="RadioButton" BasedOn="{StaticResource ToolbarPopupRadioButtonStyle}"/>
+    <Style TargetType="Slider" BasedOn="{StaticResource ToolbarPopupSliderStyle}"/>
+    <Style TargetType="TextBox" BasedOn="{StaticResource ToolbarPopupTextBoxStyle}"/>
+
+</ResourceDictionary>

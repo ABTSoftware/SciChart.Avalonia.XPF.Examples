@@ -1,0 +1,37 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+	<PropertyGroup>
+		<TargetFrameworks>net6.0-windows</TargetFrameworks>
+		<EnableWindowsTargeting>True</EnableWindowsTargeting>
+		<UseWPF>True</UseWPF>
+		<OutputType>Library</OutputType>
+		<LangVersion>Latest</LangVersion>
+		<OutputPath>..\build\$(Configuration)</OutputPath>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Remove="Resources\ExampleDefinitions\**\*.xml" />
+		<None Remove="Images\*.png" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Remove="Resources\Images\*.png" />
+		<Resource Include="Resources\Images\*.png" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<EmbeddedResource Include="Resources\ExampleDefinitions\**\*.xml" />
+		<EmbeddedResource Include="Examples\**\*.*" />
+		<EmbeddedResource Include="Themes\**\*.xaml" />
+	</ItemGroup>
+
+
+	<ItemGroup>
+		<PackageReference Include="System.Buffers" Version="4.5.1" />
+		<PackageReference Include="System.Reactive" Version="3.1.1" />
+		<PackageReference Include="MahApps.Metro.IconPacks.Material" Version="4.11.0" />
+		<PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
+		<PackageReference Include="SciChart.Avalonia.XPF" Version="*-*" />
+	</ItemGroup>
+
+</Project>

@@ -1,0 +1,98 @@
+﻿<UserControl x:Class="SciChart.Examples.Demo.Lib.Views.SearchView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:tz="http://schemas.abtsoftware.co.uk/transitionz"
+             xmlns:icons="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             xmlns:controls="clr-namespace:SciChart.Examples.Demo.Lib.Controls">
+
+    <Grid Background="Transparent">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Grid.ColumnSpan="2"
+                   FontSize="20"
+                   FontWeight="SemiBold"
+                   HorizontalAlignment="Left"
+                   VerticalAlignment="Center"
+                   Foreground="{DynamicResource SearchViewItemForegroundBrush}"
+                   Style="{StaticResource GroupHeaderTextStyle}"
+                   Text="Search Results"/>
+
+        <Button Grid.Row="0"
+                Grid.Column="2"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                Command="{Binding HideSearchCommand}" 
+                Style="{StaticResource CloseButtonStyle}" />
+
+        <Rectangle Grid.Row="1"
+                   Grid.Column="0"
+                   Grid.ColumnSpan="3"
+                   Height="1"
+                   Margin="0,10"
+                   Fill="{DynamicResource SearchViewSeparatorBrush}"
+                   HorizontalAlignment="Stretch"
+                   SnapsToDevicePixels="True"
+                   UseLayoutRounding="True"/>
+
+        <controls:EndlessItemsControl Grid.Row="2"
+                                      Grid.ColumnSpan="3"       
+                                      Opacity="0"                    
+                                      BorderThickness="0"
+                                      Background="Transparent"
+                                      HorizontalAlignment="Stretch"
+                                      VerticalAlignment="Stretch"
+                                      AllItems="{Binding SearchResults}" 
+                                      ItemContainerStyle="{StaticResource SearchItemContainerStyle}"
+                                      ItemTemplate="{StaticResource SearchItemTemplate}" 
+                                      tz:Transitionz.Opacity="{tz:OpacityParams Duration=200, TransitionOn=Visibility, From=0, To=1}"
+                                      tz:Transitionz.Visibility="{Binding HasSearchResults, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+
+        <StackPanel Grid.Row="2"
+                    Grid.ColumnSpan="3"
+                    Opacity="1" 
+                    Orientation="Vertical"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    tz:Transitionz.Opacity="{tz:OpacityParams Duration=200, TransitionOn=Visibility, From=0, To=1}"
+                    tz:Transitionz.Visibility="{Binding HasSearchResults, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
+
+            <icons:PackIconMaterial Kind="TextBoxSearchOutline"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Width="100"
+                                    Height="100"
+                                    Foreground="{DynamicResource SearchViewNoResultsForegroundBrush}"/>
+
+            <TextBlock Margin="0,10,0,0"
+                       FontSize="24"
+                       FontWeight="SemiBold"
+                       Foreground="{DynamicResource SearchViewNoResultsForegroundBrush}"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       Text="No results found :("/>
+
+            <TextBlock Margin="0,10,0,0"
+                       FontSize="16"    
+                       LineHeight="26"
+                       TextAlignment="Center"
+                       Foreground="{DynamicResource SearchViewNoResultsForegroundBrush}"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center">
+                
+                <Run Text="We could not find what you are looking for."/><LineBreak/>
+                <Run Text="Try searching for something simpler (e.g. Realtime Charts)"/>
+
+            </TextBlock>
+        </StackPanel>
+    </Grid>
+</UserControl>

@@ -1,0 +1,197 @@
+﻿<UserControl x:Class="SciChart.Examples.Examples.CreateRealtimeChart.RealTimeCursors"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:ext="http://schemas.abtsoftware.co.uk/scichart/exampleExternals"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:s="http://schemas.abtsoftware.co.uk/scichart"
+             Loaded="OnExampleLoaded"
+             Unloaded="OnExampleUnloaded"
+             d:DesignHeight="400"
+             d:DesignWidth="600"
+             mc:Ignorable="d">
+
+    <UserControl.Resources>
+        <!--  Converter used by feedback panel below SciChartSurface  -->
+        <s:ColorToBrushConverter x:Key="ColorToBrushConverter" />
+
+        <!--  Common TextBlock style, uses ColorToBrushConverter to convert RenderableSeries.Stroke to a brush for textblocks  -->
+        <Style x:Key="tbStyle" TargetType="TextBlock">
+            <Setter Property="Margin" Value="2,4" />
+            <Setter Property="Foreground" Value="{Binding Stroke, Converter={StaticResource ColorToBrushConverter}}" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="FontSize" Value="13" />
+        </Style>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <!--  The SciChartInteractionToolbar adds zoom, pan, zoom extents and rotate functionality  -->
+        <!--  to the chart and is included for example purposes.  -->
+        <!--  If you wish to know how to zoom and pan a chart then do a search for Zoom Pan in the Examples suite!  -->
+        <ext:SciChartInteractionToolbar x:Name="UserToolbar">
+            <ext:FlyoutMenuToggleButton x:Name="RollFlyoutMenuButton"
+                                        IsChecked="{Binding Source={x:Reference Name=rolloverModifier}, Path=IsEnabled,  Mode=TwoWay}"
+                                        ToolTipService.ToolTip="Rollover"
+                                        ext:FlyoutMenuToggleButtonExtensions.GroupName="RollCursorTooltipSelectionGroup">
+
+                <ext:ToolbarIcon Style="{StaticResource ToolbarButtonIconStyle}"
+                                 Path="M22.303633,3.0000001 C23.744555,3 24.99753,4.2580881 24.99753,5.7048893 L24.999998,25 25.000001,25.027508 24.999342,25.027512 24.996372,25.151785
+                                       C24.921722,26.713037 23.705593,28.040001 22.313569,28.040001 L17.024437,28.031252 17,25.017069 22.315462,25.005728 22.223639,5.7164941 17.012253,5.738297
+                                       17,3.0225473 z M2.6875,3.0000001 L8,3.0000001 8,5.8039582 2.6875,5.8039582 2.6875,25.236042 8,25.236042 8,28.039999 2.6875,28.039999 C1.25,28.039999 0,26.735832
+                                       0,25.236042 L0,5.8039582 C0,4.3041667 1.25,3 2.6875,3.0000001 z M11,0 L14,0 14,30.039999 11,30.039999 z"/>
+
+                <ext:FlyoutMenuToggleButton.PopupContent>
+                    <StackPanel Margin="5" Width="150" Orientation="Vertical">
+                        <TextBlock Text="Rollover mode" Style="{StaticResource FlyoutMenuHeaderStyle}"/>
+                        <ComboBox ItemsSource="{Binding Source={ext:EnumValues {x:Type s:SourceMode}}}"
+                                  SelectedItem="{Binding Source={x:Reference Name=rolloverModifier}, Path=SourceMode, Mode=TwoWay, Converter={StaticResource SelectedEnumValueConverter}}"/>
+
+                        <TextBlock Text="Show tooltip mode" Margin="0,10,0,5" Style="{StaticResource FlyoutMenuHeaderStyle}"/>
+                        <ComboBox ItemsSource="{Binding Source={ext:EnumValues {x:Type s:ShowTooltipOptions}}}" 
+                                  SelectedItem="{Binding Source={x:Reference Name=rolloverModifier}, Path=ShowTooltipOn, Mode=TwoWay, Converter={StaticResource SelectedEnumValueConverter}, FallbackValue='MouseHover'}"/>
+
+                        <CheckBox Content="Show Axis Label" Margin="0,10,0,0" IsChecked="{Binding Source={x:Reference Name=rolloverModifier}, Path=ShowAxisLabels, Mode=TwoWay}"/>
+                        <CheckBox x:Name="useInterpolation" Margin="0,10,0,5" Content="Use Interpolation" IsChecked="{Binding Source={x:Reference Name=rolloverModifier}, Path=UseInterpolation, Mode=TwoWay}"/>
+                    </StackPanel>
+                </ext:FlyoutMenuToggleButton.PopupContent>
+            </ext:FlyoutMenuToggleButton>
+        </ext:SciChartInteractionToolbar>
+
+        <!--  Define a SciChartSurface with RolloverModifier  -->
+        <s:SciChartSurface x:Name="sciChartSurface"
+                           Grid.Column="1"
+                           ChartTitle="Mouse-over Cursors in Realtime">
+
+            <s:SciChartSurface.RenderableSeries>
+                <s:FastLineRenderableSeries x:Name="renderableSeries0"
+                                            Stroke="{StaticResource MainThemeStrokeColor}"
+                                            StrokeThickness="2">
+
+                    <s:FastLineRenderableSeries.PointMarker>
+                        <s:EllipsePointMarker Width="6"
+                                              Height="6"
+                                              Fill="{Binding Path=Stroke,
+                                                             RelativeSource={RelativeSource Self}}" />
+                    </s:FastLineRenderableSeries.PointMarker>
+
+                </s:FastLineRenderableSeries>
+
+                <s:FastLineRenderableSeries x:Name="renderableSeries1"
+                                            Stroke="{StaticResource SecondaryThemeStrokeColor}"
+                                            StrokeThickness="2">
+                    <s:FastLineRenderableSeries.PointMarker>
+                        <s:EllipsePointMarker Width="6"
+                                              Height="6"
+                                              Fill="{Binding Path=Stroke,
+                                                             RelativeSource={RelativeSource Self}}" />
+                    </s:FastLineRenderableSeries.PointMarker>
+                </s:FastLineRenderableSeries>
+
+                <s:FastLineRenderableSeries x:Name="renderableSeries2"
+                                            Stroke="{StaticResource ExtraThemeStrokeColor_2}"
+                                            StrokeThickness="2">
+                    <s:FastLineRenderableSeries.PointMarker>
+                        <s:EllipsePointMarker Width="6"
+                                              Height="6"
+                                              Fill="{Binding Path=Stroke,
+                                                             RelativeSource={RelativeSource Self}}" />
+                    </s:FastLineRenderableSeries.PointMarker>
+                </s:FastLineRenderableSeries>
+
+            </s:SciChartSurface.RenderableSeries>
+
+            <s:SciChartSurface.XAxis>
+                <s:NumericAxis AutoRange="Always"
+                               AxisTitle="Time (Seconds)"
+                               TextFormatting="0.0" />
+            </s:SciChartSurface.XAxis>
+
+            <s:SciChartSurface.YAxis>
+                <s:NumericAxis AutoRange="Always"
+                               AxisTitle="Amplitude (Volts)"
+                               DrawMajorBands="True"
+                               GrowBy="0.1, 0.1"
+                               TextFormatting="0.00" />
+            </s:SciChartSurface.YAxis>
+
+            <s:SciChartSurface.ChartModifier>
+                <s:ModifierGroup>
+                    <s:RolloverModifier x:Name="rolloverModifier" ShowAxisLabels="False" UseInterpolation="True" ShowTooltipOn="Always"/>
+                </s:ModifierGroup>
+            </s:SciChartSurface.ChartModifier>
+
+            <!--  A nice technique is to put the rollover legend inside an annotation with relative coordinates, then it is always inside the chart surface  -->
+            <s:SciChartSurface.Annotations>
+                <s:CustomAnnotation Content="{Binding Source={x:Reference Name=rolloverModifier}, Path=SeriesData}"
+                                    CoordinateMode="Relative"
+                                    HorizontalAnchorPoint="Left"
+                                    Opacity="1"
+                                    VerticalAnchorPoint="Top"
+                                    X1="0.01"
+                                    Y1="0.02">
+                    <s:CustomAnnotation.ContentTemplate>
+                        <DataTemplate>
+                            <!--  Define a panel to display rollover results  -->
+                            <Border HorizontalAlignment="Left"
+                                    VerticalAlignment="Top"
+                                    Background="#55000000"
+                                    BorderBrush="#77FFFFFF"
+                                    BorderThickness="2"
+                                    Padding="5">
+                                <ItemsControl DataContext="{Binding}" ItemsSource="{Binding SeriesInfo}">
+                                    <ItemsControl.ItemTemplate>
+                                        <!--  Template will be instantiated for each SeriesInfo in the RolloverModifier.SeriesInfo collection  -->
+                                        <!--  See the SciChart API Documentation for SeriesInfo types, there is a different type for OHLC and XyzDataSeries for instance  -->
+                                        <!--  SeriesInfo is the datacontext for the below. Note you can access the original RenderableSeries via SeriesInfo.RenderableSeries  -->
+                                        <DataTemplate>
+                                            <Grid HorizontalAlignment="Left">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition />
+                                                    <ColumnDefinition />
+                                                    <ColumnDefinition />
+                                                    <ColumnDefinition />
+                                                </Grid.ColumnDefinitions>
+
+                                                <Ellipse Width="9"
+                                                         Height="9"
+                                                         Margin="3"
+                                                         Fill="{Binding Stroke,
+                                                                        Converter={StaticResource ColorToBrushConverter}}" />
+
+                                                <TextBlock Grid.Column="1"
+                                                           Width="90"
+                                                           Style="{StaticResource tbStyle}"
+                                                           Text="{Binding SeriesName}" />
+
+                                                <!--  When binding to XValue, YValue of type IComparable, StringFormat is mandatory due to a  -->
+                                                <!--  XAML bug that cannot convert IComparable to text, even though underlying type is double  -->
+                                                <StackPanel Grid.Column="2" Orientation="Horizontal">
+                                                    <TextBlock Style="{StaticResource tbStyle}" Text="X: " />
+                                                    <TextBlock Style="{StaticResource tbStyle}" Text="{Binding XValue, StringFormat=\{0:0.00\}}" />
+                                                </StackPanel>
+                                                <StackPanel Grid.Column="3" Orientation="Horizontal">
+                                                    <TextBlock Margin="3"
+                                                               Style="{StaticResource tbStyle}"
+                                                               Text="Y: " />
+                                                    <TextBlock Style="{StaticResource tbStyle}" Text="{Binding YValue, StringFormat=\{0:0.00\}}" />
+                                                </StackPanel>
+
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </Border>
+                        </DataTemplate>
+                    </s:CustomAnnotation.ContentTemplate>
+                </s:CustomAnnotation>
+            </s:SciChartSurface.Annotations>
+        </s:SciChartSurface>
+
+    </Grid>
+
+</UserControl>

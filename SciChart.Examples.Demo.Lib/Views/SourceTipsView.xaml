@@ -1,0 +1,70 @@
+﻿<UserControl x:Class="SciChart.Examples.Demo.Lib.Views.SourceTipsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             AutomationProperties.AutomationId="SourceTipsView">
+
+    <UserControl.Resources>
+        <Style x:Key="RoundedExamplesTipBorderStyle" TargetType="{x:Type Border}">
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="CornerRadius" Value="10"/>
+            <Setter Property="Background" Value="{DynamicResource TipsBorderBackground}"/>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid Background="{StaticResource MetroWindowDialogViewBackgroundBrush}">
+
+        <!-- Source Code section -->
+        <Grid VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,5,160,0">
+            
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <Canvas Width="57.431043" Height="130.72422" HorizontalAlignment="Right" Margin="0,5">
+                <Path StrokeThickness="2" Stroke="{DynamicResource SciChartTipsBrush}" StrokeMiterLimit="4" StrokeLineJoin="Miter" StrokeStartLineCap="Flat" StrokeEndLineCap="Flat" Data="M 57.109584 0.05113946 C 45.453932 73.317426 0.25539967 130.52243 0.25539967 130.52243"/>
+                <Path StrokeThickness="2" Stroke="{DynamicResource SciChartTipsBrush}" StrokeLineJoin="Miter" StrokeStartLineCap="Round" StrokeEndLineCap="Round" Data="M 60.76726 6.4535743 57.184869 -0.28152996 51.212565 5.0020079"/>
+            </Canvas>
+
+            <Border  Grid.Row="1" Grid.Column="0" Margin="5,-10,5,5" Style="{StaticResource RoundedExamplesTipBorderStyle}">
+                <StackPanel Grid.Row="1" MaxWidth="200">
+                    <TextBlock Style="{StaticResource TipsHeaderTextBlockStyle}" Text="Example Source Code"/>
+                    <TextBlock Style="{StaticResource TipsBodyTextBlockStyle}" Margin="0,10,10,0">
+                        <Run Text="Switch views from the example to source-code. You can also view the code on GitHub."/>
+                    </TextBlock>
+                </StackPanel>
+            </Border>
+        </Grid>
+
+        <Border Background="{DynamicResource TipsButtonBackground}"
+                Style="{StaticResource RoundedExamplesTipBorderStyle}" 
+                VerticalAlignment="Bottom" 
+                HorizontalAlignment="Center" 
+                Margin="0,0,0,50">
+
+            <StackPanel Orientation="Vertical">
+                <TextBlock Text="SciChart Source Code | Help" Style="{StaticResource GroupHeaderTextStyle}" FontSize="16"/>
+                
+                <StackPanel MaxWidth="280" Margin="0,0,0,10">
+                    <TextBlock Text="In this view you can browse the source code for this example. You can also export this single example to a Visual Studio solution." TextWrapping="Wrap" Margin="0,10" Style="{StaticResource TipsBodyTextBlockStyle}"/>
+                    <TextBlock TextWrapping="Wrap" FontSize="12" Style="{StaticResource TipsBodyTextBlockStyle}">                 
+                        <Run Text="Note:" FontWeight="Bold"/>
+                        <Run Text="All our examples are also published on"/>
+                        <Hyperlink Click="Hyperlink_Click" Foreground="{DynamicResource MainThemeSolidBrush}">GitHub</Hyperlink>
+                    </TextBlock>
+                </StackPanel>
+
+                <Button MinWidth="60"
+                        Content="OK"
+                        FontSize="12"               
+                        Command="{Binding CloseSourceCodeHelpCommand}"       
+                        Style="{StaticResource TipsGotItButtonStyle}"/>
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>

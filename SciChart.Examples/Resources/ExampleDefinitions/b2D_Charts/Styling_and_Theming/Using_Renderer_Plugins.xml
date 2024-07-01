@@ -1,0 +1,31 @@
+﻿<ExampleDefinition xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <View>Examples/StyleAChart/UseRendererPlugins.xaml</View>
+  <ViewModel>Examples.StyleAChart.UseRendererPluginsViewModel</ViewModel>
+  <ImagePath/>
+  <IconPath>IconThemes</IconPath>
+  <ToolTipDescription>Demonstrates how to apply the new High Quality Rendering mode to a SciChartSurface for smooth anti-aliased lines and fills!</ToolTipDescription>
+  <Description>
+    SciChart for Avalonia XPF ships with [url='https://www.scichart.com/documentation/win/current/webframe.html#Renderer_Plugins.html']two rasterizer plugins[/url] which use different algorithms to render the RenderableSeries to the screen. These are:
+
+    [b]#1 The VisualXcceleratorRenderSurface[/b]: A floating point, OpenGL hardware renderer (GPU Based). Utilizes pixel shaders to offload as much computation to the GPU as possible. Produces Antialiased quality and fast rendering.
+
+    [b]#2 The XamlRenderSurface[/b]: A vector renderer which uses WPF Canvas and allows high-quality, scalable export to PNG or Vector Format.
+
+    [i]Note that some renderers are only available in the source-code editions of SciChart[/i].
+
+    [b]Documentation Links[/b]
+
+    - [url='https://www.scichart.com/documentation/win/current/webframe.html#Renderer_Plugins.html']SciChart Renderer Plugins[/url]
+    - [url='https://www.scichart.com/documentation/win/current/webframe.html#Enabling%20The%20Visual%20Xccelerator%20Engine.html']Enabling the Visual Xccelerator Rendering Engine[/url]
+    - [url='https://www.scichart.com/scichart-wpf-v6-the-worlds-fastest-wpf-charts/']How Fast is SciChart's WPF Chart? DirectX vs. Software Comparison[/url]
+  </Description>
+  <CodeFiles>
+    <string>Resources/ExampleSourceFiles/StyleAChart/UseRendererPlugins.xaml.txt</string>
+    <string>Resources/ExampleSourceFiles/StyleAChart/UseRendererPlugins.xaml.cs.txt</string>
+    <string>Resources/ExampleSourceFiles/StyleAChart/UseRendererPluginsViewModel.cs.txt</string>
+  </CodeFiles>
+  <Features>
+    <Features>Style</Features>
+    <Features>RenderSurface</Features>
+  </Features>
+</ExampleDefinition>

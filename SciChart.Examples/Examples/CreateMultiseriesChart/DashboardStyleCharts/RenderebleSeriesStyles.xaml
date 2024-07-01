@@ -1,0 +1,105 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:dashboardStyleCharts="clr-namespace:SciChart.Examples.Examples.CreateMultiseriesChart.DashboardStyleCharts"
+                    xmlns:s="http://schemas.abtsoftware.co.uk/scichart">
+
+    <dashboardStyleCharts:LabelForegroundConverter x:Key="LabelForegroundConverter" />
+
+    <!--TooltipTemplate for RolloverModifier-->
+    <DataTemplate x:Key="RolloverTooltipTemplateDashboard" DataType="s:SeriesInfo">
+        <StackPanel Orientation="Vertical">
+            <TextBlock Foreground="Black" Text="{Binding SeriesName, StringFormat='{}{0}:'}" />
+            <TextBlock Foreground="Black" Text="{Binding FormattedYValue}" />
+        </StackPanel>
+    </DataTemplate>
+
+    <!--Columns colors-->
+
+    <Style x:Key="BaseStackedStyle" TargetType="s:StackedColumnRenderableSeries">
+        <Setter Property="LabelColor" Value="{Binding Stroke, RelativeSource={RelativeSource Self}, Converter={StaticResource LabelForegroundConverter}}" />
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="ShowLabel" Value="{Binding IsChecked, ElementName=ShowLabels, Mode=TwoWay}" />
+        <Setter Property="DataPointWidth" Value="{Binding Value, ElementName=DataPointWidth, Mode=TwoWay}" />
+        <Setter Property="Spacing" Value="{Binding Value, ElementName=Spacing, Mode=TwoWay}" />
+        <Setter Property="SpacingMode" Value="{Binding SelectedItem, ElementName=SpacingModeCbx, Mode=TwoWay, TargetNullValue=Absolute}" />
+    </Style>
+
+    <Style x:Key="StackedColumnFirstColorStyle"
+           BasedOn="{StaticResource BaseStackedStyle}"
+           TargetType="s:StackedColumnRenderableSeries">
+        <Setter Property="Stroke" Value="{StaticResource GroupSeriesColor_1}" />
+        <Setter Property="Fill" Value="{StaticResource GroupSeriesGradientBrush_1}"/>
+        <Setter Property="s:RolloverModifier.TooltipTemplate" Value="{StaticResource RolloverTooltipTemplateDashboard}"/>
+    </Style>
+
+    <Style x:Key="StackedColumnSecondColorStyle"
+           BasedOn="{StaticResource BaseStackedStyle}"
+           TargetType="s:StackedColumnRenderableSeries">
+        <Setter Property="Stroke" Value="{StaticResource GroupSeriesColor_2}" />
+        <Setter Property="Fill" Value="{StaticResource GroupSeriesGradientBrush_2}"/>
+        <Setter Property="s:RolloverModifier.TooltipTemplate" Value="{StaticResource RolloverTooltipTemplateDashboard}"/>
+    </Style>
+
+    <Style x:Key="StackedColumnThirdColorStyle"
+           BasedOn="{StaticResource BaseStackedStyle}"
+           TargetType="s:StackedColumnRenderableSeries">
+        <Setter Property="Stroke" Value="{StaticResource GroupSeriesColor_3}" />
+        <Setter Property="Fill" Value="{StaticResource GroupSeriesGradientBrush_3}"/>
+        <Setter Property="s:RolloverModifier.TooltipTemplate" Value="{StaticResource RolloverTooltipTemplateDashboard}"/>
+    </Style>
+
+    <Style x:Key="StackedColumnFourthColorStyle"
+           BasedOn="{StaticResource BaseStackedStyle}"
+           TargetType="s:StackedColumnRenderableSeries">
+        <Setter Property="Stroke" Value="{StaticResource GroupSeriesColor_4}" />
+        <Setter Property="Fill" Value="{StaticResource GroupSeriesGradientBrush_4}"/>
+        <Setter Property="s:RolloverModifier.TooltipTemplate" Value="{StaticResource RolloverTooltipTemplateDashboard}"/>
+    </Style>
+
+    <Style x:Key="StackedColumnFifthColorStyle"
+           BasedOn="{StaticResource BaseStackedStyle}"
+           TargetType="s:StackedColumnRenderableSeries">
+        <Setter Property="Stroke" Value="{StaticResource GroupSeriesColor_5}" />
+        <Setter Property="Fill" Value="{StaticResource GroupSeriesGradientBrush_5}"/>
+        <Setter Property="s:RolloverModifier.TooltipTemplate" Value="{StaticResource RolloverTooltipTemplateDashboard}"/>
+    </Style>
+
+    <!--Mountains colors-->
+
+    <DataTemplate x:Key="DigitalToolTipTemplate" DataType="s:XySeriesInfo">
+        <Border Style="{StaticResource BorderStyle}" BorderBrush="{Binding Stroke}">
+            <TextBlock Text="{Binding SeriesName, StringFormat='{}{0}'}" />
+        </Border>
+    </DataTemplate>
+
+    <Style x:Key="StackedMountainFirstColorStyle" TargetType="s:StackedMountainRenderableSeries">
+        <Setter Property="Stroke" Value="{StaticResource GroupSeriesColor_1}" />
+        <Setter Property="Fill" Value="{StaticResource GroupSeriesGradientBrush_1}"/>
+        <Setter Property="s:RolloverModifier.TooltipTemplate" Value="{StaticResource RolloverTooltipTemplateDashboard}"/>
+    </Style>
+
+    <Style x:Key="StackedMountainSecondColorStyle" TargetType="s:StackedMountainRenderableSeries">
+        <Setter Property="Stroke" Value="{StaticResource GroupSeriesColor_2}" />
+        <Setter Property="Fill" Value="{StaticResource GroupSeriesGradientBrush_2}"/>
+        <Setter Property="s:RolloverModifier.TooltipTemplate" Value="{StaticResource RolloverTooltipTemplateDashboard}"/>
+    </Style>
+
+    <Style x:Key="StackedMountainThirdColorStyle" TargetType="s:StackedMountainRenderableSeries">
+        <Setter Property="Stroke" Value="{StaticResource GroupSeriesColor_3}" />
+        <Setter Property="Fill" Value="{StaticResource GroupSeriesGradientBrush_3}"/>
+        <Setter Property="s:RolloverModifier.TooltipTemplate" Value="{StaticResource RolloverTooltipTemplateDashboard}"/>
+    </Style>
+
+    <Style x:Key="StackedMountainFourthColorStyle" TargetType="s:StackedMountainRenderableSeries">
+        <Setter Property="Stroke" Value="{StaticResource GroupSeriesColor_4}" />
+        <Setter Property="Fill" Value="{StaticResource GroupSeriesGradientBrush_4}"/>
+        <Setter Property="s:RolloverModifier.TooltipTemplate" Value="{StaticResource RolloverTooltipTemplateDashboard}"/>
+    </Style>
+
+    <Style x:Key="StackedMountainFifthColorStyle" TargetType="s:StackedMountainRenderableSeries">
+        <Setter Property="Stroke" Value="{StaticResource GroupSeriesColor_5}" />
+        <Setter Property="Fill" Value="{StaticResource GroupSeriesGradientBrush_5}"/>
+        <Setter Property="s:RolloverModifier.TooltipTemplate" Value="{StaticResource RolloverTooltipTemplateDashboard}"/>
+    </Style>
+
+</ResourceDictionary>

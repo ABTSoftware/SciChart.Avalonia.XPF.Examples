@@ -1,0 +1,36 @@
+﻿<UserControl x:Class="SciChart.Examples.Examples.PerformanceDemos2D.ScatterPerf.FastPalettedScatterCharts"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:s="http://schemas.abtsoftware.co.uk/scichart"
+             xmlns:ext="http://schemas.abtsoftware.co.uk/scichart/exampleExternals">
+    
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- The SciChartInteractionToolbar adds zoom, pan, zoom extents and rotate functionality -->
+        <!-- to the chart and is included for example purposes. -->
+        <!-- If you wish to know how to zoom and pan a chart then do a search for Zoom Pan in the Examples suite! -->
+        <ext:SciChartInteractionToolbar TargetSurface="{Binding Source={x:Reference Name=sciChart}}"/>
+
+        <s:SciChartSurface x:Name="sciChart" Grid.Column="1">
+            <s:SciChartSurface.XAxis>
+                <s:NumericAxis/>
+            </s:SciChartSurface.XAxis>
+
+            <s:SciChartSurface.YAxis>
+                <s:NumericAxis/>
+            </s:SciChartSurface.YAxis>
+        </s:SciChartSurface>
+
+        <TextBlock x:Name="warningText"
+                   Grid.Column="1"
+                   FontWeight="SemiBold"
+                   Text="The &quot;Fast Paletted Scatter Charts&quot; is only available with Visual Xccelerator Engine and DirectX hardware acceleration." 
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   Foreground="#FFDC7969"/>
+    </Grid>
+</UserControl>

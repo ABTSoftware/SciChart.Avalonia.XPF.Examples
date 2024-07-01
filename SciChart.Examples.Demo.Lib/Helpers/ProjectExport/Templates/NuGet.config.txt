@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+	<packageSources>
+		<clear />
+		<add key="nuget.org" value="https://api.nuget.org/v3/index.json" />
+		<add key="scichart-nightly" value="https://www.myget.org/F/abtsoftware-bleeding-edge/api/v3/index.json"/>
+		<add key="xpf" value="https://xpf-nuget-feed.avaloniaui.net/v3/index.json" />
+		<add key="avalonia-nightly" value="https://nuget-feed-nightly.avaloniaui.net/v3/index.json" />
+		<add key="solution-local" value="./nupkgs"/>
+	</packageSources>
+	<packageSourceCredentials>
+		<xpf>
+			<add key="Username" value="license" />
+			<add key="ClearTextPassword" value="[XPF_LICENSE_KEY]" />
+		</xpf>
+	</packageSourceCredentials>
+</configuration>

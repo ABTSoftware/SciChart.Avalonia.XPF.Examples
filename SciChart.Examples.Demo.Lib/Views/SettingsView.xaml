@@ -1,0 +1,268 @@
+﻿<UserControl x:Class="SciChart.Examples.Demo.Lib.Views.SettingsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:s="http://schemas.abtsoftware.co.uk/scichart"
+             xmlns:ext="http://schemas.abtsoftware.co.uk/scichart/exampleExternals"
+             xmlns:cnv="clr-namespace:SciChart.Examples.Demo.Lib.Common.Converters"
+             xmlns:vxr="clr-namespace:SciChart.Drawing.VisualXcceleratorRasterizer;assembly=SciChart.Drawing"
+             AutomationProperties.AutomationId="SettingsView">
+
+    <UserControl.Resources>
+        
+        <ext:BoolToValueConverter x:Key="BoolToValueVisibilityConverter" FalseValue="Collapsed" TrueValue="Visible"/>
+        <cnv:InverseBooleanConverter x:Key="InverseBoolConverter"/>
+        <cnv:RendererTypeToDisplayNameConverter x:Key="RendererConverter"/>
+
+        <Style x:Key="SettingsGroupHeaderStyle" TargetType="{x:Type TextBlock}">
+            <Setter Property="Margin" Value="0,10"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="{DynamicResource SettingsViewForegroundBrush}"/>
+        </Style>
+
+        <Style x:Key="SettingsCheckBoxStyle" TargetType="{x:Type CheckBox}" BasedOn="{StaticResource {x:Type CheckBox}}">
+            <Setter Property="Foreground" Value="{DynamicResource SettingsViewForegroundBrush}"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="FontSize" Value="12"/>
+        </Style>
+    </UserControl.Resources>
+
+    <Border Width="480"
+            MaxHeight="610"     
+            CornerRadius="10"
+            Background="{DynamicResource SettingsViewBackgroundBrush}"
+            IsEnabled="{Binding InitReady, Mode=OneWay, FallbackValue=False}">
+              
+        <Grid Margin="20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Row="0"
+                       Grid.Column="0"
+                       FontFamily="Segoe UI"
+                       FontSize="20"
+                       FontWeight="SemiBold"
+                       HorizontalAlignment="Left"
+                       VerticalAlignment="Center"
+                       Foreground="{DynamicResource SettingsViewForegroundBrush}"
+                       Text="SciChart Examples Suite Settings" />
+
+            <Button Grid.Row="0"
+                    Grid.Column="1"       
+                    Margin="0,5,0,0"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    AutomationProperties.AutomationId="Settings.Close"
+                    Command="{Binding ParentViewModel.HideSettingsCommand}"
+                    Style="{StaticResource CloseButtonStyle}" />
+
+            <TextBlock Grid.Row="1" Grid.Column="0" Margin="0,5,0,0" FontFamily="Segoe UI" Foreground="#FF8F94A1">
+                <Run Text="Hi there! Welcome to SciChart"/>
+                <Run Text="{Binding Source={x:Static s:SciChartSurface.VersionInfo}, Mode=OneWay, StringFormat='({0},'}"/>
+                <Run Text="{Binding TargetFramework, Mode=OneWay, StringFormat='{}{0})'}"/>
+            </TextBlock>
+
+            <Rectangle Grid.Row="2"
+                       Grid.Column="0"
+                       Grid.ColumnSpan="2"
+                       Height="1"
+                       Margin="0,10"
+                       Fill="{DynamicResource SettingsViewSeparatorBrush}"
+                       HorizontalAlignment="Stretch"
+                       SnapsToDevicePixels="True"
+                       UseLayoutRounding="True"/>
+
+            <ScrollViewer Grid.Row="3"
+                          Grid.Column="0"
+                          Grid.ColumnSpan="2"
+                          HorizontalScrollBarVisibility="Disabled"
+                          VerticalScrollBarVisibility="Auto">
+
+                <StackPanel Orientation="Vertical">
+
+                    <!-- 2D Renderer Plugins -->
+
+                    <TextBlock Margin="0,0,0,10"
+                               Text="Renderer Plugin for 2D Charts"
+                               Style="{StaticResource SettingsGroupHeaderStyle}"/>
+
+                    <CheckBox x:Name="vxRendererCheckbox"
+                              Margin="0,5"               
+                              Content="Visual Xccelerator Engine"
+                              ToolTip="Render all examples using the new incredibly fast Visual Xccelerator engine. Requires hardware accelerated GPU"
+                              s:ToggleButtonExtensions.GroupName="SettingsRenderGroup"
+                              Style="{StaticResource SettingsCheckBoxStyle}"
+                              IsEnabled="{Binding IsHardwareAcceleration, Mode=OneWay}"
+                              IsChecked="{Binding SelectedRenderer, Mode=TwoWay, Converter={StaticResource RendererConverter}, ConverterParameter={x:Type vxr:VisualXcceleratorRenderSurface}}"/>
+
+                    <CheckBox Margin="25,5"
+                              Content="Use Alternative Fill Source (DirectX Only)"
+                              ToolTip="Uses an alternative method (not WPF's D3DImage) to render DirectX Content. Can help compatibility issues on some machines"
+                              AutomationProperties.AutomationId="Settings.UseAlternativeFillSource"
+                              Style="{StaticResource SettingsCheckBoxStyle}"
+                              IsEnabled="{Binding IsDirectXEnabled, Mode=OneWay}"
+                              IsChecked="{Binding UseAlternativeFillSourceD3D, Mode=TwoWay}"
+                              Visibility="{Binding IsDirectXAvailable, Mode=OneWay, Converter={StaticResource BoolToValueVisibilityConverter}}"/>
+
+                    <CheckBox Margin="25,5"
+                              Content="Enable Force Wait for GPU (DirectX Only)"
+                              ToolTip="Enables waiting for GPU before presenting DirectX content to WPF. Can help compatibility issues on some machines"
+                              AutomationProperties.AutomationId="Settings.EnableForceWaitForGpu"
+                              Style="{StaticResource SettingsCheckBoxStyle}"
+                              IsEnabled="{Binding IsDirectXEnabled, Mode=OneWay}"
+                              IsChecked="{Binding EnableForceWaitForGPU, Mode=TwoWay}"
+                              Visibility="{Binding IsDirectXAvailable, Mode=OneWay, Converter={StaticResource BoolToValueVisibilityConverter}}"/>
+
+                    <CheckBox Margin="0,5"
+                              Content="Vector (XAML Based)"
+                              ToolTip="Render all examples using the Vector renderer plugin"
+                              s:ToggleButtonExtensions.GroupName="SettingsRenderGroup"
+                              Style="{StaticResource SettingsCheckBoxStyle}"
+                              IsChecked="{Binding SelectedRenderer, Mode=TwoWay, Converter={StaticResource RendererConverter}, ConverterParameter={x:Type s:XamlRenderSurface}}"/>
+
+                    <!-- DirectX Settings -->
+
+                    <StackPanel Visibility="{Binding IsDirectXAvailable, Mode=OneWay, Converter={StaticResource BoolToValueVisibilityConverter}}">
+                        
+                        <Rectangle Height="1"
+                                   Margin="0,10,0,0"
+                                   Fill="{DynamicResource SettingsViewSeparatorBrush}"
+                                   HorizontalAlignment="Stretch"
+                                   SnapsToDevicePixels="True"
+                                   UseLayoutRounding="True"/>
+  
+                        <TextBlock Text="Visual Xccelerator Engine Settings"
+                                   Style="{StaticResource SettingsGroupHeaderStyle}"/>
+
+                        <CheckBox Margin="0,5"
+                                  Content="AntiAliasing (None)"
+                                  ToolTip="Render all charts without AntiAliasing"
+                                  s:ToggleButtonExtensions.GroupName="AASettingsGroup"
+                                  Style="{StaticResource SettingsCheckBoxStyle}"
+                                  IsChecked="{Binding Use3DAANone, Mode=TwoWay}"/>
+
+                        <CheckBox Margin="0,5"
+                                  Content="AntiAliasing (4x MSAA)"
+                                  ToolTip="Render all charts with 4x Multi Sample AntiAliasing"
+                                  s:ToggleButtonExtensions.GroupName="AASettingsGroup"
+                                  Style="{StaticResource SettingsCheckBoxStyle}"
+                                  IsChecked="{Binding Use3DAA4x, Mode=TwoWay}"/>
+                    </StackPanel>
+                  
+                    <!-- Performance -->
+
+                    <Rectangle Height="1"
+                               Margin="0,10,0,0"
+                               Fill="{DynamicResource SettingsViewSeparatorBrush}"
+                               HorizontalAlignment="Stretch"
+                               SnapsToDevicePixels="True"
+                               UseLayoutRounding="True"/>
+
+                    <TextBlock Text="Performance"
+                               Style="{StaticResource SettingsGroupHeaderStyle}"/>
+
+                    <CheckBox Margin="0,5"
+                              Content="Enable Drop Shadow Effects (Used by Tooltips)"
+                              ToolTip="Disable effects on lower powered machines for better performance!"
+                              Style="{StaticResource SettingsCheckBoxStyle}"
+                              IsChecked="{Binding EnableDropShadows, Mode=TwoWay}"/>
+
+                    <CheckBox x:Name="EnableCppCheckbox"
+                              Margin="0,5"
+                              Content="Enable C++ Resampling Algorithms"
+                              ToolTip="Enable / disable C++ Resampling algorithms for faster, more accurate resampling"
+                              Style="{StaticResource SettingsCheckBoxStyle}"
+                              IsChecked="{Binding EnableResamplingCPlusPlus, Mode=TwoWay}"/>
+
+                    <CheckBox Margin="25,5"
+                              Content="Enable SIMD in C++ Algorithms"
+                              ToolTip="Enables SIMD / Streaming SIMD Extensions for advanced parallelisation-on-chip"
+                              Style="{StaticResource SettingsCheckBoxStyle}"
+                              IsEnabled="{Binding IsChecked, ElementName=EnableCppCheckbox}"
+                              IsChecked="{Binding EnableSimd, Mode=TwoWay}"
+                              Visibility="{Binding IsSimdAvailable, Mode=OneWay, Converter={StaticResource BoolToValueVisibilityConverter}}"/>
+
+                    <CheckBox Margin="25,5"
+                              Content="Enable Impossible mode (Experimental)"
+                              ToolTip="Enables an experimental mode which gives impossible performance in real-time big-data charts (Billions of points)"
+                              Style="{StaticResource SettingsCheckBoxStyle}"
+                              IsEnabled="{Binding IsChecked, ElementName=EnableCppCheckbox}"
+                              IsChecked="{Binding EnableImpossibleMode, Mode=TwoWay}"/>
+
+                    <!-- Feedback -->
+
+                    <Rectangle Height="1"
+                               Margin="0,10,0,0"
+                               Fill="{DynamicResource SettingsViewSeparatorBrush}"
+                               HorizontalAlignment="Stretch"
+                               SnapsToDevicePixels="True"
+                               UseLayoutRounding="True"/>
+
+                    <TextBlock Text="Allow Feedback"
+                               Style="{StaticResource SettingsGroupHeaderStyle}"/>
+
+                    <CheckBox Margin="0,5"
+                              Content="Allow Usage Stats feedback to our servers"
+                              ToolTip="Anonymous usage stats and Smile Frown feedback is enabled when this option is checked"
+                              Style="{StaticResource SettingsCheckBoxStyle}"
+                              IsChecked="{Binding AllowFeedback, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                              IsEnabled="True"/>
+
+                    <!-- Developer Mode -->
+                    
+                    <Rectangle Height="1"
+                               Margin="0,10,0,0"
+                               Fill="{DynamicResource SettingsViewSeparatorBrush}"
+                               HorizontalAlignment="Stretch"
+                               SnapsToDevicePixels="True"
+                               UseLayoutRounding="True"/>
+
+                    <TextBlock Text="Dev Mode"
+                               Style="{StaticResource SettingsGroupHeaderStyle}"/>
+
+                    <CheckBox Margin="0,5"
+                              Content="Enable Dev Mode"
+                              ToolTip="Hacks and Magic for our development and testing team. Leave this unchecked!"
+                              Style="{StaticResource SettingsCheckBoxStyle}"
+                              IsChecked="{Binding IsDeveloperMode, Source={x:Static ext:DeveloperModManager.Manage}}" />
+
+                    <StackPanel Margin="0,10" 
+                                Orientation="Vertical"
+                                HorizontalAlignment="Left"
+                                Visibility="{Binding IsDeveloperMode, Source={x:Static ext:DeveloperModManager.Manage}, Converter={StaticResource BoolToValueVisibilityConverter}}">
+
+                        <Button ToolTip="Force a GC Collect"
+                                Command="{Binding ParentViewModel.GCCollectCommand}"
+                                Content="Force GC.Collect"
+                                Style="{StaticResource DevModeButtonStyle}"/>
+
+                        <Button ToolTip="Whoa there! This option is for our devs to export all examples to HTML pages for the website"
+                                Command="{Binding ParentViewModel.ExportAllHtmlCommand}"
+                                Content="Export all to HTML"
+                                Style="{StaticResource DevModeButtonStyle}"/>
+
+                        <Button ToolTip="Whoa there! This option is for our devs to export this example to HTML page for the website"
+                                Command="{Binding ParentViewModel.ExportToHtmlCommand}"
+                                Content="Export this to HTML"
+                                Style="{StaticResource DevModeButtonStyle}"/>
+
+                        <Button ToolTip="Whoa there! This option exports all SciChart examples to stand alone projects and is for our devs to test export. If you want to export just one example, press the 'Export' button in the example toolbar"
+                                Command="{Binding ParentViewModel.ExportAllSolutionsCommand}"
+                                Content="Export all to .csproj"
+                                Style="{StaticResource DevModeButtonStyle}"/>
+
+                    </StackPanel>
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+    </Border>
+</UserControl>

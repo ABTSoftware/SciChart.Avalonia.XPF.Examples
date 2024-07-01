@@ -1,0 +1,108 @@
+﻿<UserControl x:Class="SciChart.Examples.Examples.ExportAChart.ExportAndScreenshotsChart.ExportAndScreenshotOptionsChart"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:ext="http://schemas.abtsoftware.co.uk/scichart/exampleExternals"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:s="http://schemas.abtsoftware.co.uk/scichart"
+             d:DesignHeight="300"
+             d:DesignWidth="300"
+             mc:Ignorable="d">
+
+    <UserControl.Resources>
+        <Style BasedOn="{StaticResource DefaultButtonStyle}" TargetType="Button">
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="FontSize" Value="10" />
+        </Style>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <!--  The SciChartInteractionToolbar adds zoom, pan, zoom extents and rotate functionality  -->
+        <!--  to the chart and is included for example purposes.  -->
+        <!--  If you wish to know how to zoom and pan a chart then do a search for Zoom Pan in the Examples suite!  -->
+        <ext:SciChartInteractionToolbar TargetSurface="{Binding Source={x:Reference Name=sciChart}}">
+            <ext:FlyoutMenuButton>
+                <ext:ToolbarIcon Kind="TuneVariant" Height="16" Width="16" Style="{StaticResource ToolbarButtonIconStyle}"/>
+                <ext:FlyoutMenuButton.PopupContent>
+                    <StackPanel Margin="5" MinWidth="120" Orientation="Vertical">
+                        <TextBlock Text="Antialiasing" Style="{StaticResource FlyoutMenuHeaderStyle}"/>
+                        <CheckBox x:Name="useAA" Margin="0,5" Content="Use AA" IsChecked="True"/>
+                    </StackPanel>
+                </ext:FlyoutMenuButton.PopupContent>
+            </ext:FlyoutMenuButton>
+
+            <ext:FlyoutMenuButton ToolTipService.ToolTip="Export to PNG">
+                <ext:ToolbarIcon Kind="Export" Style="{StaticResource ToolbarButtonIconStyle}"/>
+                <ext:FlyoutMenuButton.PopupContent>
+                    <StackPanel Margin="5" MinWidth="120" Orientation="Vertical">
+                        <TextBlock Text="Export Options" Style="{StaticResource FlyoutMenuHeaderStyle}"/>
+                        <Button Click="ExportToPng" Content="PNG" ToolTip="Export PNG"/>
+                        <Button Click="ExportPngInMemory" Content="PNGb" ToolTip="Export PNG Big"/>
+                    </StackPanel>
+                </ext:FlyoutMenuButton.PopupContent>
+            </ext:FlyoutMenuButton>
+        </ext:SciChartInteractionToolbar>
+
+        <Grid Grid.Column="1">
+
+            <s:SciChartSurface x:Name="sciChart">
+
+                <s:SciChartSurface.RenderableSeries>
+                    <s:FastCandlestickRenderableSeries AntiAliasing="{Binding Source={x:Reference Name=useAA}, Path=IsChecked, Mode=TwoWay}"
+                                                       FillUp="{StaticResource MainThemeTransparentSolidBrush}"
+                                                       FillDown="{StaticResource SecondaryThemeTransparentSolidBrush}">
+                    </s:FastCandlestickRenderableSeries>
+                    <s:FastLineRenderableSeries AntiAliasing="{Binding Source={x:Reference Name=useAA}, Path=IsChecked, Mode=TwoWay}" Stroke="{StaticResource ExtraThemeStrokeColor_1}" />
+                    <s:FastLineRenderableSeries AntiAliasing="{Binding Source={x:Reference Name=useAA}, Path=IsChecked, Mode=TwoWay}" Stroke="{StaticResource ExtraThemeStrokeColor_2}" />
+                    <s:FastLineRenderableSeries AntiAliasing="{Binding Source={x:Reference Name=useAA}, Path=IsChecked, Mode=TwoWay}" Stroke="{StaticResource ExtraThemeStrokeColor_3}" />
+                </s:SciChartSurface.RenderableSeries>
+
+                <s:SciChartSurface.XAxis>
+                    <s:DateTimeAxis DrawMajorBands="True" GrowBy="0.0, 0.1" />
+                </s:SciChartSurface.XAxis>
+
+                <s:SciChartSurface.YAxis>
+                    <s:NumericAxis />
+                </s:SciChartSurface.YAxis>
+
+                <s:SciChartSurface.ChartModifier>
+                    <s:ModifierGroup>
+                        <s:LegendModifier Margin="10" />
+                        <s:RubberBandXyZoomModifier />
+                        <s:ZoomExtentsModifier />
+                    </s:ModifierGroup>
+                </s:SciChartSurface.ChartModifier>
+
+                <s:SciChartSurface.Annotations>
+
+                    <s:TextAnnotation x:Name="buyTxtAnnot"
+                                      FontSize="14"
+                                      Text="Buy"
+                                      Y1="11533"
+                                      Y2="11533" />
+
+                    <s:TextAnnotation x:Name="sellTxtAnnot"
+                                      FontSize="14"
+                                      Text="Sell"
+                                      Y1="12900"
+                                      Y2="12900" />
+
+                    <s:BoxAnnotation x:Name="boxAnnotation"
+                                     Background="{StaticResource MainThemeTransparentSolidBrush}"
+                                     BorderBrush="{StaticResource MainThemeSolidBrush}"
+                                     BorderThickness="1"
+                                     CornerRadius="2"
+                                     Y1="11537"
+                                     Y2="12819" />
+
+                </s:SciChartSurface.Annotations>
+
+            </s:SciChartSurface>
+        </Grid>
+    </Grid>
+</UserControl>

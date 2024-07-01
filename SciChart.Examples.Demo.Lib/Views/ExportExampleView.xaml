@@ -1,0 +1,190 @@
+﻿<UserControl x:Class="SciChart.Examples.Demo.Lib.Views.ExportExampleView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:abt="http://schemas.abtsoftware.co.uk/presentation"
+             xmlns:ext="http://schemas.abtsoftware.co.uk/scichart/exampleExternals"
+             xmlns:icons="http://metro.mahapps.com/winfx/xaml/iconpacks">
+
+    <UserControl.Resources>
+        <Style BasedOn="{StaticResource ToolbarPopupTextBoxStyle}" TargetType="TextBox">
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Padding" Value="3"/>
+        </Style>
+
+        <abt:BoolToValueConverter x:Key="b2vConverter" TrueValue="Visible" FalseValue="Collapsed"/>
+        <abt:BoolToValueConverter x:Key="ib2vConverter" TrueValue="Hidden" FalseValue="Visible"/>
+        <abt:InverseBooleanConverter x:Key="ibConverter"/>
+
+    </UserControl.Resources>
+
+    <Border Width="480" CornerRadius="10" Background="{DynamicResource FeedbackExportViewBackgroundBrush}">
+        <Grid Margin="20,20,20,10" SnapsToDevicePixels="True">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Row="0"
+                       Grid.ColumnSpan="2"
+                       FontFamily="Segoe UI"
+                       FontSize="16"
+                       FontWeight="SemiBold"
+                       Text="Export to Visual Studio"
+                       HorizontalAlignment="Left"
+                       VerticalAlignment="Center"
+                       Foreground="{DynamicResource FeedbackExportHeaderForegroundBrush}"/>
+
+            <Button Grid.Row="0"
+                    Grid.Column="1"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    Command="{Binding CancelCommand}" 
+                    Style="{StaticResource CloseButtonStyle}"/>
+
+            <Rectangle Grid.Row="1"
+                       Grid.ColumnSpan="2"
+                       Height="1"
+                       Margin="0,10,0,0"
+                       Fill="{DynamicResource FeedbackExportViewSeparatorBrush}"
+                       HorizontalAlignment="Stretch"
+                       UseLayoutRounding="True"/>
+            
+            <TextBlock Grid.Row="2"
+                       Grid.Column="0"
+                       Grid.ColumnSpan="2"
+                       Margin="0,10"
+                       TextWrapping="Wrap"
+                       FontSize="12"
+                       Foreground="{DynamicResource FeedbackExportMessageForegroundBrush}">
+                <Run Text="If you'd like to browse the entire SciChart Examples source-code, all our examples are also published on"/>
+                <Hyperlink Click="Hyperlink_Click" Foreground="{DynamicResource MainThemeSolidBrush}">GitHub</Hyperlink>
+            </TextBlock>
+    
+            <TextBlock Grid.Row="3"
+                       Grid.Column="0"
+                       Margin="0,5"
+                       Text="Please select a folder to export the example" 
+                       Foreground="{DynamicResource FeedbackExportHeaderForegroundBrush}"/>
+
+            <TextBox Grid.Row="4"
+                     Grid.Column="0"
+                     AutomationProperties.AutomationId="ExportExampleView.ExportPathTextBox"
+                     Text="{Binding ExportPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                     ext:TextBoxHelper.Watermark="Export Path"/>
+
+            <Button Grid.Row="4"
+                    Grid.Column="1"
+                    Width="30"
+                    Height="30"
+                    Margin="10,0,0,0"
+                    Command="{Binding SelectExportPathCommand}"
+                    Style="{StaticResource DefaultButtonStyle}">
+
+                <icons:PackIconMaterial Kind="DotsHorizontal"
+                                        Height="12" Width="12"
+                                        Foreground="{DynamicResource FeedbackExportHeaderForegroundBrush}"/>
+            </Button>
+
+            <TextBlock Grid.Row="5"
+                       Grid.Column="0"
+                       Margin="0,15,0,0"
+                       Foreground="{DynamicResource FeedbackExportHeaderForegroundBrush}">
+                <Run Text="Please select how to reference SciChart libraries"/>
+                <Run Text="{Binding ExportMajorVersion, Mode=OneWay, StringFormat='(requires v{0}.x)'}"/>
+            </TextBlock>
+
+            <RadioButton Grid.Row="6"
+                         Grid.Column="0"
+                         Margin="0,10,0,0"
+                         Content="NuGet Package"
+                         IsChecked="{Binding IsFolderPath, Mode=TwoWay, Converter={StaticResource ibConverter}}" />      
+
+            <RadioButton Grid.Row="7"
+                         Grid.Column="0"
+                         Margin="0,10,0,0"
+                         Content="Local Folder"
+                         IsChecked="{Binding IsFolderPath, Mode=TwoWay}"
+                         IsEnabled="{Binding IsXpfExport, Mode=OneWay, Converter={StaticResource ibConverter}}" />
+        
+            <TextBox Grid.Row="8" 
+                     Grid.Column="0"
+                     Margin="0,10,0,0"          
+                     AutomationProperties.AutomationId="ExportExampleView.SciChartLibPath"
+                     ext:TextBoxHelper.Watermark="Folder Path"
+                     Text="{Binding LibrariesPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"        
+                     Visibility="{Binding IsFolderPath, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+
+            <Button Grid.Row="8" 
+                    Grid.Column="1"
+                    Width="30"
+                    Height="30"
+                    Margin="10,10,0,0"
+                    Command="{Binding SelectLibraryCommand}"
+                    Style="{StaticResource DefaultButtonStyle}"
+                    Visibility="{Binding IsFolderPath, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
+
+                <icons:PackIconMaterial Kind="DotsHorizontal"
+                                        Height="12" Width="12"
+                                        Foreground="{DynamicResource FeedbackExportHeaderForegroundBrush}"/>
+            </Button>
+
+            <StackPanel Grid.Row="9"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="2"
+                        Margin="0,15,0,0"
+                        Visibility="{Binding IsXpfExport, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
+
+                <TextBlock Text="Please select how to set Avalonia XPF license"
+                           Foreground="{DynamicResource FeedbackExportHeaderForegroundBrush}"/>
+
+                <RadioButton Content="Manually (Later)"
+                             Margin="0,10,0,0"
+                             IsChecked="{Binding IsXpfLicense, Mode=TwoWay, Converter={StaticResource ibConverter}}"/>
+                
+                <RadioButton Content="License Key"
+                             Margin="0,10,0,0"
+                             IsChecked="{Binding IsXpfLicense, Mode=TwoWay}"/>
+
+                <TextBox Margin="0,10,0,0"
+                         AutomationProperties.AutomationId="ExportExampleView.XpfLicenseKey"
+                         ext:TextBoxHelper.Watermark="License Key"
+                         Text="{Binding XpfLicenseKey, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                         Visibility="{Binding IsXpfLicense, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            </StackPanel>
+
+            <Grid Grid.Row="10"
+                  Grid.Column="0"  
+                  Margin="0,10,0,0"
+                  MinHeight="40">
+
+                <Button Content="GO"                  
+                        Command="{Binding ExportCommand}"
+                        Style="{StaticResource ExportExampleButtonStyle}"
+                        Visibility="{Binding ShowExportedMessage, Converter={StaticResource ib2vConverter}}"
+                        AutomationProperties.AutomationId="ExportExampleView.ExportButton"/>
+
+                <TextBlock Text="The example has been successfully exported!" 
+                           Foreground="{DynamicResource HyperlinkAlternativeForegroundBrush}"
+                           FontSize="12"
+                           FontWeight="SemiBold"
+                           HorizontalAlignment="Left"
+                           VerticalAlignment="Center"
+                           Visibility="{Binding ShowExportedMessage, Converter={StaticResource b2vConverter}}"/>
+            </Grid>
+        </Grid>
+    </Border>
+</UserControl>

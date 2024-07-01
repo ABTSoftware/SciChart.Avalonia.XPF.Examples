@@ -1,0 +1,111 @@
+﻿<UserControl x:Class="SciChart.Examples.Examples.AnnotateAChart.CompositeAnnotations.CompositeAnnotationsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:ext="http://schemas.abtsoftware.co.uk/scichart/exampleExternals"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:s="http://schemas.abtsoftware.co.uk/scichart"
+             d:DesignHeight="400"
+             d:DesignWidth="600"
+             mc:Ignorable="d">
+
+    <UserControl.Resources>
+        
+        <ext:ToolbarIcon x:Key="FibonacciRetracementContent"
+                         Style="{StaticResource ToolbarButtonIconStyle}"
+                         Path="M5 5V19H7V21H3V3H7V5H5M20 7H7V9H20V7M20 11H7V13H20V11M20 15H7V17H20V15Z"/>
+
+        <ext:ToolbarIcon x:Key="FibonacciExtensionContent"
+                         Style="{StaticResource ToolbarButtonIconStyle}"
+                         Path="M23.999999,67 L100,67 100,78 23.999999,78 Z
+                               M99.901573,15.192719 L100,28.040001 32.463245,44 100,44 100,55 23.999999,55 23.999999,45.999998 23.999999,44 23.999999,33.083706 Z
+                               M99.900093,15 L99.93338,15.185219 99.901573,15.192719 Z M0,0 L24.0,0 24.0,11.12 12,11.12 12,88.89 24.0,88.89 24.0,100 0,100 Z"/>
+
+        <ext:ToolbarIcon x:Key="MeasureXContent"
+                         Style="{StaticResource ToolbarButtonIconStyle}"
+                         Path="M13,8V11H3V13H13V16L17,12L13,8M19,20H21V4H19V20Z"/>
+
+        <ext:ToolbarIcon x:Key="MeasureYContent"
+                         Style="{StaticResource ToolbarButtonIconStyle}"
+                         Path="M16,13H13V3H11V13H8L12,17L16,13M4,19V21H20V19H4Z"/>
+
+        <ext:ToolbarIcon x:Key="MeasureXYContent"
+                         Style="{StaticResource ToolbarButtonIconStyle}"
+                         Path="M83,0 L94,0 94,81.000001 0.000001,81.000001 0.000001,71 83,71 Z
+                               M28.500002,15.25 L49.714287,15.25 49.714287,1 72,20 49.714287,39 49.714287,24.75 28.500002,24.75
+                               28.500002,42.857145 45,42.857145 23,62.000005 0.9999993,42.857145 17.5,42.857145 17.5,24.75 17.5,15.25 Z"/>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <!--  The SciChartInteractionToolbar adds zoom, pan, zoom extents and rotate functionality  -->
+        <!--  to the chart and is included for example purposes.  -->
+        <!--  If you wish to know how to zoom and pan a chart then do a search for Zoom Pan in the Examples suite!  -->
+        <ext:SciChartInteractionToolbar TargetSurface="{Binding Source={x:Reference Name=SciChart}}">
+            <ToggleButton x:Name="FibRetr"
+                          Checked="FibonacciRetracementChecked"
+                          Unchecked="AnnotationTypeUnchecked"
+                          Content="{StaticResource FibonacciRetracementContent}"
+                          Style="{StaticResource DefaultToggleButtonStyle}"
+                          ToolTipService.ToolTip="Create Fibonacci Retracement Annotation"/>   
+                       
+            <ToggleButton x:Name="FibExt"
+                          Checked="FibonacciExtensionChecked"
+                          Unchecked="AnnotationTypeUnchecked"
+                          Content="{StaticResource FibonacciExtensionContent}"
+                          Style="{StaticResource DefaultToggleButtonStyle}"
+                          ToolTipService.ToolTip="Create Fibonacci Extension Annotation"/>
+                               
+            <ToggleButton x:Name="MeasureX"
+                          Checked="MeasureXChecked"
+                          Unchecked="AnnotationTypeUnchecked"
+                          Content="{StaticResource MeasureXContent}"
+                          Style="{StaticResource DefaultToggleButtonStyle}"
+                          ToolTipService.ToolTip="Create MeasureXAnnotation"/>
+            
+            <ToggleButton x:Name="MeasureY"
+                          Checked="MeasureYChecked"
+                          Unchecked="AnnotationTypeUnchecked"
+                          Content="{StaticResource MeasureYContent}"
+                          Style="{StaticResource DefaultToggleButtonStyle}"
+                          ToolTipService.ToolTip="Create MeasureYAnnotation"/>
+            
+            <ToggleButton x:Name="MeasureXy"
+                          Checked="MeasureXyChecked"
+                          Unchecked="AnnotationTypeUnchecked"
+                          Content="{StaticResource MeasureXYContent}"
+                          Style="{StaticResource DefaultToggleButtonStyle}"
+                          ToolTipService.ToolTip="Create MeasureXYAnnotation"/>
+            
+        </ext:SciChartInteractionToolbar>
+
+        <s:SciChartSurface x:Name="SciChart"
+                           Grid.Column="1"
+                           RenderableSeries="{s:SeriesBinding RenderableSeriesViewModels}">
+            <!--  Styles.xaml resource keys must match StyleKey in RenderableSeriesViewModel  -->
+            <s:SciChartSurface.Resources>
+                <!--  <ResourceDictionary Source="Styles.xaml" />  -->
+            </s:SciChartSurface.Resources>
+
+            <s:SciChartSurface.XAxis>
+                <s:CategoryDateTimeAxis />
+            </s:SciChartSurface.XAxis>
+
+            <s:SciChartSurface.YAxis>
+                <s:NumericAxis />
+            </s:SciChartSurface.YAxis>
+
+            <s:SciChartSurface.ChartModifier>
+                <s:ModifierGroup>
+                    <s:AnnotationCreationModifier x:Name="AnnotationCreation" AnnotationCreated="OnAnnotationCreated" />
+                </s:ModifierGroup>
+            </s:SciChartSurface.ChartModifier>
+
+        </s:SciChartSurface>
+
+    </Grid>
+</UserControl>

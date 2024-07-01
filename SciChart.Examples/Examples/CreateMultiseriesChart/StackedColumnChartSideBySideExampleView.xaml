@@ -1,0 +1,183 @@
+﻿<UserControl x:Class="SciChart.Examples.Examples.CreateMultiseriesChart.StackedColumnChartSideBySideExampleView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:s="http://schemas.abtsoftware.co.uk/scichart"
+             xmlns:local="clr-namespace:SciChart.Examples.Examples.CreateMultiseriesChart"
+             Loaded="StackedColumnChartSideBySideExampleView_OnLoaded"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:ext="http://schemas.abtsoftware.co.uk/scichart/exampleExternals"             
+             d:DesignHeight="400"
+             d:DesignWidth="600"
+             mc:Ignorable="d">
+    
+    <UserControl.Resources>
+
+        <ResourceDictionary>
+
+            <local:YearsLabelProvider x:Key="YearsLabelProvider" />
+
+            <Style TargetType="s:StackedColumnRenderableSeries">
+                <Setter Property="Stroke" Value="Transparent" />
+                <Setter Property="LegendMarkerTemplate">
+                    <Setter.Value>
+                        <DataTemplate DataType="s:StackedColumnRenderableSeries">
+                            <Rectangle Width="10"
+                                   Fill="{Binding Fill}"
+                                   Stretch="Fill" />
+                        </DataTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <Style TargetType="s:SciChartLegend">
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="BorderThickness" Value="0" />
+            </Style>
+        </ResourceDictionary>
+
+    </UserControl.Resources>
+
+    <Grid>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <!--  The SciChartInteractionToolbar adds zoom, pan, zoom extents and rotate functionality  -->
+        <!--  to the chart and is included for example purposes.  -->
+        <!--  If you wish to know how to zoom and pan a chart then do a search for Zoom Pan in the Examples suite!  -->
+        <ext:SciChartInteractionToolbar TargetSurface="{Binding Source={x:Reference Name=SciChart}}" />
+
+        <!--  Create the chart surface  -->
+        <s:SciChartSurface x:Name="SciChart"
+                           ChartTitle="THE WORLD POPULATION"
+                           Padding="0" BorderThickness="0" Grid.Column="1">
+            <!--  Declare RenderableSeries  -->
+            <s:SciChartSurface.RenderableSeries>
+                <s:StackedColumnRenderableSeries x:Name="ChinaSeries"
+                                                 DataPointWidth="0.9"
+                                                 Fill="{StaticResource GroupSeriesGradientBrush_1}"
+                                                 Stroke="{StaticResource GroupSeriesColor_1}"
+                                                 StackedGroupId="China">
+                    <s:StackedColumnRenderableSeries.SeriesAnimation>
+                        <s:WaveAnimation AnimationDelay="0:0:0.2" Duration="0:0:1" PointDurationFraction="0.3"/>
+                    </s:StackedColumnRenderableSeries.SeriesAnimation>
+                </s:StackedColumnRenderableSeries>
+                <s:StackedColumnRenderableSeries x:Name="IndiaSeries"
+                                                 Fill="{StaticResource GroupSeriesGradientBrush_2}"
+                                                 Stroke="{StaticResource GroupSeriesColor_2}"
+                                                 StackedGroupId="India">
+                    <s:StackedColumnRenderableSeries.SeriesAnimation>
+                        <s:WaveAnimation AnimationDelay="0:0:0.2" Duration="0:0:1" PointDurationFraction="0.3"/>
+                    </s:StackedColumnRenderableSeries.SeriesAnimation>
+                </s:StackedColumnRenderableSeries>
+                <s:StackedColumnRenderableSeries x:Name="USASeries"
+                                                 Fill="{StaticResource GroupSeriesGradientBrush_3}"
+                                                 Stroke="{StaticResource GroupSeriesColor_3}"
+                                                 StackedGroupId="USA">
+                    <s:StackedColumnRenderableSeries.SeriesAnimation>
+                        <s:WaveAnimation AnimationDelay="0:0:0.2" Duration="0:0:1" PointDurationFraction="0.3"/>
+                    </s:StackedColumnRenderableSeries.SeriesAnimation>
+                </s:StackedColumnRenderableSeries>
+                <s:StackedColumnRenderableSeries x:Name="IndonesiaSeries"
+                                                 Fill="{StaticResource GroupSeriesGradientBrush_4}"
+                                                 Stroke="{StaticResource GroupSeriesColor_4}"
+                                                 StackedGroupId="Indonesia">
+                    <s:StackedColumnRenderableSeries.SeriesAnimation>
+                        <s:WaveAnimation AnimationDelay="0:0:0.2" Duration="0:0:1" PointDurationFraction="0.3"/>
+                    </s:StackedColumnRenderableSeries.SeriesAnimation>
+                </s:StackedColumnRenderableSeries>
+                <s:StackedColumnRenderableSeries x:Name="BrazilSeries"
+                                                 Fill="{StaticResource GroupSeriesGradientBrush_5}"
+                                                 Stroke="{StaticResource GroupSeriesColor_5}"
+                                                 StackedGroupId="Brazil">
+                    <s:StackedColumnRenderableSeries.SeriesAnimation>
+                        <s:WaveAnimation AnimationDelay="0:0:0.2" Duration="0:0:1" PointDurationFraction="0.3"/>
+                    </s:StackedColumnRenderableSeries.SeriesAnimation>
+                </s:StackedColumnRenderableSeries>
+                <s:StackedColumnRenderableSeries x:Name="PakistanSeries"
+                                                 Fill="{StaticResource GroupSeriesGradientBrush_6}"
+                                                 Stroke="{StaticResource GroupSeriesColor_6}"
+                                                 StackedGroupId="Pakistan">
+                    <s:StackedColumnRenderableSeries.SeriesAnimation>
+                        <s:WaveAnimation AnimationDelay="0:0:0.2" Duration="0:0:1" PointDurationFraction="0.3"/>
+                    </s:StackedColumnRenderableSeries.SeriesAnimation>
+                </s:StackedColumnRenderableSeries>
+                <s:StackedColumnRenderableSeries x:Name="NigeriaSeries"
+                                                 Fill="{StaticResource GroupSeriesGradientBrush_7}"
+                                                 Stroke="{StaticResource GroupSeriesColor_7}"
+                                                 StackedGroupId="Nigeria">
+                    <s:StackedColumnRenderableSeries.SeriesAnimation>
+                        <s:WaveAnimation AnimationDelay="0:0:0.2" Duration="0:0:1" PointDurationFraction="0.3"/>
+                    </s:StackedColumnRenderableSeries.SeriesAnimation>
+                </s:StackedColumnRenderableSeries>
+                <s:StackedColumnRenderableSeries x:Name="BangladeshSeries"
+                                                 Fill="{StaticResource GroupSeriesGradientBrush_8}"
+                                                 Stroke="{StaticResource GroupSeriesColor_8}"
+                                                 StackedGroupId="BangladeshSeries">
+                    <s:StackedColumnRenderableSeries.SeriesAnimation>
+                        <s:WaveAnimation AnimationDelay="0:0:0.2" Duration="0:0:1" PointDurationFraction="0.3"/>
+                    </s:StackedColumnRenderableSeries.SeriesAnimation>
+                </s:StackedColumnRenderableSeries>
+                <s:StackedColumnRenderableSeries x:Name="RussiaSeries"
+                                                 Fill="{StaticResource GroupSeriesGradientBrush_9}"
+                                                 Stroke="{StaticResource GroupSeriesColor_9}"
+                                                 StackedGroupId="Russia">
+                    <s:StackedColumnRenderableSeries.SeriesAnimation>
+                        <s:WaveAnimation AnimationDelay="0:0:0.2" Duration="0:0:1" PointDurationFraction="0.3"/>
+                    </s:StackedColumnRenderableSeries.SeriesAnimation>
+                </s:StackedColumnRenderableSeries>
+                <s:StackedColumnRenderableSeries x:Name="JapanSeries"
+                                                 Fill="{StaticResource GroupSeriesGradientBrush_10}"
+                                                 Stroke="{StaticResource GroupSeriesColor_10}"
+                                                 StackedGroupId="Japan">
+                    <s:StackedColumnRenderableSeries.SeriesAnimation>
+                        <s:WaveAnimation AnimationDelay="0:0:0.2" Duration="0:0:1" PointDurationFraction="0.3"/>
+                    </s:StackedColumnRenderableSeries.SeriesAnimation>
+                </s:StackedColumnRenderableSeries>
+                <s:StackedColumnRenderableSeries x:Name="RestOfTheWorldSeries"
+                                                 Fill="{StaticResource GroupSeriesGradientBrush_11}"
+                                                 Stroke="{StaticResource GroupSeriesColor_11}"
+                                                 StackedGroupId="RestOfTheWorld">
+                    <s:StackedColumnRenderableSeries.SeriesAnimation>
+                        <s:WaveAnimation AnimationDelay="0:0:0.2" Duration="0:0:1" PointDurationFraction="0.3"/>
+                    </s:StackedColumnRenderableSeries.SeriesAnimation>
+                </s:StackedColumnRenderableSeries>
+            </s:SciChartSurface.RenderableSeries>
+
+            <!--  Create an X Axis  -->
+            <s:SciChartSurface.XAxis>
+                <s:NumericAxis AutoTicks="False"
+                               LabelProvider="{StaticResource YearsLabelProvider}"
+                               MajorDelta="1"
+                               MinorDelta="0.5"
+                               DrawMajorBands="True"
+                               VisibleRangeLimit="-3, 7" />
+            </s:SciChartSurface.XAxis>
+
+            <!--  Create a Y Axis with GrowBy  -->
+            <s:SciChartSurface.YAxis>
+                <s:NumericAxis AutoRange="Always"
+                               AxisTitle="Billion of People"
+                               GrowBy="0,0.1"
+                               DrawMajorBands="True"
+                               VisibleRangeLimit="-5, 10" />
+            </s:SciChartSurface.YAxis>
+
+            <s:SciChartSurface.ChartModifier>
+                <s:ModifierGroup>
+                    <s:RubberBandXyZoomModifier IsXAxisOnly="True" />
+                    <s:LegendModifier Margin="10"
+                                      VerticalAlignment="Center"
+                                      GetLegendDataFor="AllSeries"
+                                      LegendPlacement="Right"
+                                      ShowLegend="True"
+                                      ShowVisibilityCheckboxes="True" />
+                    <s:TooltipModifier />
+                </s:ModifierGroup>
+            </s:SciChartSurface.ChartModifier>
+        </s:SciChartSurface>
+    </Grid>
+</UserControl>

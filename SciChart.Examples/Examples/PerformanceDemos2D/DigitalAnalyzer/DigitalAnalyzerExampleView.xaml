@@ -1,0 +1,311 @@
+﻿<UserControl x:Class="SciChart.Examples.Examples.PerformanceDemos2D.DigitalAnalyzer.DigitalAnalyzerExampleView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:ext="http://schemas.abtsoftware.co.uk/scichart/exampleExternals"
+             xmlns:s="http://schemas.abtsoftware.co.uk/scichart"
+             xmlns:local="clr-namespace:SciChart.Examples.Examples.PerformanceDemos2D.DigitalAnalyzer" 
+             xmlns:common="clr-namespace:SciChart.Examples.Examples.PerformanceDemos2D.DigitalAnalyzer.Common"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             mc:Ignorable="d" 
+             d:DesignHeight="450"
+             d:DesignWidth="800">
+    
+    <UserControl.Resources>
+        <s:InvertBooleanConverter x:Key="InvertBooleanConverter" />
+        <s:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+
+        <common:TimeLabelProvider x:Key="TimeLabelProvider"/>
+        <common:PointCountToLabelConverter x:Key="PointCountToLabelConverter"/>
+
+        <Style x:Key="HiddenAxisStyle" TargetType="s:AxisBase">
+            <Setter Property="DrawLabels" Value="False" />
+            <Setter Property="DrawMajorBands" Value="False" />
+            <Setter Property="DrawMajorGridLines" Value="False" />
+            <Setter Property="DrawMajorTicks" Value="False" />
+            <Setter Property="DrawMinorGridLines" Value="False" />
+            <Setter Property="DrawMinorTicks" Value="False" />
+            <Setter Property="AutoRange" Value="Never" />
+        </Style>
+
+        <Style x:Key="TimeAxisMajorTickLineStyle" TargetType="Line">
+            <Setter Property="Stroke" Value="#FF40434E" />
+            <Setter Property="StrokeThickness" Value="1" />
+            <Setter Property="StrokeEndLineCap" Value="Square" />
+            <Setter Property="X2" Value="6" />
+            <Setter Property="Y2" Value="6" />
+        </Style>
+
+        <Style x:Key="TimeAxisMinorTickLineStyle" TargetType="Line">
+            <Setter Property="Stroke" Value="#FF40434E" />
+            <Setter Property="StrokeThickness" Value="1" />
+            <Setter Property="StrokeEndLineCap" Value="Square" />
+            <Setter Property="X2" Value="3" />
+            <Setter Property="Y2" Value="3" />
+        </Style>
+
+        <x:Array x:Key="ChannelTypeSource" Type="sys:String">
+            <sys:String>Digital</sys:String>
+            <sys:String>Analog</sys:String>
+        </x:Array>
+
+        <x:Array x:Key="ChannelCountSource" Type="sys:Int32">
+            <sys:Int32>8</sys:Int32>
+            <sys:Int32>16</sys:Int32>
+            <sys:Int32>32</sys:Int32>
+            <sys:Int32>64</sys:Int32>
+        </x:Array>
+
+        <x:Array x:Key="PointCountSource" Type="sys:Int32">
+            <sys:Int32>1000000</sys:Int32>
+            <sys:Int32>10000000</sys:Int32>
+            <sys:Int32>100000000</sys:Int32>
+            <sys:Int32>1000000000</sys:Int32>
+        </x:Array>
+
+        <x:Array x:Key="StrokeThicknesses" Type="sys:Int32">
+            <sys:Int32>1</sys:Int32>
+            <sys:Int32>2</sys:Int32>
+            <sys:Int32>3</sys:Int32>
+        </x:Array>
+
+        <x:Array x:Key="ResamplingEnabled" Type="sys:Boolean">
+            <sys:Boolean>True</sys:Boolean>
+            <sys:Boolean>False</sys:Boolean>
+        </x:Array>
+
+        <x:Array x:Key="ResamplingPrecision" Type="local:ResamplingPrecision">
+            <local:ResamplingPrecision>Default</local:ResamplingPrecision>
+            <local:ResamplingPrecision>Precision2x</local:ResamplingPrecision>
+            <local:ResamplingPrecision>Precision4x</local:ResamplingPrecision>
+        </x:Array>
+    </UserControl.Resources>
+
+    <Grid Grid.IsSharedSizeScope="True" IsEnabled="{Binding IsLoading, Converter={StaticResource InvertBooleanConverter}}">
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Toolbar -->
+        <ext:SciChartInteractionToolbar Grid.Row="0" Grid.RowSpan="3" Grid.Column="0">
+            <ToggleButton x:Name="IsZoomEnabled"
+                          IsChecked="True"
+                          Style="{StaticResource DefaultToggleButtonStyle}"
+                          ToolTipService.ToolTip="Toggle Rubber-Band Zoom"
+                          s:ToggleButtonExtensions.GroupName="ToogleModifiersGroup">
+                <ext:ToolbarIcon Kind="MagnifyPlusOutline" Style="{StaticResource ToolbarButtonIconStyle}"/>
+            </ToggleButton>
+
+            <ToggleButton x:Name="IsPanEnabled"
+                          Style="{StaticResource DefaultToggleButtonStyle}"
+                          ToolTipService.ToolTip="Toggle Zoom-Pan"
+                          s:ToggleButtonExtensions.GroupName="ToogleModifiersGroup">
+                <ext:ToolbarIcon Kind="ArrowAll" Style="{StaticResource ToolbarButtonIconStyle}"/>
+            </ToggleButton>
+
+            <ext:FlyoutSeparator/>
+
+            <ext:FlyoutMenuButton>
+                <ext:ToolbarIcon Kind="Plus" Height="14" Width="14" Style="{StaticResource ToolbarButtonIconStyle}"/>
+                <ext:FlyoutMenuButton.PopupContent>
+                    <StackPanel Margin="5" Width="130" Orientation="Vertical">
+                        <TextBlock Text="Channel Type" Style="{StaticResource FlyoutMenuHeaderStyle}"/>
+                        <ComboBox ItemsSource="{StaticResource ChannelTypeSource}"
+                                  SelectedItem="{Binding SelectedChannelType}"/>
+                        <Button Content="Add" Margin="0,10,0,0" Command="{Binding AddChannelCommand}"/>
+                    </StackPanel>
+                </ext:FlyoutMenuButton.PopupContent>
+            </ext:FlyoutMenuButton>
+
+            <ext:FlyoutMenuButton>
+                <ext:ToolbarIcon Kind="Reload" Margin="2,0,0,0" Style="{StaticResource ToolbarButtonIconStyle}"/>
+                <ext:FlyoutMenuButton.PopupContent>
+                    <StackPanel Margin="5" Width="130" Orientation="Vertical">
+                        <TextBlock Text="Channel Count" Style="{StaticResource FlyoutMenuHeaderStyle}"/>
+                        <ComboBox SelectedItem="{Binding SelectedChannelCount}" ItemsSource="{StaticResource ChannelCountSource}"/>
+                        <TextBlock Text="Point Count" Margin="0,10,0,5" Style="{StaticResource FlyoutMenuHeaderStyle}"/>
+                        <ComboBox SelectedItem="{Binding SelectedPointCount}" ItemsSource="{StaticResource PointCountSource}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Converter={StaticResource PointCountToLabelConverter}}"/>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                        <Button Content="Load" Margin="0,10,0,0" Command="{Binding LoadChannelsCommand}"/>
+                    </StackPanel>
+                </ext:FlyoutMenuButton.PopupContent>
+            </ext:FlyoutMenuButton>
+
+            <ext:FlyoutMenuButton>
+                <ext:ToolbarIcon Kind="TuneVariant" Height="16" Width="16" Style="{StaticResource ToolbarButtonIconStyle}"/>
+                <ext:FlyoutMenuButton.PopupContent>
+                    <StackPanel Margin="5" Width="130" Orientation="Vertical">
+                        <TextBlock Text="Line Stroke Thickness" Style="{StaticResource FlyoutMenuHeaderStyle}"/>
+                        <ComboBox SelectedItem="{Binding SelectedStrokeThickness}" ItemsSource="{StaticResource StrokeThicknesses}"/>
+                        <TextBlock Text="Resampling Precision" Margin="0,10,0,5" Style="{StaticResource FlyoutMenuHeaderStyle}"/>
+                        <ComboBox SelectedItem="{Binding SelectedResamplingPrecision}" ItemsSource="{StaticResource ResamplingPrecision}"/>
+                    </StackPanel>
+                </ext:FlyoutMenuButton.PopupContent>
+            </ext:FlyoutMenuButton>
+        </ext:SciChartInteractionToolbar>
+
+        <!-- Info -->
+        <StackPanel Grid.Row="0" Grid.Column="1" Focusable="False" Height="30" Orientation="Horizontal" Background="{StaticResource ThemedChartBackground}">
+            <TextBlock VerticalAlignment="Center" Margin="5,0" Foreground="White" FontWeight="SemiBold">
+                <Run Text="Channels:" Foreground="#FF80838E"/>
+                <Run Text="{Binding ChannelViewModels.Count, Mode=OneWay}"/>
+            </TextBlock>
+
+            <TextBlock VerticalAlignment="Center" Margin="5,0" Foreground="White" FontWeight="SemiBold">
+                <Run Text="Channel Points:" Foreground="#FF80838E"/>
+                <Run Text="{Binding SelectedPointCount, Mode=OneWay, Converter={StaticResource PointCountToLabelConverter}}"/>
+            </TextBlock>
+
+            <TextBlock VerticalAlignment="Center" Margin="5,0" Foreground="White" FontWeight="SemiBold">
+                <Run Text="Total Points:" Foreground="#FF80838E"/>
+                <Run Text="{Binding TotalPoints, Mode=OneWay, Converter={StaticResource PointCountToLabelConverter}}"/>
+            </TextBlock>
+        </StackPanel>
+
+        <!-- BottomAxis -->
+        <Grid Grid.Row="2" Grid.Column="1" Background="{StaticResource ThemedChartBackground}"
+              Visibility="{Binding IsEmpty, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter='INVERSE'}">
+            
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition SharedSizeGroup="ChannelNames"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <s:SciChartSurface Grid.Column="1" Background="{StaticResource ThemedChartBackground}">
+                <s:SciChartSurface.XAxis>
+                    <s:NumericAxis Height="30"
+                                   AxisAlignment="Bottom"
+                                   VisibleRange="{Binding XRange, Mode=TwoWay}"                 
+                                   LabelProvider="{StaticResource TimeLabelProvider}"
+                                   MajorTickLineStyle="{StaticResource TimeAxisMajorTickLineStyle}"
+                                   MinorTickLineStyle="{StaticResource TimeAxisMinorTickLineStyle}"/>
+                </s:SciChartSurface.XAxis>
+                <s:SciChartSurface.YAxis>
+                    <s:NumericAxis Visibility="Collapsed"/>
+                </s:SciChartSurface.YAxis>
+            </s:SciChartSurface>
+        </Grid>
+
+        <!-- Channels -->
+        <Border Grid.Row="1" 
+                Grid.RowSpan="2" 
+                Grid.Column="1" 
+                BorderThickness="0,1"
+                BorderBrush="#FF40434E"
+                Margin="0,0,0,30">
+
+            <ScrollViewer Background="{StaticResource ThemedChartBackground}"
+                          VerticalScrollBarVisibility="Auto"
+                          HorizontalScrollBarVisibility="Disabled">
+
+                <b:Interaction.Behaviors>
+                    <common:DigitalAnalyzerScrollBehavior ChannelHeightDelta="10" ChangeChannelHeightCommand="{Binding ChangeChannelHeightCommand}"/>
+                </b:Interaction.Behaviors>
+
+                <ItemsControl x:Name="chartItemsControl" ItemsSource="{Binding ChannelViewModels}">
+
+                    <b:Interaction.Behaviors>
+                        <common:FocusedChannelScrollBehavior ScrollToFocusedChannel="False"/>
+                    </b:Interaction.Behaviors>
+
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="{x:Type local:ChannelViewModel}">
+                            <Border BorderThickness="0,0,0,1"
+                                    BorderBrush="{StaticResource ThemedChartBackground}"
+                                    Background="{StaticResource ThemedTransparentChartBackground}"
+                                    Height="{Binding ChannelHeight, Mode=OneWay}"
+                                    Focusable="False">
+
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition SharedSizeGroup="ChannelNames" />
+                                        <ColumnDefinition />
+                                    </Grid.ColumnDefinitions>
+
+                                    <DockPanel>
+                                        <Border DockPanel.Dock="Left"     
+                                                Background="{Binding ChannelColor, Mode=OneWay}" 
+                                                Width="5"/>
+
+                                        <TextBlock DockPanel.Dock="Left"
+                                                   Margin="10,5"
+                                                   VerticalAlignment="Center"
+                                                   Foreground="White"
+                                                   Text="{Binding ChannelName}"/>
+                                    </DockPanel>
+
+                                    <s:SciChartSurface x:Name="channelSurface"
+                                                       Grid.Column="1"
+                                                       RenderableSeries="{Binding RenderableSeries}">
+
+                                        <!--  Create an X Axis with GrowBy  -->
+                                        <s:SciChartSurface.XAxis>
+                                            <s:NumericAxis Style="{StaticResource HiddenAxisStyle}"
+                                                           VisibleRangeLimitMode="Min"
+                                                           VisibleRangeLimit="0,0"
+                                                           VisibleRange="{Binding DataContext.XRange, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=ItemsControl, AncestorLevel=2}}"/>
+                                        </s:SciChartSurface.XAxis>
+
+                                        <!--  Create a Y Axis with GrowBy. Optional bands give a cool look and feel for minimal performance impact  -->
+                                        <s:SciChartSurface.YAxis>
+                                            <s:NumericAxis Style="{StaticResource HiddenAxisStyle}"
+                                                           VisibleRange="{Binding YRange, Mode=OneWay}"/>
+                                        </s:SciChartSurface.YAxis>
+
+                                        <s:SciChartSurface.ChartModifier>
+                                            <s:ModifierGroup s:MouseManager.MouseEventGroup="ChannelModifierGroup">
+                                                <s:RubberBandXyZoomModifier IsAnimated="False" IsXAxisOnly="True" ZoomExtentsY="False" ReceiveHandledEvents="True" IsEnabled="{Binding IsChecked, Mode=OneWay, ElementName=IsZoomEnabled}"/>
+                                                <s:ZoomPanModifier ZoomExtentsY="False" XyDirection="XDirection" IsEnabled="{Binding IsChecked, Mode=OneWay, ElementName=IsPanEnabled}"/>
+                                                <s:ZoomExtentsModifier XyDirection="XDirection" IsAnimated="False" />
+                                                <s:MouseWheelZoomModifier XyDirection="XDirection" />
+                                            </s:ModifierGroup>
+                                        </s:SciChartSurface.ChartModifier>
+                                    </s:SciChartSurface>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+        </Border>
+
+        <TextBlock Grid.Row="0"
+                   Grid.RowSpan="3"
+                   Grid.Column="1"
+                   Text="There is no data to display" 
+                   FontSize="28" 
+                   FontWeight="Bold" 
+                   Foreground="LightGray"
+                   Opacity="0.6"
+                   Visibility="{Binding IsEmpty, Converter={StaticResource BooleanToVisibilityConverter}}"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"/>
+
+        <!--Busy Indicator-->
+        <Border Grid.Row="0"
+                Grid.RowSpan="3"
+                Grid.Column="1" 
+                Background="{StaticResource ThemedSurfaceChartBackground}"
+                Visibility="{Binding IsLoading, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <ProgressBar Background="Transparent" Foreground="#FF64BAE4" BorderThickness="0" HorizontalAlignment="Center" IsIndeterminate="True" Height="5" Width="{Binding ActualWidth, Mode=OneWay, ElementName=BusyMessage}"/>
+                <TextBlock x:Name="BusyMessage" Text="Generating data points..." FontSize="16" Foreground="#FFF" Margin="0,10" TextAlignment="Center" Opacity="0.7"/>
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>
