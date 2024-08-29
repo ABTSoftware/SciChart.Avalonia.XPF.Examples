@@ -106,6 +106,6 @@ You could learn more about Avalonia XPF Licensing [at this link](https://avaloni
 At this point you should be able to build and run the Examples Demo. If you experience any issues or want to leave your feedback, feel free to [contact us](https://www.scichart.com/contact-us/).
 
 ### Licensing SciChart
-This Examples Demo app doesn't require SciChart license to run. However, creating your own application with SciChart for Avalonia XPF requires any [SciChart Bundle](https://www.scichart.com/shop/) license to be active. 
-Head over to https://www.scichart.com/getting-started-scichart-wpf?utm_source=nuget.org to learn how to activate a SciChart license or start a free 30-days trial. 
+This Examples Demo app doesn't require SciChart license to run. However, creating your own application with SciChart for Avalonia XPF requires either an activated [SciChart Bundle](https://www.scichart.com/shop/) license or a running trial period for the [SciChart WPF](https://www.scichart.com/shop/) license. 
+Head over to https://www.scichart.com/getting-started-scichart-wpf/ to learn how to activate a SciChart license or start a free 30-days trial. 
 The multi-platform Licensing Wizard can be found on the [Downloads page](https://www.scichart.com/downloads/).
