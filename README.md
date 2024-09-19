@@ -21,17 +21,17 @@ Create a file /etc/apt/preferences, if it doesn't already exist.
 > sudo touch /etc/apt/preferences
 
 Open the file in a text editor and add the following content:
-> Package: *
-> Pin: origin "packages.microsoft.com"
+> Package: *  
+> Pin: origin "packages.microsoft.com"  
 > Pin-Priority: 1001
 
 ### Installing Microsoft .NET packages
 Installing with APT can be done with a few commands. Before you install .NET, open a terminal and run the following commands to 
 add the Microsoft package signing key to your list of trusted keys and add the package repository.
-> wget https://packages.microsoft.com/config/ubuntu/22.04/packages-microsoft-prod.deb -O pkg-ms-prod.deb
-> sudo dpkg -i pkg-ms-prod.deb
-> rm pkg-ms-prod.deb
-> sudo apt update
+> wget https://packages.microsoft.com/config/ubuntu/22.04/packages-microsoft-prod.deb -O pkg-ms-prod.deb  
+> sudo dpkg -i pkg-ms-prod.deb  
+> rm pkg-ms-prod.deb  
+> sudo apt update  
 
 After you have registered the Microsoft package repository, you can install .NET through the package manager 
 with the apt install <package-name> command. 
