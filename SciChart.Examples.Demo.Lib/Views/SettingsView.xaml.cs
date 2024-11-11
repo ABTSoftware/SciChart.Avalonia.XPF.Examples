@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 using SciChart.Examples.Demo.Lib.Bootstrapper;
 using SciChart.Examples.Demo.Lib.ViewModels;
@@ -13,6 +14,8 @@ namespace SciChart.Examples.Demo.Lib.Views
         {
             InitializeComponent();
 
+            IsVisibleChanged += OnIsVisibleChanged;
+
             ServiceLocator.Container.Resolve<IBootstrapper>().WhenInit += (s, e) =>
             {
                 Action operation = () =>
@@ -24,6 +27,14 @@ namespace SciChart.Examples.Demo.Lib.Views
 
                 Dispatcher.BeginInvoke(operation);
             };
+        }
+
+        private void OnIsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (DataContext is ISettingsViewModel viewModel)
+            {
+                viewModel.OnIsVisibleChanged((bool)e.NewValue);
+            }
         }
     }
 }

@@ -12,7 +12,6 @@
         </Style>
 
         <abt:BoolToValueConverter x:Key="b2vConverter" TrueValue="Visible" FalseValue="Collapsed"/>
-        <abt:BoolToValueConverter x:Key="ib2vConverter" TrueValue="Hidden" FalseValue="Visible"/>
         <abt:InverseBooleanConverter x:Key="ibConverter"/>
 
     </UserControl.Resources>
@@ -111,22 +110,25 @@
                          Grid.Column="0"
                          Margin="0,10,0,0"
                          Content="NuGet Package"
-                         IsChecked="{Binding IsFolderPath, Mode=TwoWay, Converter={StaticResource ibConverter}}" />      
+                         IsChecked="{Binding IsFolderPath, Mode=TwoWay, Converter={StaticResource ibConverter}}"
+                         IsEnabled="{Binding IsXpfExport, Mode=OneWay, Converter={StaticResource ibConverter}}"/>
+                         <!-- TODO The IsEnabled binding must be removed after uploading XPF NuGet packages -->
 
             <RadioButton Grid.Row="7"
                          Grid.Column="0"
                          Margin="0,10,0,0"
                          Content="Local Folder"
-                         IsChecked="{Binding IsFolderPath, Mode=TwoWay}"
-                         IsEnabled="{Binding IsXpfExport, Mode=OneWay, Converter={StaticResource ibConverter}}" />
-        
+                         IsChecked="{Binding IsFolderPath, Mode=TwoWay}"/>
+
             <TextBox Grid.Row="8" 
                      Grid.Column="0"
                      Margin="0,10,0,0"          
                      AutomationProperties.AutomationId="ExportExampleView.SciChartLibPath"
                      ext:TextBoxHelper.Watermark="Folder Path"
                      Text="{Binding LibrariesPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"        
-                     Visibility="{Binding IsFolderPath, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                     Visibility="{Binding IsFolderPath, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
+                     IsReadOnly="{Binding IsXpfExport, Mode=OneWay}"/>
+                     <!-- TODO The IsReadOnly binding must be removed after uploading XPF NuGet packages -->
 
             <Button Grid.Row="8" 
                     Grid.Column="1"
@@ -135,7 +137,9 @@
                     Margin="10,10,0,0"
                     Command="{Binding SelectLibraryCommand}"
                     Style="{StaticResource DefaultButtonStyle}"
-                    Visibility="{Binding IsFolderPath, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    Visibility="{Binding IsFolderPath, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
+                    IsEnabled="{Binding IsXpfExport, Mode=OneWay, Converter={StaticResource ibConverter}}">
+                    <!-- TODO The IsEnabled binding must be removed after uploading XPF NuGet packages -->
 
                 <icons:PackIconMaterial Kind="DotsHorizontal"
                                         Height="12" Width="12"
@@ -171,19 +175,27 @@
                   Margin="0,10,0,0"
                   MinHeight="40">
 
-                <Button Content="GO"                  
+                <Button Content="GO"
                         Command="{Binding ExportCommand}"
                         Style="{StaticResource ExportExampleButtonStyle}"
-                        Visibility="{Binding ShowExportedMessage, Converter={StaticResource ib2vConverter}}"
+                        Visibility="{Binding CanExport, Converter={StaticResource b2vConverter}}"
                         AutomationProperties.AutomationId="ExportExampleView.ExportButton"/>
-
-                <TextBlock Text="The example has been successfully exported!" 
-                           Foreground="{DynamicResource HyperlinkAlternativeForegroundBrush}"
+                
+                <TextBlock Text="The example has been successfully exported!"
+                           Visibility="{Binding OnExportSuccess, Converter={StaticResource b2vConverter}}"
+                           Foreground="{DynamicResource FeedbackExportSuccessForegroundBrush}"
                            FontSize="12"
                            FontWeight="SemiBold"
                            HorizontalAlignment="Left"
-                           VerticalAlignment="Center"
-                           Visibility="{Binding ShowExportedMessage, Converter={StaticResource b2vConverter}}"/>
+                           VerticalAlignment="Center"/>
+
+                <TextBlock Text="The example cannot be exported, please try to change the export path!"
+                           Visibility="{Binding OnExportError, Converter={StaticResource b2vConverter}}"
+                           Foreground="{DynamicResource FeedbackExportErrorForegroundBrush}"
+                           FontSize="12"
+                           FontWeight="SemiBold"
+                           HorizontalAlignment="Left"
+                           VerticalAlignment="Center"/>
             </Grid>
         </Grid>
     </Border>

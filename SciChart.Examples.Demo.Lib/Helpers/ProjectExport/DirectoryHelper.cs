@@ -47,7 +47,7 @@ namespace SciChart.Examples.Demo.Lib.Helpers.ProjectExport
 
                 if (!Regex.IsMatch(path, @"^[a-zA-Z]:\\.*$"))
                 {
-                    error = @"Drive should be set in the following format: '_:\', where '_' is a drive letter";
+                    error = @"Drive should be set in the following format: ""_:\"", where ""_"" is a drive letter";
                     return false;
                 }
 
@@ -56,6 +56,12 @@ namespace SciChart.Examples.Demo.Lib.Helpers.ProjectExport
                 if (Regex.IsMatch(path, @"^[a-zA-Z]:\\.*[" + Regex.Escape(invalidPathChars) + @"].*"))
                 {
                     error = "The given path's format is not supported";
+                    return false;
+                }
+
+                if (Regex.IsMatch(path, @"^.*\\(.*\.+|\.{2,}.*)($|\\)"))
+                {
+                    error = @"The given path with ""."" in folder name is not supported";
                     return false;
                 }
             }
@@ -97,6 +103,12 @@ namespace SciChart.Examples.Demo.Lib.Helpers.ProjectExport
             var fullPath = Path.Combine(path, "file.temp");
             try
             {
+                if (!Directory.Exists(path))
+                {
+                    // We cannot verify write access to a non-existent folder
+                    return true;
+                }
+
                 using var fs = new FileStream(fullPath, FileMode.CreateNew, FileAccess.Write);
                 fs.WriteByte(0xff);
                 return true;
@@ -104,6 +116,11 @@ namespace SciChart.Examples.Demo.Lib.Helpers.ProjectExport
             catch (UnauthorizedAccessException)
             {
                 error = "This location is not accessible for writing.";
+                return false;
+            }
+            catch
+            {
+                error = "This location is not found or inaccessible.";
                 return false;
             }
             finally

@@ -65,6 +65,11 @@ namespace SciChart.Examples.Demo.Xpf
 
         private async void OnStartup(object sender, StartupEventArgs e)
         {
+#if !HIDE3D
+            var surface3DStyle = new Style(typeof(Charting3D.SciChart3DSurface));
+            surface3DStyle.Setters.Add(new Setter(ThemeManager.ThemeProperty, "SciChartv7Navy"));
+            Resources.Add(typeof(Charting3D.SciChart3DSurface), surface3DStyle);
+#endif
             if (e.Args.Contains(DevMode, StringComparer.InvariantCultureIgnoreCase))
             {
                 DeveloperModManager.Manage.IsDeveloperMode = true;
@@ -95,11 +100,7 @@ namespace SciChart.Examples.Demo.Xpf
 
                 await Task.WhenAll(_bootstrapper.InitializeAsync(), Task.Delay(SplashDelay));
 
-                if (DemoSettings.Instance.UIAutomationTestMode)
-                {
-                    VisualXcceleratorEngine.EnableForceWaitForGPU = true;
-                }
-                else
+                if (!DemoSettings.Instance.UIAutomationTestMode)               
                 {
                     // Do this on background thread
                     _ = Task.Run(() =>

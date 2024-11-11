@@ -1,8 +1,9 @@
 ﻿<Project Sdk="[PROJECT_SDK]">
   <PropertyGroup>
     <TargetFramework>[PROJECT_TARGET]</TargetFramework>
-    <OutputType>WinExe</OutputType>
     <UseWPF>True</UseWPF>
+    <OutputType>WinExe</OutputType>
+    <OutputPath>bin\$(Configuration)</OutputPath>
   </PropertyGroup>
   <PropertyGroup>
     <Copyright>Copyright © 2011-2024</Copyright>

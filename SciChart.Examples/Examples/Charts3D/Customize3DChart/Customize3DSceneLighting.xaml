@@ -1,0 +1,202 @@
+﻿<UserControl x:Class="SciChart.Examples.Examples.Charts3D.Customize3DChart.Customize3DSceneLighting"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:s3D="http://schemas.abtsoftware.co.uk/scichart3D"
+             xmlns:ext="http://schemas.abtsoftware.co.uk/scichart/exampleExternals">
+
+    <UserControl.Resources>
+        <s3D:SolidColorBrushPalette x:Key="SolidHeightColorMap" Fill="{StaticResource MainThemeStrokeColor}" />
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <ext:SciChart3DInteractionToolbar TargetSurface="{Binding Source={x:Reference Name=sciChart}}">
+            <ext:FlyoutSeparator/>
+            <ext:FlyoutMenuButton>
+                <ext:ToolbarIcon Kind="TrackLight" Style="{StaticResource ToolbarButtonIconStyle}"/>
+                <ext:FlyoutMenuButton.PopupContent>
+                    <StackPanel Margin="5" Width="150" Orientation="Vertical">
+                        <TextBlock Text="Main Light Mode" Style="{StaticResource FlyoutMenuHeaderStyle}"/>
+                        <ComboBox x:Name="lightModeComboBox" SelectionChanged="LightMode_OnSelectionChanged"/>
+                        <StackPanel x:Name="lightSlidersPanel" IsEnabled="False">
+                            <StackPanel.Style>
+                                <Style TargetType="{x:Type StackPanel}">
+                                    <Setter Property="Opacity" Value="1"/>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsEnabled" Value="False">
+                                            <Setter Property="Opacity" Value="0.3"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </StackPanel.Style>
+
+                            <TextBlock Text="Light Direction X" Margin="0,10,0,5" Style="{StaticResource FlyoutMenuHeaderStyle}"/>
+                            <Slider x:Name="lightSliderX" Minimum="-1.0" Maximum="1.0" Value="0.5" ValueChanged="LightSlider_OnValueChanged"/>
+
+                            <TextBlock Text="Light Direction Y" Margin="0,10,0,5" Style="{StaticResource FlyoutMenuHeaderStyle}"/>
+                            <Slider x:Name="lightSliderY" Minimum="-1.0" Maximum="1.0" Value="-0.25" ValueChanged="LightSlider_OnValueChanged"/>
+
+                            <TextBlock Text="Light Direction Z" Margin="0,10,0,5" Style="{StaticResource FlyoutMenuHeaderStyle}"/>
+                            <Slider x:Name="lightSliderZ" Minimum="-1.0" Maximum="1.0" Value="-0.5" ValueChanged="LightSlider_OnValueChanged"/>
+                        </StackPanel>
+                    </StackPanel>
+                </ext:FlyoutMenuButton.PopupContent>
+            </ext:FlyoutMenuButton>
+        </ext:SciChart3DInteractionToolbar>
+
+        <s3D:SciChart3DSurface x:Name="sciChart"
+                               Grid.Column="1"
+                               BorderThickness="0"
+                               WorldDimensions="200,200,200"                  
+                               Rendered="SciChart_OnRendered">
+
+            <s3D:SciChart3DSurface.Camera>
+                <s3D:Camera3D Target="0,100,0" Radius="450" OrbitalPitch="25"/>
+            </s3D:SciChart3DSurface.Camera>
+
+            <s3D:SciChart3DSurface.RenderableSeries>
+                <s3D:FreeSurfaceRenderableSeries3D x:Name="sphereMesh"
+                                                   DrawMeshAs="SolidMesh"
+                                                   LightingFactor="0.95"
+                                                   MeshColorPalette="{StaticResource SolidHeightColorMap}"
+                                                   Shininess="7.0"
+                                                   SpecularStrength="0.6"/>
+            </s3D:SciChart3DSurface.RenderableSeries>
+
+            <s3D:SciChart3DSurface.XAxis>
+                <s3D:NumericAxis3D VisibleRange="-7,7" AutoRange="Never" />
+            </s3D:SciChart3DSurface.XAxis>
+
+            <s3D:SciChart3DSurface.YAxis>
+                <s3D:NumericAxis3D VisibleRange="-7,7" AutoRange="Never" />
+            </s3D:SciChart3DSurface.YAxis>
+
+            <s3D:SciChart3DSurface.ZAxis>
+                <s3D:NumericAxis3D VisibleRange="-7,7" AutoRange="Never" />
+            </s3D:SciChart3DSurface.ZAxis>
+        </s3D:SciChart3DSurface>
+
+        <Border Grid.Column="1"            
+                Background="{StaticResource MainThemeTransparentSolidBrush}"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                BorderThickness="0"
+                CornerRadius="5"
+                Width="200"
+                Margin="5">
+
+            <Grid Margin="10">
+                <Grid.Resources>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="Opacity" Value="0.7"/>
+                        <Setter Property="Margin" Value="0,5,0,0"/>
+                        <Setter Property="Foreground" Value="#FFF"/>
+                    </Style>
+                </Grid.Resources>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock x:Name="labelLightMode"
+                           Grid.Row="0"
+                           Grid.Column="0"
+                           Grid.ColumnSpan="3"
+                           FontWeight="Bold"
+                           Margin="0,-5,0,0"/>
+
+                <Rectangle Grid.Row="1"
+                           Grid.Column="0"
+                           Grid.ColumnSpan="3"
+                           Height="1"
+                           HorizontalAlignment="Stretch"
+                           StrokeThickness="0"
+                           Fill="#FFF"
+                           Opacity="0.2" 
+                           Margin="0,5,0,0"
+                           UseLayoutRounding="True"/>
+
+                <TextBlock Text="Lighting Direction X"                           
+                           Grid.Row="2"
+                           Grid.Column="0"
+                           FontWeight="Bold"/>
+
+                <TextBlock x:Name="labelLightX"
+                           Grid.Row="2"
+                           Grid.Column="2"/>
+
+                <TextBlock Text="Lighting Direction Y"
+                           Grid.Row="3"
+                           Grid.Column="0"
+                           FontWeight="Bold"/>
+
+                <TextBlock x:Name="labelLightY"
+                           Grid.Row="3"
+                           Grid.Column="2"/>
+
+                <TextBlock Text="Lighting Direction Z"
+                           Grid.Row="4"
+                           Grid.Column="0"
+                           FontWeight="Bold"/>
+
+                <TextBlock x:Name="labelLightZ"
+                           Grid.Row="4"
+                           Grid.Column="2"/>
+
+                <Rectangle Grid.Row="5"
+                           Grid.Column="0"
+                           Grid.ColumnSpan="3"
+                           Height="1"
+                           HorizontalAlignment="Stretch"
+                           StrokeThickness="0"
+                           Fill="#FFF"
+                           Opacity="0.2" 
+                           Margin="0,5,0,0"
+                           UseLayoutRounding="True"/>
+
+                <TextBlock Text="Camera Direction X"
+                           Grid.Row="6"
+                           Grid.Column="0"
+                           FontWeight="Bold"/>
+
+                <TextBlock x:Name="labelCameraX"
+                           Grid.Row="6"
+                           Grid.Column="2"/>
+
+                <TextBlock Text="Camera Direction Y"
+                           Grid.Row="7"
+                           Grid.Column="0"
+                           FontWeight="Bold"/>
+
+                <TextBlock x:Name="labelCameraY"
+                           Grid.Row="7"
+                           Grid.Column="2"/>
+
+                <TextBlock Text="Camera Direction Z"
+                           Grid.Row="8"
+                           Grid.Column="0"
+                           FontWeight="Bold"/>
+
+                <TextBlock x:Name="labelCameraZ"
+                           Grid.Row="8"
+                           Grid.Column="2"/>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

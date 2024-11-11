@@ -207,7 +207,7 @@
     <Style TargetType="{x:Type s:SciChartParallelCoordinateSurface}">
         <Setter Property="s:ThemeManager.Theme" Value="SciChartv7Navy"/>
     </Style>
-
+    
     <Style TargetType="{x:Type s:SciChartOverview}">
         <Setter Property="s:ThemeManager.Theme" Value="SciChartv7Navy"/>
     </Style>
@@ -215,5 +215,5 @@
     <Style TargetType="{x:Type s:HeatmapColorMap}">
         <Setter Property="s:ThemeManager.Theme" Value="SciChartv7Navy"/>
     </Style>
-    
+
 </ResourceDictionary>

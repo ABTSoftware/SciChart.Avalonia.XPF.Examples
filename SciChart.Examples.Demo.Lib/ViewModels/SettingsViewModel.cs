@@ -15,11 +15,16 @@ using SciChart.Drawing.VisualXcceleratorRasterizer;
 using SciChart.Drawing.XamlRasterizer;
 using SciChart.Examples.Demo.Lib.Common;
 using SciChart.Examples.Demo.Lib.Common.Converters;
+using SciChart.Examples.Demo.Lib.Helpers.Navigation;
 using SciChart.Examples.Demo.Lib.Traits;
 using SciChart.UI.Bootstrap;
 using SciChart.UI.Reactive;
 using SciChart.UI.Reactive.Observability;
 using FullScreenAntiAliasingMode = SciChart.Drawing.VisualXcceleratorRasterizer.FullScreenAntiAliasingMode;
+
+#if !HIDE3D
+using SciChart.Charting3D;
+#endif
 
 namespace SciChart.Examples.Demo.Lib.ViewModels
 {
@@ -30,20 +35,8 @@ namespace SciChart.Examples.Demo.Lib.ViewModels
 
         private VxRenderSettings _renderSettings = new();
 
-#if NETFRAMEWORK
+        public string VersionInfo { get; }
 
-        public string TargetFramework => ".NET Framework 4.6.2";
-
-#elif NETCOREAPP3_1
-
-        public string TargetFramework => ".NET Core 3.1";
-
-#elif NET
-
-        public string TargetFramework => SciChartRuntimeInfo.IsXPF
-            ? ".NET 6.0 Avalonia XPF"
-            : ".NET 6.0 Windows";
-#endif
         public bool InitReady
         {
             get => GetDynamicValue<bool>();
@@ -56,13 +49,31 @@ namespace SciChart.Examples.Demo.Lib.ViewModels
             set => SetDynamicValue(value);
         }
 
-        public bool UseD3D11
+        public bool IsHardwareAcceleration
+        {
+            get => GetDynamicValue<bool>();
+            set => SetDynamicValue(value);
+        }
+
+        public bool IsDirectXAvailable
+        {
+            get => GetDynamicValue<bool>();
+            set => SetDynamicValue(value);
+        }
+
+        public bool IsD3D911Available
         {
             get => GetDynamicValue<bool>();
             set => SetDynamicValue(value);
         }
 
         public bool UseD3D9
+        {
+            get => GetDynamicValue<bool>();
+            set => SetDynamicValue(value);
+        }
+
+        public bool UseD3D11
         {
             get => GetDynamicValue<bool>();
             set => SetDynamicValue(value);
@@ -75,6 +86,69 @@ namespace SciChart.Examples.Demo.Lib.ViewModels
         }
 
         public bool Use3DAA4x
+        {
+            get => GetDynamicValue<bool>();
+            set => SetDynamicValue(value);
+        }
+
+        public Type SelectedRenderer
+        {
+            get => _selectedRenderer;
+            set
+            {
+                if (_selectedRenderer == value || value == null) return;
+
+                IsVxRenderer = value == typeof(VisualXcceleratorRenderSurface);
+
+                if (IsVxRenderer)
+                {
+                    try
+                    {
+                        VisualXcceleratorEngine.AssertSupportsHardwareAcceleration();
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                        return;
+                    }
+                }
+
+                _selectedRenderer = value;
+                OnPropertyChanged(value);
+            }
+        }
+
+        public bool IsVxRenderer
+        {
+            get => GetDynamicValue<bool>();
+            set => SetDynamicValue(value);
+        }
+
+        public bool UseAlternativeFillSource
+        {
+            get => GetDynamicValue<bool>();
+            set => SetDynamicValue(value);
+        }
+
+        public bool EnableForceWaitForGPU
+        {
+            get => GetDynamicValue<bool>();
+            set => SetDynamicValue(value);
+        }
+
+        public bool Is3DAvailable
+        {
+            get => GetDynamicValue<bool>();
+            set => SetDynamicValue(value);
+        }
+
+        public bool Enable3DZAxisUp
+        {
+            get => GetDynamicValue<bool>();
+            set => SetDynamicValue(value);
+        }
+
+        public bool Is3DZAxisUpOverridden
         {
             get => GetDynamicValue<bool>();
             set => SetDynamicValue(value);
@@ -129,102 +203,33 @@ namespace SciChart.Examples.Demo.Lib.ViewModels
             set => SetDynamicValue(value);
         }
 
-        private void RecreateStyles()
-        {
-            CreateGlobalStyle<SciChartSurface>();
-            CreateGlobalStyle<SciChartRadarSurface>();
-            CreateGlobalStyle<SciStockChart>();
-        }
-
-        public Type SelectedRenderer
-        {
-            get => _selectedRenderer;
-            set
-            {
-                if (_selectedRenderer == value || value == null) return;
-
-                if (IsDirectXAvailable)
-                {
-                    IsDirectXEnabled = value == typeof(VisualXcceleratorRenderSurface);
-
-                    if (IsDirectXEnabled)
-                    {
-                        try
-                        {
-                            VisualXcceleratorEngine.AssertSupportsDirectX();
-                        }
-                        catch (Exception ex)
-                        {
-                            MessageBox.Show(ex.Message);
-                            return;
-                        }
-                    }
-                }
-
-                _selectedRenderer = value;
-                OnPropertyChanged(value);
-            }
-        }
-
-        public bool UseAlternativeFillSourceD3D
-        {
-            get => GetDynamicValue<bool>();
-            set => SetDynamicValue(value);
-        }
-
-        public bool EnableForceWaitForGPU
-        {
-            get => GetDynamicValue<bool>();
-            set => SetDynamicValue(value);
-        }
-
-        public bool IsHardwareAcceleration
-        {
-            get => GetDynamicValue<bool>();
-            set => SetDynamicValue(value);
-        }
-
-        public bool IsDirectXAvailable
-        {
-            get => GetDynamicValue<bool>();
-            set => SetDynamicValue(value);
-        }
-
-        public bool IsDirectXEnabled
-        {
-            get => GetDynamicValue<bool>();
-            set => SetDynamicValue(value);
-        }
-
         public SettingsViewModel()
         {
             WithTrait<AllowFeedbackSettingTrait>();
 
+            VersionInfo = $"{SciChartRuntimeInfo.GetVersion()}, {SciChartRuntimeInfo.GetTargetFramework()}";
+
             if (VisualXcceleratorEngine.SupportsHardwareAcceleration)
             {
-                if (SciChartRuntimeInfo.IsXPF || VisualXcceleratorEngine.IsUsingOpenGL)
-                {
-                    IsHardwareAcceleration = VisualXcceleratorEngine.HasOpenGLCapableGpu;
-                    IsDirectXAvailable = false;
-                }
-                else
-                {
-                    IsHardwareAcceleration = VisualXcceleratorEngine.HasDirectX9CapableGpu ||
-                                             VisualXcceleratorEngine.HasDirectX10OrBetterCapableGpu;
+                IsHardwareAcceleration = true;
 
-                    if (IsHardwareAcceleration)
+                if (VisualXcceleratorEngine.ActiveGraphicsAPI == VxGraphicsAPI.DirectX)
+                {
+                    IsDirectXAvailable = true;
+
+                    if (!SciChartRuntimeInfo.IsXPF)
                     {
-                        IsDirectXAvailable = true;
+                        IsD3D911Available = true;
 
                         UseD3D9 = VisualXcceleratorEngine.DirectXMode == DirectXMode.DirectX9c;
                         UseD3D11 = VisualXcceleratorEngine.DirectXMode == DirectXMode.DirectX11;
 
-                        Use3DAA4x = VisualXcceleratorEngine.AntiAliasingMode == FullScreenAntiAliasingMode.MSAA4x;
-                        Use3DAANone = VisualXcceleratorEngine.AntiAliasingMode == FullScreenAntiAliasingMode.None;
-
                         // Always force wait for draw in UIAutomationTestMode 
-                        EnableForceWaitForGPU = DemoSettings.Instance.UIAutomationTestMode;                      
-                    }                  
+                        EnableForceWaitForGPU = DemoSettings.Instance.UIAutomationTestMode;
+                    }
+
+                    Use3DAA4x = VisualXcceleratorEngine.AntiAliasingMode == FullScreenAntiAliasingMode.MSAA4x;
+                    Use3DAANone = VisualXcceleratorEngine.AntiAliasingMode == FullScreenAntiAliasingMode.None;
                 }
             }
 
@@ -234,7 +239,9 @@ namespace SciChart.Examples.Demo.Lib.ViewModels
                 EnableSimd = true;
             }
 
-            UseAlternativeFillSourceD3D = true;
+            Enable3DZAxisUp = false;
+            Is3DZAxisUpOverridden = false;
+            UseAlternativeFillSource = true;
 
             EnableResamplingCPlusPlus = true;
             EnableExtremeDrawingManager = false;
@@ -248,7 +255,7 @@ namespace SciChart.Examples.Demo.Lib.ViewModels
                 : typeof(XamlRenderSurface);
 
             Observable.CombineLatest(
-                    this.WhenPropertyChanged(x => x.UseAlternativeFillSourceD3D),
+                    this.WhenPropertyChanged(x => x.UseAlternativeFillSource),
                     this.WhenPropertyChanged(x => x.EnableForceWaitForGPU),
                     this.WhenPropertyChanged(x => x.EnableResamplingCPlusPlus),
                     this.WhenPropertyChanged(x => x.EnableImpossibleMode),
@@ -258,49 +265,84 @@ namespace SciChart.Examples.Demo.Lib.ViewModels
                 .Throttle(TimeSpan.FromMilliseconds(1))
                 .Subscribe(t =>
                 {
-                    VisualXcceleratorEngine.EnableForceWaitForGPU = t.Item2;
-
                     RecreateStyles();
                 })
                 .DisposeWith(this);
 
-            Observable.CombineLatest(
-                    this.WhenPropertyChanged(x => x.UseD3D9),
-                    this.WhenPropertyChanged(x => x.UseD3D11),
-                    this.WhenPropertyChanged(x => x.Use3DAANone),
-                    this.WhenPropertyChanged(x => x.Use3DAA4x),
-                    Tuple.Create)
-                .Skip(1)
-                .Throttle(TimeSpan.FromMilliseconds(1))
-                .Subscribe(t =>
+            if (IsDirectXAvailable)
+            {
+                Observable.CombineLatest(
+                        this.WhenPropertyChanged(x => x.UseD3D9),
+                        this.WhenPropertyChanged(x => x.UseD3D11),
+                        this.WhenPropertyChanged(x => x.Use3DAANone),
+                        this.WhenPropertyChanged(x => x.Use3DAA4x),
+                        Tuple.Create)
+                    .Skip(1)
+                    .Throttle(TimeSpan.FromMilliseconds(1))
+                    .Subscribe(t =>
+                    {
+                        var renderSettings = new VxRenderSettings
+                        {
+                            FullScreenAntiAliasingMode = Use3DAA4x
+                                ? FullScreenAntiAliasingMode.MSAA4x
+                                : FullScreenAntiAliasingMode.None
+                        };
+
+                        if (!renderSettings.Equals(_renderSettings))
+                        {
+                            // Restart 2D engine
+                            VisualXcceleratorEngine.RestartEngine(renderSettings);
+                            _renderSettings = renderSettings;
+                        }
+                    });
+            }
+
+#if !HIDE3D
+            Is3DAvailable = true;
+
+            this.WhenPropertyChanged(x => x.Enable3DZAxisUp)
+                .Subscribe(zAxisUp =>
                 {
-                    var renderSettings = new VxRenderSettings
-                    {
-                        DirectXMode = UseD3D9
-                            ? DirectXMode.DirectX9c
-                            : DirectXMode.AutoDetect,
-                        
-                        FullScreenAntiAliasingMode = Use3DAA4x
-                            ? FullScreenAntiAliasingMode.MSAA4x
-                            : FullScreenAntiAliasingMode.None,
-                    };
-
-                    if (!renderSettings.Equals(_renderSettings))
-                    {
-                        // Restart 2D engine
-                        VisualXcceleratorEngine.RestartEngine(renderSettings);
-                        _renderSettings = renderSettings;
-                    }
-                });
-
-            this.WhenPropertyChanged(x => x.EnableDropShadows)
-                .Subscribe(b => EffectManager.EnableDropShadows = b)
+                    Viewport3D.SetViewportOrientation(zAxisUp
+                        ? Viewport3DOrientation.ZAxisUp
+                        : Viewport3DOrientation.YAxisUp);
+                })
                 .DisposeWith(this);
+#endif
+            this.WhenPropertyChanged(x => x.EnableDropShadows)
+                .Subscribe(value => EffectManager.EnableDropShadows = value)
+                .DisposeWith(this);
+        }
+
+        public void OnIsVisibleChanged(bool isVisible)
+        {
+#if !HIDE3D
+            if (!isVisible) return;
+
+            Enable3DZAxisUp = Viewport3D.ViewportOrientation == Viewport3DOrientation.ZAxisUp;
+
+            if (Navigator.Instance.CurrentPage is ExamplesHostAppPage)
+            {
+                Is3DZAxisUpOverridden = Navigator.Instance.CurrentExample.Uri.Contains("ZAxisUp3D");
+            }
+            else
+            {
+                Is3DZAxisUpOverridden = false;
+            }
+#endif
+        }
+
+        private void RecreateStyles()
+        {
+            CreateGlobalStyle<SciChartSurface>();
+            CreateGlobalStyle<SciChartRadarSurface>();
+            CreateGlobalStyle<SciStockChart>();
         }
 
         private void CreateGlobalStyle<T>() where T : SciChartSurfaceBase
         {
             var overrideStyle = new Style(typeof(T));
+#if !XPF
             var binding = new Binding
             {
                 Source = this,
@@ -309,10 +351,10 @@ namespace SciChart.Examples.Demo.Lib.ViewModels
             };
 
             overrideStyle.Setters.Add(new Setter(SciChartSurfaceBase.RenderSurfaceProperty, binding));
+#endif
             overrideStyle.Setters.Add(new Setter(VisualXcceleratorEngine.EnableImpossibleModeProperty, EnableImpossibleMode));
-            
             overrideStyle.Setters.Add(new Setter(PerformanceHelper.EnableExtremeResamplersProperty, EnableResamplingCPlusPlus));
-            overrideStyle.Setters.Add(new Setter(PerformanceHelper.EnableExtremeDrawingManagerProperty, EnableExtremeDrawingManager));           
+            overrideStyle.Setters.Add(new Setter(PerformanceHelper.EnableExtremeDrawingManagerProperty, EnableExtremeDrawingManager));
 
             var currentTheme = "SciChartv7Navy";
 

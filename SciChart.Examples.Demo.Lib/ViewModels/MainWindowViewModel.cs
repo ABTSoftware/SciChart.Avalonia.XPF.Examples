@@ -6,6 +6,7 @@ using System.Windows.Input;
 using SciChart.Charting;
 using SciChart.Charting.Visuals;
 using SciChart.Core.Utility;
+using SciChart.Drawing.VisualXcceleratorRasterizer;
 using SciChart.Examples.Demo.Lib.Common;
 using SciChart.Examples.Demo.Lib.Helpers.HtmlExport;
 using SciChart.Examples.Demo.Lib.Helpers.Navigation;
@@ -149,7 +150,7 @@ namespace SciChart.Examples.Demo.Lib.ViewModels
 
             AutoCompleteDataSource = module.Examples.Select(ex => ex.Value.Title).ToList();
             VXHardwareAcceleration = VisualXcceleratorEngine.SupportsHardwareAcceleration
-                    ? ((SciChartRuntimeInfo.IsXPF || VisualXcceleratorEngine.IsUsingOpenGL) ? "OpenGL" : "DirectX")
+                    ? (VisualXcceleratorEngine.ActiveGraphicsAPI == VxGraphicsAPI.OpenGL ? "OpenGL" : "DirectX")
                     : "Not Available";
      
             WithTrait<AutoCompleteSearchTrait>();
@@ -159,7 +160,7 @@ namespace SciChart.Examples.Demo.Lib.ViewModels
 
             ResetSelectedCommand = new ActionCommand(() =>
             {
-                SelectedCategory = Categories.FirstOrDefault();
+                SelectedCategory = Categories.FirstOrDefault(x => x.IsHomeCategory);
                 SelectedShowcaseExample = ShowcaseExamples.FirstOrDefault();
             });
 
@@ -181,7 +182,7 @@ namespace SciChart.Examples.Demo.Lib.ViewModels
                 DeveloperModManager.Manage.IsDeveloperMode = false;
                 TimedMethod.Invoke(() => HtmlExportHelper.ExportExampleToHtml(SelectedExample)).After(1000).Go();
 
-            }, () => SelectedExample != null);
+            }, () => SelectedExample != null && !SciChartRuntimeInfo.IsXPF);
 
             ExportAllHtmlCommand = new ActionCommand(() =>
             {
@@ -189,7 +190,7 @@ namespace SciChart.Examples.Demo.Lib.ViewModels
                 DeveloperModManager.Manage.IsDeveloperMode = false;
                 TimedMethod.Invoke(() => HtmlExportHelper.ExportExamplesToHtml(module)).After(1000).Go();
 
-            }, () => SelectedExample != null);
+            }, () => SelectedExample != null && !SciChartRuntimeInfo.IsXPF);
 
             ExportAllSolutionsCommand = new ActionCommand(() =>
             {

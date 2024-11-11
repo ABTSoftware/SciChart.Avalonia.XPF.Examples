@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using SciChart.Core.Extensions;
 using SciChart.Examples.Demo.Lib.Common;
-using SciChart.Examples.Demo.Lib.Helpers;
 using SciChart.Examples.ExternalDependencies.Common;
 using SciChart.UI.Bootstrap;
 using SciChart.Wpf.UI.Transitionz;
@@ -84,9 +83,13 @@ namespace SciChart.Examples.Demo.Lib.ViewModels
 
             ShowExample = true;
             IsInfoVisible = true;
+
 #if !DEBUG
-            IsShowingHelp = true;
-            IsShowingSourceCodeHelp = true;
+            if (!DemoSettings.Instance.UIAutomationTestMode)
+            {
+                IsShowingHelp = true;
+                IsShowingSourceCodeHelp = true;
+            }
 #endif
         }
 

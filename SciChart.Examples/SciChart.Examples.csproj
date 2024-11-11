@@ -5,17 +5,29 @@
 		<EnableWindowsTargeting>True</EnableWindowsTargeting>
 		<UseWPF>True</UseWPF>
 		<OutputType>Library</OutputType>
-		<LangVersion>Latest</LangVersion>
-		<OutputPath>..\build\$(Configuration)</OutputPath>
+		<LangVersion>Latest</LangVersion>		
+		<OutputPath>..\..\Build.WPF\$(Configuration)</OutputPath>
+		<!-- <DefineConstants>HIDE3D</DefineConstants> -->
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<IsXPF>False</IsXPF>
+	</PropertyGroup>
+
+	<!-- SolutionDir/Name is undefined for non-IDE solution build (e.g. dotnet build) -->
+	<Import Project="$(SolutionDir)\$(SolutionName).targets" Condition="!$(SolutionDir.Contains('Undefined')) AND Exists('$(SolutionDir)\$(SolutionName).targets')" />
+
+	<PropertyGroup Condition="'$(IsXPF)'=='True'">
+		<DefineConstants>$(DefineConstants);XPF</DefineConstants>
+		<OutputPath>..\..\Build.Avalonia.XPF\$(Configuration)</OutputPath>
 	</PropertyGroup>
 
 	<ItemGroup>
 		<None Remove="Resources\ExampleDefinitions\**\*.xml" />
-		<None Remove="Images\*.png" />
+		<None Remove="Resources\Images\*.png" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Remove="Resources\Images\*.png" />
 		<Resource Include="Resources\Images\*.png" />
 	</ItemGroup>
 
@@ -25,13 +37,37 @@
 		<EmbeddedResource Include="Themes\**\*.xaml" />
 	</ItemGroup>
 
-
 	<ItemGroup>
 		<PackageReference Include="System.Buffers" Version="4.5.1" />
 		<PackageReference Include="System.Reactive" Version="3.1.1" />
-		<PackageReference Include="MahApps.Metro.IconPacks.Material" Version="4.11.0" />
-		<PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
-		<PackageReference Include="SciChart.Avalonia.XPF" Version="*-*" />
+    <PackageReference Include="SciChart.Avalonia.XPF" Version="*-*" />
 	</ItemGroup>
 
+  <ItemGroup Condition="$(DefineConstants.Contains('HIDE3D'))">
+
+		<!-- Definitions -->
+		<EmbeddedResource Remove="Resources\ExampleDefinitions\a3D_Charts\**\*.xml" />
+		<EmbeddedResource Remove="Resources\ExampleDefinitions\cFeatured_Apps\Financial_Charts\Tenor_Curves_3D_Chart.xml" />
+		<EmbeddedResource Remove="Resources\ExampleDefinitions\cFeatured_Apps\Scientific_Charts\LIDAR_PointCloud_3D_Demo.xml" />
+
+		<!-- Charts3D -->
+		<Page Remove="Examples\Charts3D\**\*.*" />
+		<Content Remove="Examples\Charts3D\**\*.*" />
+		<Compile Remove="Examples\Charts3D\**\*.*" />
+		<EmbeddedResource Remove="Examples\Charts3D\**\*.*" />
+
+		<!-- Lidar3DPointCloud -->
+		<Page Remove="Examples\SeeFeaturedApplication\Lidar3DPointCloudDemo\*.*" />
+		<Content Remove="Examples\SeeFeaturedApplication\Lidar3DPointCloudDemo\*.*" />
+		<Compile Remove="Examples\SeeFeaturedApplication\Lidar3DPointCloudDemo\*.*" />
+		<EmbeddedResource Remove="Examples\SeeFeaturedApplication\Lidar3DPointCloudDemo\*.*" />
+
+		<!-- TenorCurves3DChart -->
+		<Page Remove="Examples\SeeFeaturedApplication\TenorCurves3DChart\*.*" />
+		<Content Remove="Examples\SeeFeaturedApplication\TenorCurves3DChart\*.*" />
+		<Compile Remove="Examples\SeeFeaturedApplication\TenorCurves3DChart\*.*" />
+		<EmbeddedResource Remove="Examples\SeeFeaturedApplication\TenorCurves3DChart\*.*" />
+		
+	</ItemGroup>
+	
 </Project>

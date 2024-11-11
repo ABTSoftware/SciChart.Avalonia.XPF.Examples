@@ -9,12 +9,13 @@ namespace SciChart.Examples.Demo.Lib.Views
     {
         public ShellView()
         {
-            InitializeComponent();           
+            InitializeComponent();
         }
 
         private void UIElement_OnMouseDown(object sender, MouseButtonEventArgs e)
         {
             var uri = new Uri(Urls.SciChartWebSite);
+
             uri.Launch();
         }
     }

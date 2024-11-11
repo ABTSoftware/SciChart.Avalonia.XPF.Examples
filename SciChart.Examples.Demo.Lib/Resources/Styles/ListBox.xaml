@@ -61,6 +61,11 @@
         </Setter>
     </Style>
 
+    <Style x:Key="NavigationViewExampleItemContainerStyle" TargetType="ListBoxItem"
+           BasedOn="{StaticResource NavigationViewListBoxItemContainerStyle}">
+        <Setter Property="AutomationProperties.AutomationId" Value="{Binding Path=Title}"/>
+    </Style>
+
     <Style x:Key="NavigationViewListBoxStyle" TargetType="ListBox">
         <Setter Property="Margin" Value="0"/>
         <Setter Property="BorderThickness" Value="0"/>

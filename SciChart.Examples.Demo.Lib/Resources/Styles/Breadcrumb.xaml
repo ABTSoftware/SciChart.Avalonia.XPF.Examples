@@ -51,6 +51,7 @@
                                 AutomationProperties.AutomationId="Breadcrumb.Home"/>
 
                         <ItemsControl Grid.Column="1"
+                                      Background="Transparent"
                                       OpacityMask="{StaticResource RightFadeOpacityBrush}"
                                       ItemsSource="{TemplateBinding BreadcrumbItems}">
                             <ItemsControl.ItemsPanel>

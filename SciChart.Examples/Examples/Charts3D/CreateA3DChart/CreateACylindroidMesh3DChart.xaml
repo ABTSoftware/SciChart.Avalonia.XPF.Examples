@@ -1,0 +1,117 @@
+<UserControl x:Class="SciChart.Examples.Examples.Charts3D.CreateA3DChart.CreateACylindroidMesh3DChart"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:ext="http://schemas.abtsoftware.co.uk/scichart/exampleExternals"
+             xmlns:s3D="http://schemas.abtsoftware.co.uk/scichart3D"
+             mc:Ignorable="d"
+             d:DesignHeight="400"
+             d:DesignWidth="600">
+
+    <UserControl.Resources>
+
+        <s3D:GradientColorPalette x:Key="HeightColorMap" ContourColor="Black" ContourStrokeThickness="2.0">
+            <s3D:GradientColorPalette.GradientStops>
+                <GradientStop Offset="1" Color="{StaticResource ColorMapColor_6}"/>
+                <GradientStop Offset="0.9" Color="{StaticResource ColorMapColor_5}"/>
+                <GradientStop Offset="0.7" Color="{StaticResource ColorMapColor_7}"/>
+                <GradientStop Offset="0.5" Color="{StaticResource ColorMapColor_4}"/>
+                <GradientStop Offset="0.3" Color="{StaticResource ColorMapColor_3}"/>
+                <GradientStop Offset="0.1" Color="{StaticResource ColorMapColor_2}"/>
+                <GradientStop Offset="0.0" Color="{StaticResource ColorMapColor_1}"/>
+            </s3D:GradientColorPalette.GradientStops>
+        </s3D:GradientColorPalette>
+
+        <ext:EnumValueToStringConverter x:Key="SelectedEnumValueConverter" />
+        <ext:LinearToLogarithmicValueConverter x:Key="LinearToLogarithmicValueConverter"/>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- The SciChart3DInteractionToolbar adds rotate, orbit, zoom, pan, zoom extents functionality -->
+        <!-- to the chart and is included for example purposes. -->
+        <!-- If you wish to know how to zoom and pan a 3D chart then do a search for Zoom Pan in the Examples suite! -->
+        <ext:SciChart3DInteractionToolbar TargetSurface="{Binding Source={x:Reference Name=sciChart}}" >
+            <ext:FlyoutMenuButton>
+                <ext:ToolbarIcon Kind="TuneVariant" Height="16" Width="16" Style="{StaticResource ToolbarButtonIconStyle}"/>
+                <ext:FlyoutMenuButton.PopupContent>
+                    <StackPanel Margin="5" Width="150" Orientation="Vertical">
+                        <TextBlock Text="Draw Mesh As" Style="{StaticResource FlyoutMenuHeaderStyle}"/>
+                        <ComboBox ItemsSource="{Binding Source={ext:EnumValues {x:Type s3D:DrawMeshAs}}}"
+                                  SelectedItem="{Binding DrawMeshAs, Source={x:Reference cylindroidMeshRenderableSeries}, Mode=TwoWay, Converter={StaticResource SelectedEnumValueConverter}}"/>
+
+                        <TextBlock Text="Back Side" Margin="0,10,0,5" Style="{StaticResource FlyoutMenuHeaderStyle}"/>
+                        <CheckBox x:Name="CheckDrawSkirt" Margin="0,5" Content="Draw Back Side" IsChecked="{Binding DrawBackSide, Source={x:Reference cylindroidMeshRenderableSeries}, Mode=TwoWay}"/>
+
+                        <TextBlock Text="Opacity" Margin="0,5" Style="{StaticResource FlyoutMenuHeaderStyle}"/>
+                        <Slider Minimum="0.1" Maximum="1.0" x:Name="opacitySlider" Value="0.9" Orientation="Horizontal" HorizontalAlignment="Stretch"/>
+
+                        <TextBlock Text="Lighting Factor" Margin="0,10,0,5" Style="{StaticResource FlyoutMenuHeaderStyle}"/>
+                        <Slider Minimum="0.0" Maximum="1.0" x:Name="lightingFactorSlider" Value="0.8" Orientation="Horizontal" HorizontalAlignment="Stretch"/>
+
+                        <TextBlock Text="Shininess" Margin="0,10,0,5" Style="{StaticResource FlyoutMenuHeaderStyle}"/>
+                        <Slider Minimum="0" Maximum="11" x:Name="shininessSlider" Orientation="Horizontal" HorizontalAlignment="Stretch"/>
+
+                        <TextBlock Text="Specular Strength" Margin="0,10,0,5" Style="{StaticResource FlyoutMenuHeaderStyle}"/>
+                        <Slider Minimum="0.1" Maximum="5.0" x:Name="specularStrengthSlider" Value="1.0" Orientation="Horizontal" HorizontalAlignment="Stretch"/>
+                    </StackPanel>
+                </ext:FlyoutMenuButton.PopupContent>
+            </ext:FlyoutMenuButton>
+
+            <ext:FlyoutSeparator/>
+
+            <ext:FlyoutMenuButton>
+                <ext:ToolbarIcon Kind="Palette" Height="16" Width="16" Style="{StaticResource ToolbarButtonIconStyle}"/>
+                <ext:FlyoutMenuButton.PopupContent>
+                    <StackPanel Margin="5" Width="150" Orientation="Vertical">
+                        <TextBlock Text="Palette Mode" Style="{StaticResource FlyoutMenuHeaderStyle}"/>
+                        <ComboBox SelectionChanged="PaletteModeComboBox_OnSelectionChanged">
+                            <ComboBoxItem IsSelected="True">Radial</ComboBoxItem>
+                            <ComboBoxItem>Axial</ComboBoxItem>
+                            <ComboBoxItem>Azimuthal</ComboBoxItem>
+                            <ComboBoxItem>Polar</ComboBoxItem>
+                        </ComboBox>
+                    </StackPanel>
+                </ext:FlyoutMenuButton.PopupContent>
+            </ext:FlyoutMenuButton>
+        </ext:SciChart3DInteractionToolbar>
+
+        <s3D:SciChart3DSurface x:Name="sciChart" Grid.Column="1" WorldDimensions="200,200,200" BorderThickness="0">
+            <s3D:SciChart3DSurface.Camera>
+                <s3D:Camera3D ZoomToFitOnAttach="True"/>
+            </s3D:SciChart3DSurface.Camera>
+
+            <s3D:SciChart3DSurface.RenderableSeries>
+                <s3D:FreeSurfaceRenderableSeries3D x:Name="cylindroidMeshRenderableSeries"
+                                             DrawMeshAs="SolidWireFrame"
+                                             Stroke="{StaticResource MainThemeTransparentStrokeColor}"
+                                             ContourInterval="0.1"
+                                             ContourStroke="{StaticResource MainThemeTransparentStrokeColor}"
+                                             StrokeThickness="2.0"
+                                             LightingFactor="{Binding Source={x:Reference Name=lightingFactorSlider}, Path=Value, Mode=TwoWay}"
+                                             Opacity="{Binding Source={x:Reference Name=opacitySlider}, Path=Value, Mode=TwoWay}"
+                                             MeshColorPalette="{StaticResource HeightColorMap}"
+                                             Shininess="{Binding Source={x:Reference Name=shininessSlider}, Path=Value, Mode=TwoWay, Converter={StaticResource LinearToLogarithmicValueConverter}}"
+                                             SpecularStrength="{Binding Source={x:Reference Name=specularStrengthSlider}, Path=Value, Mode=TwoWay}"
+                                             PaletteMinimum="3.0, 0.0, 0.0" PaletteMaximum="4.0, 0.0, 0.0" />
+            </s3D:SciChart3DSurface.RenderableSeries>
+
+            <s3D:SciChart3DSurface.XAxis>
+                <s3D:NumericAxis3D NegativeSideClipping="None" PositiveSideClipping="None" />
+            </s3D:SciChart3DSurface.XAxis>
+
+            <s3D:SciChart3DSurface.YAxis>
+                <s3D:NumericAxis3D />
+            </s3D:SciChart3DSurface.YAxis>
+
+            <s3D:SciChart3DSurface.ZAxis>
+                <s3D:NumericAxis3D NegativeSideClipping="None" PositiveSideClipping="None" />
+            </s3D:SciChart3DSurface.ZAxis>
+
+        </s3D:SciChart3DSurface>
+    </Grid>
+</UserControl>

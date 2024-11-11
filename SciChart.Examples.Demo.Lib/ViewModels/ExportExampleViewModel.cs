@@ -20,9 +20,11 @@ namespace SciChart.Examples.Demo.Lib.ViewModels
             IsXpfExport = SciChartRuntimeInfo.IsXPF;
             IsXpfLicense = SciChartRuntimeInfo.IsXPF;
 
-            IsFolderPath = !SciChartRuntimeInfo.IsXPF;
+            // TODO This code must be removed after uploading XPF NuGet package
+            // Do not forget to check and update the ExportExampleView.xaml
+            IsFolderPath = SciChartRuntimeInfo.IsXPF;
 
-            ExportMajorVersion = ProjectWriter.SciChartVersion.Major;
+            ExportMajorVersion = SciChartRuntimeInfo.GetVersion()?.Split('.')[0].Trim('v') ?? "*";
             LibrariesPath = ExportExampleHelper.TryAutomaticallyFindAssemblies();
 
             SelectExportPathCommand = new ActionCommand(() =>
@@ -47,27 +49,44 @@ namespace SciChart.Examples.Demo.Lib.ViewModels
             {
                 var librariesPath = IsFolderPath ? LibrariesPath : string.Empty;
 
+                string projectName = null;
+
+                CanExport = false;
+
                 if (IsXpfExport)
                 {
                     var xpfLicenseKey = IsXpfLicense ? XpfLicenseKey : string.Empty;
 
-                    ProjectWriter.WriteXpfProject(module.CurrentExample, ExportPath, librariesPath, xpfLicenseKey);
+                    projectName = ProjectWriter.WriteXpfProject(module.CurrentExample, ExportPath, librariesPath, xpfLicenseKey);
                 }
                 else
                 {
-                    ProjectWriter.WriteProject(module.CurrentExample, ExportPath, librariesPath);
+                    projectName = ProjectWriter.WriteProject(module.CurrentExample, ExportPath, librariesPath);
                 }
 
-                ShowExportedMessage = true;
-
-                if (_parent.Usage != null)
+                if (string.IsNullOrEmpty(projectName))
                 {
-                    _parent.Usage.Exported = true;
+                    OnExportError = true;
+
+                    await Task.Delay(4000);
+
+                    OnExportError = false;
+                }
+                else
+                {
+                    OnExportSuccess = true;
+
+                    if (_parent.Usage != null)
+                    {
+                        _parent.Usage.Exported = true;
+                    }
+
+                    await Task.Delay(2000);
+
+                    OnExportSuccess = false;
                 }
 
-                await Task.Delay(TimeSpan.FromMilliseconds(2000));
-
-                ShowExportedMessage = false;
+                CanExport = true;
 
             }, () => IsValid);
 
@@ -80,7 +99,7 @@ namespace SciChart.Examples.Demo.Lib.ViewModels
         public ActionCommand ExportCommand { get; }
         public ActionCommand CancelCommand { get; }
 
-        public int ExportMajorVersion { get; }
+        public string ExportMajorVersion { get; }
 
         public bool IsXpfExport { get; }
 
@@ -93,7 +112,9 @@ namespace SciChart.Examples.Demo.Lib.ViewModels
                 {
                     SetDynamicValue(value);
 
-                    ShowExportedMessage = false;
+                    CanExport = true;
+                    OnExportSuccess = false;
+                    OnExportError = false;
 
                     if (IsExportVisible)
                     {
@@ -104,6 +125,12 @@ namespace SciChart.Examples.Demo.Lib.ViewModels
                     _parent.InvalidateDialogProperties();
                 }
             }
+        }
+
+        public bool CanExport
+        {
+            get => GetDynamicValue<bool>();
+            set => SetDynamicValue(value);
         }
 
         public string ExportPath
@@ -156,7 +183,13 @@ namespace SciChart.Examples.Demo.Lib.ViewModels
             }
         }
 
-        public bool ShowExportedMessage
+        public bool OnExportSuccess
+        {
+            get => GetDynamicValue<bool>();
+            set => SetDynamicValue(value);
+        }
+
+        public bool OnExportError
         {
             get => GetDynamicValue<bool>();
             set => SetDynamicValue(value);

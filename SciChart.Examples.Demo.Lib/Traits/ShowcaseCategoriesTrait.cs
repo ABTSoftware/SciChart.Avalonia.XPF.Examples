@@ -32,8 +32,14 @@ namespace SciChart.Examples.Demo.Lib.Traits
                 .Select(x => new ExampleCategoryViewModel { Category = x.Key, Groups = x.Value })
                 .ToList();
 
-            Target.SelectedShowcaseExample = Target.ShowcaseExamples.FirstOrDefault();           
-            Target.SelectedCategory = Target.Categories.FirstOrDefault();
+            Target.SelectedShowcaseExample = Target.ShowcaseExamples.FirstOrDefault();
+
+            int midCount = (Target.Categories.Count() - 1) / 2;
+            if (midCount >= 0 && midCount < Target.Categories.Count())
+            {
+                Target.SelectedCategory = Target.Categories.ElementAt(midCount);
+                Target.SelectedCategory.IsHomeCategory = true;
+            }
 
             Target.EverythingViewModel = new EverythingViewModel();
 

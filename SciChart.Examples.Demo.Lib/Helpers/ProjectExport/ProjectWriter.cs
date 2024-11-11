@@ -6,7 +6,6 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using SciChart.Charting.Common.Extensions;
-using SciChart.Charting.Visuals;
 using SciChart.Core.Utility;
 using SciChart.Examples.Demo.Lib.Common;
 
@@ -19,6 +18,9 @@ namespace SciChart.Examples.Demo.Lib.Helpers.ProjectExport
             "SciChart.Core.dll",
             "SciChart.Data.dll",
             "SciChart.Charting.dll",
+#if !HIDE3D
+            "SciChart.Charting3D.dll",
+#endif
             "SciChart.Drawing.dll",
             "SciChart.Charting.DrawingTools.dll",
             "SciChart.Examples.ExternalDependencies.dll"
@@ -27,7 +29,9 @@ namespace SciChart.Examples.Demo.Lib.Helpers.ProjectExport
         public static readonly string[] SciChartNuGetPackages =
         {
             "SciChart",
+#if !HIDE3D
             "SciChart3D",
+#endif
             "SciChart.DrawingTools",
             "SciChart.ExternalDependencies"
         };
@@ -44,24 +48,22 @@ namespace SciChart.Examples.Demo.Lib.Helpers.ProjectExport
             "VitalSignsMonitorDemo;System.Reactive;3.1.1"
         };
 
-        public static readonly string ExampleTheme = "Navy";
+        public const string ExampleTheme = "Navy";
 
-        public static readonly string SolutionFileName = "SolutionFile.sln";
-        public static readonly string ProjectFileName = "ProjectFile.csproj";
-        public static readonly string NuGetConfigFileName = "NuGet.config";
+        public const string SolutionFileName = "SolutionFile.sln";
+        public const string ProjectFileName = "ProjectFile.csproj";
+        public const string NuGetConfigFileName = "NuGet.config";
 
-        public static readonly string ApplicationFileName = "App.xaml";
-        public static readonly string MainWindowFileName = "MainWindow.xaml";
-        public static readonly string ExampleResourcesFileName = "ExampleResources.xaml";
+        public const string ApplicationFileName = "App.xaml";
+        public const string MainWindowFileName = "MainWindow.xaml";
+        public const string ExampleResourcesFileName = "ExampleResources.xaml";
 
-        public static readonly string ClrNamespace = "clr-namespace:";
-        public static readonly string ViewModelKey = "ViewModel";
+        public const string ClrNamespace = "clr-namespace:";
+        public const string ViewModelKey = "ViewModel";
 
         public static readonly XNamespace PresentationXmlns = "http://schemas.microsoft.com/winfx/2006/xaml/presentation";
         public static readonly XNamespace XXmlns = "http://schemas.microsoft.com/winfx/2006/xaml";
 
-        public static readonly Version SciChartVersion = typeof(SciChartSurface).Assembly.GetName().Version;
-        
         public static string WriteProject(Example example, string exportPath, string libsPath)
         {
             if (SciChartRuntimeInfo.IsXPF)
@@ -139,34 +141,85 @@ namespace SciChart.Examples.Demo.Lib.Helpers.ProjectExport
 
             var exportDirPath = Path.Combine(exportPath, projectName);
 
-            Directory.CreateDirectory(exportDirPath);
-
-            foreach (var file in files)
+            try
             {
-                var sw = new StreamWriter(Path.Combine(exportDirPath, file.Key));
-                sw.Write(file.Value);
-                sw.Close();
-                sw.Dispose();
-            }
+                Directory.CreateDirectory(exportDirPath);
 
-            // Copy local NuGet folder
-            var localNuGetDirName = "nupkgs";
-            var destinationDirPath = Path.Combine(exportDirPath, localNuGetDirName);
-            var assemblyPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            var sourcePath = Path.GetFullPath(Path.Combine(assemblyPath, "..", "..", "..", localNuGetDirName));
-            if (Directory.Exists(sourcePath))
-            {
-                var sourceDir = new DirectoryInfo(sourcePath);
-                var nugetFile = sourceDir.GetFiles("*.nupkg").FirstOrDefault();
-                if (nugetFile != null)
+                foreach (var file in files)
                 {
-                    Directory.CreateDirectory(destinationDirPath);
-                    var destinationPath = Path.Combine(destinationDirPath, nugetFile.Name);
-                    nugetFile.CopyTo(destinationPath, true);
+                    var sw = new StreamWriter(Path.Combine(exportDirPath, file.Key));
+                    sw.Write(file.Value);
+                    sw.Close();
+                    sw.Dispose();
+                }
+
+                if (isXpfExport && !string.IsNullOrEmpty(libsPath))
+                {
+                    var assemblyPath = Assembly.GetExecutingAssembly().Location;
+                    var sourcePath = Path.GetFullPath(Path.GetDirectoryName(assemblyPath));
+
+                    CopyNativeLibs(sourcePath, exportDirPath, "Debug", "win-x64");
+                    CopyNativeLibs(sourcePath, exportDirPath, "Debug", "win-x86");
+
+                    CopyNativeLibs(sourcePath, exportDirPath, "Release", "win-x64");
+                    CopyNativeLibs(sourcePath, exportDirPath, "Release", "win-x86");
+
+                    CopyNativeLibs(sourcePath, exportDirPath, "Debug", "linux-x64");
+                    CopyNativeLibs(sourcePath, exportDirPath, "Release", "linux-x64");             
+                }
+
+                return projectName;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        private static void CopyNativeLibs(string sourcePath, string exportPath, string config, string runtime)
+        {
+            var nativeSourcePath = Path.Combine(sourcePath, "runtimes", runtime, "native");
+
+            if (Directory.Exists(nativeSourcePath))
+            {
+                var nativeLibs = new List<string>();
+
+                if (runtime.Contains("win"))
+                {
+                    nativeLibs.Add("AbtLicensingNative.dll");
+                    nativeLibs.Add("VXccelEngine2D.dll");
+#if !HIDE3D
+                    nativeLibs.Add("VXccelEngine3D.dll");
+#endif
+                    nativeLibs.Add("D3DCompiler_47.dll");
+                    nativeLibs.Add("glew32.dll");
+                }
+                else if (runtime.Contains("linux"))
+                {
+                    nativeLibs.Add("AbtLicensingNative.so");
+                    nativeLibs.Add("VXccelEngine2D.so");
+#if !HIDE3D
+                    nativeLibs.Add("VXccelEngine3D.so");
+#endif
+                }
+
+                if (nativeLibs.Any())
+                {
+                    var configDestPath = Path.Combine(exportPath, "bin", config, "net6.0-windows");
+                    var nativeDestPath = Path.Combine(configDestPath, "runtimes", runtime, "native");
+
+                    Directory.CreateDirectory(nativeDestPath);
+
+                    foreach (var nativeLib in nativeLibs)
+                    {
+                        var libSourcePath = Path.Combine(nativeSourcePath, nativeLib);
+                        var libDestPath = Path.Combine(nativeDestPath, nativeLib);
+
+                        if (File.Exists(libSourcePath))
+                            File.Copy(libSourcePath, libDestPath, true);
+                    }
                 }
             }
-
-            return projectName;
         }
 
         private static string GetFileName(string fullName)
@@ -189,10 +242,32 @@ namespace SciChart.Examples.Demo.Lib.Helpers.ProjectExport
 
         private static string GenerateExampleResourcesFile(string themeName)
         {
-            var dictionary = ThemeLoader.LoadThemeFile(themeName);
-            var pattern = "<ResourceDictionary\\.MergedDictionaries>[\\s\\S]*?<\\/ResourceDictionary\\.MergedDictionaries>";
+            var themeText = ThemeLoader.LoadThemeFile(themeName);
+            var themeXaml = XDocument.Parse(themeText);
+            
+            if (themeXaml.Root != null)
+            {
+                var mergedDictionaries = themeXaml.Root
+                    .Elements()
+                    .FirstOrDefault(x => x.Name.LocalName == "ResourceDictionary.MergedDictionaries");
 
-            return Regex.Replace(dictionary, pattern, string.Empty);
+                mergedDictionaries?.Remove();
+#if !HIDE3D
+                var style = new XElement(PresentationXmlns + "Style",
+                    new XAttribute(XNamespace.Xmlns + "s3D", "http://schemas.abtsoftware.co.uk/scichart3D"),
+                    new XAttribute("TargetType", "{x:Type s3D:SciChart3DSurface}"));
+                        
+                var setter = new XElement(PresentationXmlns + "Setter",
+                    new XAttribute("Property", "s:ThemeManager.Theme"),
+                    new XAttribute("Value", ExampleTheme == "Navy" ? "SciChartv7Navy" : "SciChartv4Dark"));
+
+                style.Add(setter);
+
+                themeXaml.Root.Add(style);
+#endif
+            }
+
+            return themeXaml.ToString();
         }
 
         private static string GenerateNuGetConfigFile(string file, string xpfLicenseKey)
@@ -212,20 +287,11 @@ namespace SciChart.Examples.Demo.Lib.Helpers.ProjectExport
                 var elements = projXml.Root.Elements().Where(x => x.Name.LocalName == "ItemGroup").ToList();
                 if (elements.Count == 3)
                 {
-                    if (!string.IsNullOrEmpty(libsPath))
-                    {
-                        // Add assembly references
-                        foreach (var asmName in SciChartAssemblyNames)
-                        {
-                            var el = new XElement("Reference", new XAttribute("Include", asmName.Replace(".dll", string.Empty)));
-                            el.Add(new XElement("HintPath", Path.Combine(libsPath, asmName)));
-                            elements[0].Add(el);
-                        }
-                    }
-                    else
+                    if (string.IsNullOrEmpty(libsPath))
                     {
                         // Get version in format [major].*-*
-                        var version = $"{SciChartVersion.Major}.*-*";
+                        var version = SciChartRuntimeInfo.GetVersion();
+                        var major = version?.Split('.')[0].Trim('v') ?? "*";
 
                         // Get NuGet packages list
                         var packages = isXpfExport ? SciChartXpfNuGetPackages : SciChartNuGetPackages;
@@ -235,15 +301,25 @@ namespace SciChart.Examples.Demo.Lib.Helpers.ProjectExport
                         {
                             var el = new XElement("PackageReference",
                                 new XAttribute("Include", asmPackage),
-                                new XAttribute("Version", version));
+                                new XAttribute("Version", $"{major}.*-*"));
 
+                            elements[0].Add(el);
+                        }
+                    }
+                    else
+                    {
+                        // Add assembly references
+                        foreach (var asmName in SciChartAssemblyNames)
+                        {
+                            var el = new XElement("Reference", new XAttribute("Include", asmName.Replace(".dll", string.Empty)));
+                            el.Add(new XElement("HintPath", Path.Combine(libsPath, asmName)));
                             elements[0].Add(el);
                         }
                     }
 
                     // Add package references for specific example NuGet packages
                     var exampleTitle = Regex.Replace(example.Title, @"\s", string.Empty);
-                    var examplePackages = ExamplesNuGetPackages.Where(p => p.StartsWith(exampleTitle));
+                    var examplePackages = ExamplesNuGetPackages.Where(p => p.StartsWith(exampleTitle));                   
                     if (examplePackages.Any())
                     {
                         foreach (var package in examplePackages)
@@ -279,7 +355,7 @@ namespace SciChart.Examples.Demo.Lib.Helpers.ProjectExport
                         elements[2].Add(el);
 
                         projXmlStr = projXml.ToString();
-                        projXmlStr = projXmlStr.Replace("[PROJECT_SDK]", @"Xpf.Sdk/1.0.1-cibuild001094");                       
+                        projXmlStr = projXmlStr.Replace("[PROJECT_SDK]", @"Xpf.Sdk/1.4.0-cibuild001853");
                     }
                     else
                     {
@@ -297,7 +373,7 @@ namespace SciChart.Examples.Demo.Lib.Helpers.ProjectExport
 #else
                     "net6.0-windows";
 #endif
-                    return projXmlStr.Replace("[PROJECT_TARGET]", targetFramework);                    
+                    return projXmlStr.Replace("[PROJECT_TARGET]", targetFramework);
                 }
             }
 
@@ -349,10 +425,11 @@ namespace SciChart.Examples.Demo.Lib.Helpers.ProjectExport
                 {
                     var classNs = xClassAttribute.Value;
                     var index = classNs.LastIndexOf('.');
+                    
                     if (index > 0)
                     {
                         xamlFileName = classNs.Substring(index + 1, classNs.Length - index - 1);
-                        return classNs.Replace($".{xamlFileName}", string.Empty);
+                        return classNs.Substring(0, index).TrimEnd('.');
                     }
                 }
             }

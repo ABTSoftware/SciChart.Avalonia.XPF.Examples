@@ -3,37 +3,40 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:s="http://schemas.abtsoftware.co.uk/scichart"
              xmlns:ext="http://schemas.abtsoftware.co.uk/scichart/exampleExternals"
+             xmlns:icons="http://metro.mahapps.com/winfx/xaml/iconpacks"
              xmlns:cnv="clr-namespace:SciChart.Examples.Demo.Lib.Common.Converters"
              xmlns:vxr="clr-namespace:SciChart.Drawing.VisualXcceleratorRasterizer;assembly=SciChart.Drawing"
              AutomationProperties.AutomationId="SettingsView">
 
     <UserControl.Resources>
-        
-        <ext:BoolToValueConverter x:Key="BoolToValueVisibilityConverter" FalseValue="Collapsed" TrueValue="Visible"/>
+
+        <ext:BoolToValueConverter x:Key="BoolToVisibilityConverter" FalseValue="Collapsed" TrueValue="Visible"/>
+        <ext:BoolToValueConverter x:Key="InverseBoolToVisibilityConverter" FalseValue="Visible" TrueValue="Collapsed"/>
+
         <cnv:InverseBooleanConverter x:Key="InverseBoolConverter"/>
         <cnv:RendererTypeToDisplayNameConverter x:Key="RendererConverter"/>
 
         <Style x:Key="SettingsGroupHeaderStyle" TargetType="{x:Type TextBlock}">
-            <Setter Property="Margin" Value="0,10"/>
+            <Setter Property="Margin" Value="0,10,0,5"/>
             <Setter Property="FontSize" Value="16"/>
             <Setter Property="FontWeight" Value="SemiBold"/>
             <Setter Property="Foreground" Value="{DynamicResource SettingsViewForegroundBrush}"/>
         </Style>
 
         <Style x:Key="SettingsCheckBoxStyle" TargetType="{x:Type CheckBox}" BasedOn="{StaticResource {x:Type CheckBox}}">
-            <Setter Property="Foreground" Value="{DynamicResource SettingsViewForegroundBrush}"/>
-            <Setter Property="HorizontalAlignment" Value="Left"/>
             <Setter Property="FontSize" Value="12"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="Foreground" Value="{DynamicResource SettingsViewForegroundBrush}"/>
         </Style>
     </UserControl.Resources>
 
     <Border Width="480"
-            MaxHeight="610"     
+            MaxHeight="600"
             CornerRadius="10"
             Background="{DynamicResource SettingsViewBackgroundBrush}"
             IsEnabled="{Binding InitReady, Mode=OneWay, FallbackValue=False}">
-              
-        <Grid Margin="20">
+
+        <Grid Margin="20,20,0,20">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
@@ -58,7 +61,7 @@
 
             <Button Grid.Row="0"
                     Grid.Column="1"       
-                    Margin="0,5,0,0"
+                    Margin="0,5,20,0"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Center"
                     AutomationProperties.AutomationId="Settings.Close"
@@ -67,15 +70,14 @@
 
             <TextBlock Grid.Row="1" Grid.Column="0" Margin="0,5,0,0" FontFamily="Segoe UI" Foreground="#FF8F94A1">
                 <Run Text="Hi there! Welcome to SciChart"/>
-                <Run Text="{Binding Source={x:Static s:SciChartSurface.VersionInfo}, Mode=OneWay, StringFormat='({0},'}"/>
-                <Run Text="{Binding TargetFramework, Mode=OneWay, StringFormat='{}{0})'}"/>
+                <Run Text="{Binding VersionInfo, Mode=OneWay, StringFormat='({0})'}"/>
             </TextBlock>
 
             <Rectangle Grid.Row="2"
                        Grid.Column="0"
                        Grid.ColumnSpan="2"
                        Height="1"
-                       Margin="0,10"
+                       Margin="0,10,20,0"
                        Fill="{DynamicResource SettingsViewSeparatorBrush}"
                        HorizontalAlignment="Stretch"
                        SnapsToDevicePixels="True"
@@ -85,14 +87,14 @@
                           Grid.Column="0"
                           Grid.ColumnSpan="2"
                           HorizontalScrollBarVisibility="Disabled"
-                          VerticalScrollBarVisibility="Auto">
+                          VerticalScrollBarVisibility="Auto"
+                          Style="{StaticResource OverlayScrollViewerStyle}">
 
-                <StackPanel Orientation="Vertical">
+                <StackPanel Orientation="Vertical" Margin="0,0,20,0">
 
                     <!-- 2D Renderer Plugins -->
 
-                    <TextBlock Margin="0,0,0,10"
-                               Text="Renderer Plugin for 2D Charts"
+                    <TextBlock Text="Renderer Plugin for 2D Charts"
                                Style="{StaticResource SettingsGroupHeaderStyle}"/>
 
                     <CheckBox x:Name="vxRendererCheckbox"
@@ -109,18 +111,18 @@
                               ToolTip="Uses an alternative method (not WPF's D3DImage) to render DirectX Content. Can help compatibility issues on some machines"
                               AutomationProperties.AutomationId="Settings.UseAlternativeFillSource"
                               Style="{StaticResource SettingsCheckBoxStyle}"
-                              IsEnabled="{Binding IsDirectXEnabled, Mode=OneWay}"
-                              IsChecked="{Binding UseAlternativeFillSourceD3D, Mode=TwoWay}"
-                              Visibility="{Binding IsDirectXAvailable, Mode=OneWay, Converter={StaticResource BoolToValueVisibilityConverter}}"/>
+                              IsEnabled="{Binding IsVxRenderer, Mode=OneWay}"
+                              IsChecked="{Binding UseAlternativeFillSource, Mode=TwoWay}"
+                              Visibility="{Binding IsD3D911Available, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"/>
 
                     <CheckBox Margin="25,5"
                               Content="Enable Force Wait for GPU (DirectX Only)"
                               ToolTip="Enables waiting for GPU before presenting DirectX content to WPF. Can help compatibility issues on some machines"
                               AutomationProperties.AutomationId="Settings.EnableForceWaitForGpu"
                               Style="{StaticResource SettingsCheckBoxStyle}"
-                              IsEnabled="{Binding IsDirectXEnabled, Mode=OneWay}"
+                              IsEnabled="{Binding IsVxRenderer, Mode=OneWay}"
                               IsChecked="{Binding EnableForceWaitForGPU, Mode=TwoWay}"
-                              Visibility="{Binding IsDirectXAvailable, Mode=OneWay, Converter={StaticResource BoolToValueVisibilityConverter}}"/>
+                              Visibility="{Binding IsD3D911Available, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"/>
 
                     <CheckBox Margin="0,5"
                               Content="Vector (XAML Based)"
@@ -131,17 +133,33 @@
 
                     <!-- DirectX Settings -->
 
-                    <StackPanel Visibility="{Binding IsDirectXAvailable, Mode=OneWay, Converter={StaticResource BoolToValueVisibilityConverter}}">
-                        
+                    <StackPanel Visibility="{Binding IsDirectXAvailable, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+
                         <Rectangle Height="1"
                                    Margin="0,10,0,0"
                                    Fill="{DynamicResource SettingsViewSeparatorBrush}"
                                    HorizontalAlignment="Stretch"
                                    SnapsToDevicePixels="True"
                                    UseLayoutRounding="True"/>
-  
+
                         <TextBlock Text="Visual Xccelerator Engine Settings"
                                    Style="{StaticResource SettingsGroupHeaderStyle}"/>
+
+                        <CheckBox Margin="0,5"
+                                  Content="Use DirectX 11"
+                                  ToolTip="Render all 2D &amp; 3D Charts using DirectX11 (where available)"
+                                  s:ToggleButtonExtensions.GroupName="DirectXSettingsGroup" 
+                                  Style="{StaticResource SettingsCheckBoxStyle}"
+                                  IsChecked="{Binding UseD3D11, Mode=TwoWay}"
+                                  Visibility="{Binding IsD3D911Available, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"/>
+
+                        <CheckBox Margin="0,5"
+                                  Content="Use DirectX 9c"
+                                  ToolTip="Render all 3D Charts (and 2D Charts when TSR Engine) using DirectX9 (where available)"
+                                  s:ToggleButtonExtensions.GroupName="DirectXSettingsGroup"
+                                  Style="{StaticResource SettingsCheckBoxStyle}"
+                                  IsChecked="{Binding UseD3D9, Mode=TwoWay}"
+                                  Visibility="{Binding IsD3D911Available, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"/>
 
                         <CheckBox Margin="0,5"
                                   Content="AntiAliasing (None)"
@@ -156,8 +174,54 @@
                                   s:ToggleButtonExtensions.GroupName="AASettingsGroup"
                                   Style="{StaticResource SettingsCheckBoxStyle}"
                                   IsChecked="{Binding Use3DAA4x, Mode=TwoWay}"/>
+                        
                     </StackPanel>
-                  
+
+                    <!-- Viewport 3D Orientation -->
+
+                    <StackPanel Visibility="{Binding Is3DAvailable, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+
+                        <Rectangle Height="1"
+                                   Margin="0,10,0,0"
+                                   Fill="{DynamicResource SettingsViewSeparatorBrush}"
+                                   HorizontalAlignment="Stretch"
+                                   SnapsToDevicePixels="True"
+                                   UseLayoutRounding="True"/>
+
+                        <TextBlock Text="Viewport 3D Orientation" 
+                                   Style="{StaticResource SettingsGroupHeaderStyle}"/>
+
+                        <StackPanel Margin="0,5"
+                                    Orientation="Horizontal"
+                                    Visibility="{Binding Is3DZAxisUpOverridden, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+
+                            <icons:PackIconMaterial Kind="Alert"
+                                                    Height="16"
+                                                    Width="16"
+                                                    VerticalAlignment="Center"
+                                                    HorizontalAlignment="Center"
+                                                    Foreground="{DynamicResource HyperlinkForegroundBrush}"/>
+
+                            <TextBlock Margin="5,0"
+                                       Text="Orientation is controlled by the current example"
+                                       Foreground="{DynamicResource HyperlinkForegroundBrush}"/>
+                        </StackPanel>
+
+                        <CheckBox Margin="0,5"
+                                  Content="Y Axis Up"
+                                  Style="{StaticResource SettingsCheckBoxStyle}"
+                                  IsEnabled="{Binding Is3DZAxisUpOverridden, Mode=OneWay, Converter={StaticResource InverseBoolConverter}}"
+                                  IsChecked="{Binding Enable3DZAxisUp, Mode=TwoWay, Converter={StaticResource InverseBoolConverter}}"
+                                  s:ToggleButtonExtensions.GroupName="Viewport3DSettingsGroup" />
+
+                        <CheckBox Margin="0,5"
+                                  Content="Z Axis Up"
+                                  Style="{StaticResource SettingsCheckBoxStyle}"
+                                  IsEnabled="{Binding Is3DZAxisUpOverridden, Mode=OneWay, Converter={StaticResource InverseBoolConverter}}"
+                                  IsChecked="{Binding Enable3DZAxisUp, Mode=TwoWay}"
+                                  s:ToggleButtonExtensions.GroupName="Viewport3DSettingsGroup" />
+                    </StackPanel>
+
                     <!-- Performance -->
 
                     <Rectangle Height="1"
@@ -189,7 +253,7 @@
                               Style="{StaticResource SettingsCheckBoxStyle}"
                               IsEnabled="{Binding IsChecked, ElementName=EnableCppCheckbox}"
                               IsChecked="{Binding EnableSimd, Mode=TwoWay}"
-                              Visibility="{Binding IsSimdAvailable, Mode=OneWay, Converter={StaticResource BoolToValueVisibilityConverter}}"/>
+                              Visibility="{Binding IsSimdAvailable, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"/>
 
                     <CheckBox Margin="25,5"
                               Content="Enable Impossible mode (Experimental)"
@@ -218,7 +282,7 @@
                               IsEnabled="True"/>
 
                     <!-- Developer Mode -->
-                    
+
                     <Rectangle Height="1"
                                Margin="0,10,0,0"
                                Fill="{DynamicResource SettingsViewSeparatorBrush}"
@@ -235,10 +299,10 @@
                               Style="{StaticResource SettingsCheckBoxStyle}"
                               IsChecked="{Binding IsDeveloperMode, Source={x:Static ext:DeveloperModManager.Manage}}" />
 
-                    <StackPanel Margin="0,10" 
+                    <StackPanel Margin="0,10,0,0" 
                                 Orientation="Vertical"
                                 HorizontalAlignment="Left"
-                                Visibility="{Binding IsDeveloperMode, Source={x:Static ext:DeveloperModManager.Manage}, Converter={StaticResource BoolToValueVisibilityConverter}}">
+                                Visibility="{Binding IsDeveloperMode, Source={x:Static ext:DeveloperModManager.Manage}, Converter={StaticResource BoolToVisibilityConverter}}">
 
                         <Button ToolTip="Force a GC Collect"
                                 Command="{Binding ParentViewModel.GCCollectCommand}"

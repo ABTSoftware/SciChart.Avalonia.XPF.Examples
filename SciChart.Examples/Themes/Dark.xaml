@@ -197,7 +197,7 @@
     <Style TargetType="{x:Type s:SciChartParallelCoordinateSurface}">
         <Setter Property="s:ThemeManager.Theme" Value="SciChartv4Dark"/>
     </Style>
-
+    
     <Style TargetType="{x:Type s:SciChartOverview}">
         <Setter Property="s:ThemeManager.Theme" Value="SciChartv4Dark"/>
     </Style>

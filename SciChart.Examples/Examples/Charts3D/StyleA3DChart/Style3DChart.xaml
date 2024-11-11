@@ -1,0 +1,246 @@
+﻿<UserControl x:Class="SciChart.Examples.Examples.Charts3D.StyleA3DChart.Style3DChart"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ext="http://schemas.abtsoftware.co.uk/scichart/exampleExternals"
+             xmlns:s3D="http://schemas.abtsoftware.co.uk/scichart3D">
+
+    <UserControl.Resources>
+
+        <!--  Define styles for the SciChart3DSurface  -->
+        <Style x:Key="SciChartSurfaceStyle" TargetType="s3D:SciChart3DSurface">
+            <Setter Property="Background" Value="{StaticResource ExtraThemeStrokeBrush_5}" />
+            <Setter Property="Foreground" Value="{StaticResource ExtraThemeStrokeBrush_4}" />
+            <Setter Property="FontSize" Value="20" />
+            <Setter Property="FontFamily" Value="Arial Black" />
+            <Setter Property="FontWeight" Value="Bold" />
+        </Style>
+
+        <!--  Define styles for the X and Y Axes  -->
+
+        <Style x:Key="XAxisStyle" TargetType="s3D:AxisBase3D">
+            <Setter Property="DrawMajorBands" Value="True" />
+            <Setter Property="AxisBandsFill" Value="{StaticResource SecondaryThemeStrokeColor}" />
+            <Setter Property="PlaneBorderColor" Value="{StaticResource ExtraThemeStrokeColor_1}" />
+            <Setter Property="TitleStyle">
+                <Setter.Value>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="Foreground" Value="{StaticResource ExtraThemeStrokeBrush_3}" />
+                        <Setter Property="FontSize" Value="22" />
+                        <Setter Property="FontFamily" Value="Calibri Light" />
+                    </Style>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="TickLabelStyle">
+                <Setter.Value>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="Foreground" Value="{StaticResource ExtraThemeStrokeBrush_1}" />
+                        <Setter Property="FontSize" Value="18" />
+                        <Setter Property="FontFamily" Value="Segoe UI" />
+                    </Style>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="MajorTickLineStyle">
+                <Setter.Value>
+                    <Style TargetType="Line">
+                        <Setter Property="Stroke" Value="{StaticResource ExtraThemeTransparentStrokeBrush_1}" />
+                        <Setter Property="StrokeThickness" Value="1" />
+                        <Setter Property="X2" Value="8" />
+                        <Setter Property="Y2" Value="8" />
+                    </Style>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="MinorTickLineStyle">
+                <Setter.Value>
+                    <Style TargetType="Line">
+                        <Setter Property="Stroke" Value="{StaticResource ExtraThemeStrokeBrush_6}" />
+                        <Setter Property="StrokeThickness" Value="1" />
+                        <Setter Property="X2" Value="4" />
+                        <Setter Property="Y2" Value="4" />
+                    </Style>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="MajorGridLineStyle">
+                <Setter.Value>
+                    <Style TargetType="Line">
+                        <Setter Property="Stroke" Value="{StaticResource ExtraThemeTransparentStrokeBrush_1}" />
+                        <Setter Property="StrokeThickness" Value="1" />
+                        <Setter Property="StrokeDashArray" Value="10 5" />
+                    </Style>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="MinorGridLineStyle">
+                <Setter.Value>
+                    <Style TargetType="Line">
+                        <Setter Property="Stroke" Value="{StaticResource ExtraThemeStrokeBrush_2}" />
+                        <Setter Property="StrokeThickness" Value="1" />
+                        <Setter Property="StrokeDashArray" Value="2 2" />
+                    </Style>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="YAxisStyle" TargetType="s3D:AxisBase3D">
+            <Setter Property="DrawMajorBands" Value="True" />
+            <Setter Property="AxisBandsFill" Value="{StaticResource ExtraThemeStrokeColor_3}" />
+            <Setter Property="PlaneBorderColor" Value="{StaticResource ExtraThemeStrokeColor_6}" />
+            <Setter Property="TitleStyle">
+                <Setter.Value>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="Foreground" Value="{StaticResource ExtraThemeStrokeBrush_5}" />
+                        <Setter Property="FontSize" Value="18" />
+                        <Setter Property="FontFamily" Value="Verdana" />
+                    </Style>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="TickLabelStyle">
+                <Setter.Value>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="Foreground" Value="{StaticResource ExtraThemeStrokeBrush_6}" />
+                        <Setter Property="FontSize" Value="14" />
+                        <Setter Property="FontFamily" Value="Segoe UI" />
+                    </Style>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="MajorTickLineStyle">
+                <Setter.Value>
+                    <Style TargetType="Line">
+                        <Setter Property="Stroke" Value="{StaticResource ExtraThemeTransparentStrokeBrush_6}" />
+                        <Setter Property="StrokeThickness" Value="1" />
+                        <Setter Property="X2" Value="8" />
+                        <Setter Property="Y2" Value="8" />
+                    </Style>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="MinorTickLineStyle">
+                <Setter.Value>
+                    <Style TargetType="Line">
+                        <Setter Property="Stroke" Value="{StaticResource ExtraThemeStrokeBrush_6}" />
+                        <Setter Property="StrokeThickness" Value="1" />
+                        <Setter Property="X2" Value="4" />
+                        <Setter Property="Y2" Value="4" />
+                    </Style>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="MajorGridLineStyle">
+                <Setter.Value>
+                    <Style TargetType="Line">
+                        <Setter Property="Stroke" Value="{StaticResource ExtraThemeStrokeBrush_1}" />
+                        <Setter Property="StrokeThickness" Value="1" />
+                        <Setter Property="StrokeDashArray" Value="10 5" />
+                    </Style>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="MinorGridLineStyle">
+                <Setter.Value>
+                    <Style TargetType="Line">
+                        <Setter Property="Stroke" Value="{StaticResource SecondaryThemeTransparentSolidBrush}" />
+                        <Setter Property="StrokeThickness" Value="1" />
+                        <Setter Property="StrokeDashArray" Value="2 2" />
+                    </Style>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="ZAxisStyle" TargetType="s3D:AxisBase3D">
+            <Setter Property="DrawMajorBands" Value="True" />
+            <Setter Property="AxisBandsFill" Value="{StaticResource ExtraThemeStrokeColor_6}" />
+            <Setter Property="PlaneBorderColor" Value="{StaticResource ExtraThemeStrokeColor_2}" />
+            <Setter Property="TitleStyle">
+                <Setter.Value>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="Foreground" Value="{StaticResource ExtraThemeStrokeBrush_2}" />
+                        <Setter Property="FontSize" Value="14" />
+                        <Setter Property="FontFamily" Value="Cambria" />
+                    </Style>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="TickLabelStyle">
+                <Setter.Value>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="Foreground" Value="{StaticResource MainThemeTransparentSolidBrush}" />
+                        <Setter Property="FontSize" Value="10" />
+                        <Setter Property="FontFamily" Value="Segoe UI" />
+                    </Style>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="MajorTickLineStyle">
+                <Setter.Value>
+                    <Style TargetType="Line">
+                        <Setter Property="Stroke" Value="{StaticResource MainThemeTransparentSolidBrush}" />
+                        <Setter Property="StrokeThickness" Value="1" />
+                        <Setter Property="X2" Value="8" />
+                        <Setter Property="Y2" Value="8" />
+                    </Style>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="MinorTickLineStyle">
+                <Setter.Value>
+                    <Style TargetType="Line">
+                        <Setter Property="Stroke" Value="{StaticResource ExtraThemeStrokeBrush_1}" />
+                        <Setter Property="StrokeThickness" Value="1" />
+                        <Setter Property="X2" Value="4" />
+                        <Setter Property="Y2" Value="4" />
+                    </Style>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="MajorGridLineStyle">
+                <Setter.Value>
+                    <Style TargetType="Line">
+                        <Setter Property="Stroke" Value="Beige" />
+                        <Setter Property="StrokeThickness" Value="1" />
+                        <Setter Property="StrokeDashArray" Value="10 5" />
+                    </Style>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="MinorGridLineStyle">
+                <Setter.Value>
+                    <Style TargetType="Line">
+                        <Setter Property="Stroke" Value="Brown" />
+                        <Setter Property="StrokeThickness" Value="1" />
+                        <Setter Property="StrokeDashArray" Value="2 2" />
+                    </Style>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+    </UserControl.Resources>
+
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <!--  The SciChart3DInteractionToolbar adds rotate, orbit, zoom, pan, zoom extents functionality  -->
+        <!--  to the chart and is included for example purposes.  -->
+        <!--  If you wish to know how to zoom and pan a 3D chart then do a search for Zoom Pan in the Examples suite!  -->
+        <ext:SciChart3DInteractionToolbar TargetSurface="{Binding Source={x:Reference Name=sciChart}}" />
+
+        <s3D:SciChart3DSurface x:Name="sciChart"
+                           Grid.Column="1"
+                           BorderBrush="{StaticResource MainThemeSolidBrush}"
+                           BorderThickness="3"
+                           Style="{StaticResource SciChartSurfaceStyle}"
+                           Background="{StaticResource Style3DChartBackground}"
+                           WorldDimensions="200,100,200">
+
+            <s3D:SciChart3DSurface.Camera>
+                <s3D:Camera3D ZoomToFitOnAttach="True" />
+            </s3D:SciChart3DSurface.Camera>
+
+            <s3D:SciChart3DSurface.XAxis>
+                <s3D:NumericAxis3D GrowBy="0.1, 0.1" AxisTitle="X-Axis" Style="{StaticResource XAxisStyle}" />
+            </s3D:SciChart3DSurface.XAxis>
+
+            <s3D:SciChart3DSurface.YAxis>
+                <s3D:NumericAxis3D GrowBy="0.1, 0.1" AxisTitle="Y-Axis" Style="{StaticResource YAxisStyle}" />
+            </s3D:SciChart3DSurface.YAxis>
+
+            <s3D:SciChart3DSurface.ZAxis>
+                <s3D:NumericAxis3D GrowBy="0.1, 0.1" AxisTitle="Z-Axis" Style="{StaticResource ZAxisStyle}" />
+            </s3D:SciChart3DSurface.ZAxis>
+
+        </s3D:SciChart3DSurface>
+    </Grid>
+</UserControl>

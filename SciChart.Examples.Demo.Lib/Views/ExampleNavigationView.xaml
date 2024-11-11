@@ -63,8 +63,8 @@
         </DataTemplate>
     </UserControl.Resources>
 
-    <Border Height="540" Width="750" CornerRadius="10" Background="{DynamicResource ExampleNavigationViewBackgroundBrush}">
-        <Grid Margin="20">
+    <Border Height="540" Width="800" CornerRadius="10" Background="{DynamicResource ExampleNavigationViewBackgroundBrush}">
+        <Grid Margin="0,20">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
@@ -73,9 +73,7 @@
 
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="30*"/>
-                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="35*"/>
-                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="35*"/>
             </Grid.ColumnDefinitions>
 
@@ -86,12 +84,14 @@
                        FontSize="16"
                        FontWeight="SemiBold"
                        Text="SciChart Navigation"
+                       Margin="20,0"
                        HorizontalAlignment="Left"
                        VerticalAlignment="Center"
                        Foreground="{DynamicResource ExampleNavigationViewForegroundBrush}"/>
 
             <Button Grid.Row="0"
                     Grid.Column="5"
+                    Margin="20,0"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Center"
                     Command="{Binding HideNavigationCommand}" 
@@ -101,15 +101,15 @@
             <Rectangle Grid.Row="1"
                        Grid.ColumnSpan="5"
                        Height="1"
-                       Margin="0,10,0,5"
+                       Margin="20,10,20,5"
                        HorizontalAlignment="Stretch"
                        SnapsToDevicePixels="True"
                        UseLayoutRounding="True"
                        Fill="{DynamicResource ExampleNavigationViewSeparatorBrush}"/>
 
             <ListBox Grid.Row="2"
-                     Grid.Column="0"   
-                     Margin="0"
+                     Grid.Column="0"
+                     Margin="20,0"
                      ItemsSource="{Binding AllCategories}"
                      SelectedItem="{Binding SelectedCategory, Mode=TwoWay}"                
                      ItemTemplate="{StaticResource CategoryItemTemplate}" 
@@ -117,41 +117,53 @@
                      AutomationProperties.AutomationId="CategoryListBox"/>
 
             <Rectangle Grid.Row="2"
-                       Grid.Column="1"
+                       Grid.Column="0"
                        Width="1"
-                       Margin="10,0,0,0"       
-                       HorizontalAlignment="Stretch"
+                       Margin="0,2"
+                       IsHitTestVisible="False"
+                       HorizontalAlignment="Right"
                        SnapsToDevicePixels="True"
                        UseLayoutRounding="True"
                        Fill="{DynamicResource ExampleNavigationViewSeparatorBrush}"/>
 
             <ListBox Grid.Row="2"
-                     Grid.Column="2"   
-                     Margin="10,0,0,0"                
+                     Grid.Column="1"
+                     Margin="0,0,-3,0"
+                     Padding="20,0,23,0"          
                      ItemsSource="{Binding AllCategoryGroups}"
                      SelectedItem="{Binding SelectedCategoryGroup, Mode=TwoWay}"                  
                      ItemTemplate="{StaticResource GroupItemTemplate}" 
                      Style="{StaticResource NavigationViewListBoxStyle}"
-                     AutomationProperties.AutomationId="GroupsListBox"/>
+                     AutomationProperties.AutomationId="GroupsListBox">
+                <ListBox.Resources>
+                    <Style TargetType="ScrollViewer" BasedOn="{StaticResource OverlayScrollViewerStyle}"/>
+                </ListBox.Resources>
+            </ListBox>
 
             <Rectangle Grid.Row="2"
-                       Grid.Column="3"
+                       Grid.Column="1"
                        Width="1"
-                       Margin="10,0,0,0"
-                       HorizontalAlignment="Stretch"
+                       Margin="0,2"
+                       IsHitTestVisible="False"
+                       HorizontalAlignment="Right"
                        SnapsToDevicePixels="True"
                        UseLayoutRounding="True"
                        Fill="{DynamicResource ExampleNavigationViewSeparatorBrush}"
                        Visibility="{Binding Is2DCharts, Mode=OneWay, Converter={StaticResource InverseBooleanToVisibilityConverter}}"/>
 
             <ListBox Grid.Row="2"
-                     Grid.Column="4"      
-                     Margin="10,0,0,0" 
+                     Grid.Column="2"      
+                     Padding="20,0"
                      ItemsSource="{Binding AllGroupExamples}"
                      SelectedItem="{Binding SelectedGroupExample, Mode=TwoWay}"                 
                      ItemTemplate="{StaticResource ExampleItemTemplate}"
+                     ItemContainerStyle="{StaticResource NavigationViewExampleItemContainerStyle}"
                      Style="{StaticResource NavigationViewListBoxStyle}"
-                     AutomationProperties.AutomationId="ExamplesListBox"/>
+                     AutomationProperties.AutomationId="ExamplesListBox">
+                <ListBox.Resources>
+                    <Style TargetType="ScrollViewer" BasedOn="{StaticResource OverlayScrollViewerStyle}"/>
+                </ListBox.Resources>
+            </ListBox>
         </Grid>
     </Border>
 </UserControl>

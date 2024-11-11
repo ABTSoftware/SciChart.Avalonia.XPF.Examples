@@ -1,0 +1,119 @@
+﻿<UserControl x:Class="SciChart.Examples.Examples.Charts3D.TooltipsAndHitTest3DCharts.SelectScatterPoint3DChart"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:s="http://schemas.abtsoftware.co.uk/scichart"
+             xmlns:s3D="http://schemas.abtsoftware.co.uk/scichart3D"
+             xmlns:local="clr-namespace:SciChart.Examples.Examples.Charts3D.TooltipsAndHitTest3DCharts"
+             xmlns:ext="http://schemas.abtsoftware.co.uk/scichart/exampleExternals"
+             d:DesignHeight="400"
+             d:DesignWidth="600"
+             mc:Ignorable="d">
+
+    <UserControl.Resources>
+        <local:ExamplePointCloudPaletteProvider x:Key="CloudPaletteProvider" />
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <ext:SciChart3DInteractionToolbar TargetSurface="{Binding Source={x:Reference Name=sciChartSurface}}"/>
+
+        <s3D:SciChart3DSurface x:Name="sciChartSurface"
+                               Grid.Column="1"
+                               BorderThickness="0"
+                               WorldDimensions="200,100,200">
+
+            <s3D:SciChart3DSurface.RenderableSeries>
+                <s3D:ScatterRenderableSeries3D x:Name="renderableSeries3D" PaletteProvider="{StaticResource CloudPaletteProvider}" >
+                    <s3D:ScatterRenderableSeries3D.PointMarker>
+                        <s3D:EllipsePointMarker3D Size="0.2"/>
+                    </s3D:ScatterRenderableSeries3D.PointMarker>
+                </s3D:ScatterRenderableSeries3D>
+            </s3D:SciChart3DSurface.RenderableSeries>
+
+            <s3D:SciChart3DSurface.XAxis>
+                <s3D:NumericAxis3D x:Name="XAx" />
+            </s3D:SciChart3DSurface.XAxis>
+
+            <s3D:SciChart3DSurface.YAxis>
+                <s3D:NumericAxis3D x:Name="YAx" />
+            </s3D:SciChart3DSurface.YAxis>
+
+            <s3D:SciChart3DSurface.ZAxis>
+                <s3D:NumericAxis3D x:Name="ZAx" />
+            </s3D:SciChart3DSurface.ZAxis>
+
+            <s3D:SciChart3DSurface.ChartModifier>
+                <s3D:ModifierGroup3D>
+                    <s3D:FreeLookModifier3D ExecuteOn="MouseLeftButton" ExecuteWhen="Shift" />
+                    <s3D:OrbitModifier3D ExecuteOn="MouseLeftButton" />
+                    <s3D:VertexSelectionModifier3D ExecuteOn="MouseLeftButton" ExecuteWhen="None" />
+                    <s3D:MouseWheelZoomModifier3D />
+                </s3D:ModifierGroup3D>
+            </s3D:SciChart3DSurface.ChartModifier>
+        </s3D:SciChart3DSurface>
+
+        <ScrollViewer x:Name="selectedPanel"
+                      Grid.Column="1"
+                      Background="{StaticResource ThemedChartBackground}"
+                      Width="200"
+                      MaxHeight="305"
+                      Margin="5"
+                      VerticalAlignment="Bottom"
+                      HorizontalAlignment="Right"
+                      HorizontalScrollBarVisibility ="Disabled">
+
+            <ItemsControl x:Name="selectedList" Margin="5">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <CheckBox IsChecked="{Binding PointMetadata3D.IsSelected, Mode=TwoWay}">
+                            <TextBlock Foreground="White" VerticalAlignment="Center">
+                            <Run Text="X:" FontWeight="Bold"/>
+                            <Run Text="{Binding X, StringFormat='0.00'}"/>
+                            <Run Text="Y:" FontWeight="Bold"/>
+                            <Run Text="{Binding Y, StringFormat='0.00'}"/>
+                            <Run Text="Z:" FontWeight="Bold"/>
+                            <Run Text="{Binding Z, StringFormat='0.00'}"/>
+                            </TextBlock>
+                        </CheckBox>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+
+        <Border Grid.Column="1"
+                CornerRadius="5" 
+                Margin="5"
+                VerticalAlignment="Top"
+                HorizontalAlignment="Left"
+                Background="{StaticResource MainThemeTransparentSolidBrush}">
+
+            <StackPanel Orientation="Vertical" Margin="5">
+                <TextBlock FontSize="16" 
+                           Opacity="0.7"               
+                           Margin="5,0"
+                           VerticalAlignment="Center"
+                           Text="Press the left mouse button and drag the rectangle to select all point markers that fall inside!" 
+                           Foreground="#FFF"/>
+
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock FontSize="16" 
+                               Opacity="0.7"               
+                               Margin="5,0"
+                               VerticalAlignment="Center"
+                               Text="Also it is possible to select a single point marker by clicking on it. To disable selection, uncheck" 
+                               Foreground="#FFF"/>
+
+                    <Border Width="26" Height="26" Margin="5,5,5,0" CornerRadius="5" Background="#FF2A354B">
+                        <ext:ToolbarIcon Kind="ArrowTopLeft" Height="12" Width="12" Foreground="#FFF" Style="{StaticResource ToolbarButtonIconStyle}"/>
+                    </Border>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>

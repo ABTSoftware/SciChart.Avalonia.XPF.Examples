@@ -11,7 +11,8 @@
              xmlns:converters="clr-namespace:SciChart.Examples.Demo.Lib.Common.Converters"
              xmlns:navigation="clr-namespace:SciChart.Examples.Demo.Lib.Helpers.Navigation"
              xmlns:views="clr-namespace:SciChart.Examples.Demo.Lib.Views"
-             xmlns:controls="clr-namespace:SciChart.Examples.Demo.Lib.Controls">
+             xmlns:controls="clr-namespace:SciChart.Examples.Demo.Lib.Controls"
+             AutomationProperties.AutomationId="ShellView">
 
     <UserControl.Resources>
 
@@ -115,6 +116,14 @@
                     Command="{Binding ShowSettingsCommand}"
                     Style="{StaticResource SettingsButtonStyle}" />
         </Grid>
+
+        <controls:AutomationNavigateButton Grid.Row="0"                                           
+                                           Height="24"
+                                           Width="200"
+                                           VerticalAlignment="Top"
+                                           HorizontalAlignment="Center"
+                                           Content="FlaUI.Navigate"
+                                           AutomationProperties.AutomationId="ShellControl.Navigate"/>
 
         <abt:ExceptionViewer Grid.Row="0"
                              Grid.RowSpan="2"

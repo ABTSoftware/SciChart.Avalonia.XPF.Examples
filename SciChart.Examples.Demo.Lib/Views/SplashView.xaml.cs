@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using SciChart.Core.Extensions;
+using SciChart.Core.Utility;
 
 namespace SciChart.Examples.Demo.Lib.Views
 {
@@ -10,6 +11,11 @@ namespace SciChart.Examples.Demo.Lib.Views
         public SplashView()
         {
             InitializeComponent();
+#if XPF
+            vTextBlock.Text = $"SciChart Avalonia XPF SDK {SciChartRuntimeInfo.GetVersion()}.";
+#else
+            vTextBlock.Text = $"SciChart WPF SDK {SciChartRuntimeInfo.GetVersion()}.";
+#endif
         }
 
         private void Hyperlink_OnClick(object sender, RoutedEventArgs e)

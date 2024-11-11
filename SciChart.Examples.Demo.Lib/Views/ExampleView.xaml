@@ -257,7 +257,7 @@
                         Background="{DynamicResource InfoPanelBackgroundBrush}"
                         SizeChanged="OnExamplesPopupSizeChanged">
 
-                    <Grid Margin="20,15">
+                    <Grid Margin="0,20,0,0">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="*" />
@@ -269,12 +269,11 @@
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
 
-                        <Viewbox Grid.Column="0" Width="30" Height="30">
+                        <Viewbox Grid.Column="0" Margin="20,0,10,0" Width="30" Height="30">
                             <ContentPresenter Content="{Binding}" ext:ContentPresenterHelper.ContentTemplate="{Binding SelectedExample.IconPath}"/>
                         </Viewbox>
 
                         <TextBlock Grid.Column="1"
-                                   Margin="10,0,0,0"
                                    HorizontalAlignment="Left"
                                    VerticalAlignment="Center"
                                    TextWrapping="Wrap"
@@ -282,22 +281,28 @@
                                    Style="{StaticResource TipsHeaderTextBlockStyle}"/>
 
                         <Button Grid.Column="2"
-                                Margin="20,0,0,0"
+                                Margin="20,0"
                                 HorizontalAlignment="Right"
                                 VerticalAlignment="Center"
                                 Command="{Binding HideDescriptionCommand}"
                                 Style="{StaticResource CloseButtonStyle}"/>
 
-                        <RichTextBox Grid.Row="1"
-                                     Grid.ColumnSpan="3"
-                                     Margin="-5,20,-5,5"
-                                     Background="Transparent"
-                                     BorderThickness="0"
-                                     Foreground="#FFC2C4CB"                                    
-                                     IsReadOnly="True" 
-                                     HorizontalScrollBarVisibility="Disabled"
-                                     VerticalScrollBarVisibility="Hidden"
-                                     extensions:RichTextBoxExtensions.Text="{Binding SelectedExample.FormattedDescription}" />
+                        <ScrollViewer Grid.Row="1"
+                                      Grid.Column="0"
+                                      Grid.ColumnSpan="3"
+                                      Margin="20,20,2,2"
+                                      HorizontalScrollBarVisibility="Disabled"
+                                      VerticalScrollBarVisibility="Auto">
+
+                            <RichTextBox Margin="-5,0,15,20"
+                                         Background="Transparent"
+                                         BorderThickness="0"
+                                         Foreground="#FFC2C4CB"                                    
+                                         IsReadOnly="True" 
+                                         HorizontalScrollBarVisibility="Disabled"
+                                         VerticalScrollBarVisibility="Disabled"
+                                         extensions:RichTextBoxExtensions.Text="{Binding SelectedExample.FormattedDescription}"/>
+                        </ScrollViewer>
                     </Grid>
                 </Border>
             </Expander>

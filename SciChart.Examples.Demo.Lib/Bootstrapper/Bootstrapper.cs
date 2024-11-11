@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using SciChart.Charting;
 using SciChart.Charting.Visuals;
 using SciChart.Core.Utility;
+using SciChart.Drawing.VisualXcceleratorRasterizer;
 using SciChart.Examples.Demo.Lib.Common;
 using SciChart.Examples.Demo.Lib.Search;
 using SciChart.Examples.Demo.Lib.ViewModels;
@@ -24,6 +25,7 @@ namespace SciChart.Examples.Demo.Lib.Bootstrapper
 
         public Bootstrapper(IUnityContainer container, IAttributedTypeDiscoveryService service) : base(container, service)
         {
+            // IUnityContainer container is ServiceLocator.Container
         }
 
         private void InitializeEngine()
@@ -82,7 +84,8 @@ namespace SciChart.Examples.Demo.Lib.Bootstrapper
 
             await Task.WhenAll(loadTask, indexTask);
 
-            var isSyncEngineInit = SciChartRuntimeInfo.IsXPF || VisualXcceleratorEngine.IsUsingOpenGL;
+            var isSyncEngineInit = SciChartRuntimeInfo.IsLinuxPlatform ||
+                                   VisualXcceleratorEngine.ActiveGraphicsAPI == VxGraphicsAPI.OpenGL;
 
             var initTask = Task.Run(() =>
             {              
@@ -91,9 +94,9 @@ namespace SciChart.Examples.Demo.Lib.Bootstrapper
                     InitializeEngine();
                 }
 
-                var mainViewModel = ServiceLocator.Container.Resolve<IMainWindowViewModel>();
-                var settingsViewModel = ServiceLocator.Container.Resolve<ISettingsViewModel>();
-                var exampleViewModel = ServiceLocator.Container.Resolve<IExampleViewModel>();
+                var mainViewModel = Container.Resolve<IMainWindowViewModel>();
+                var settingsViewModel = Container.Resolve<ISettingsViewModel>();
+                var exampleViewModel = Container.Resolve<IExampleViewModel>();
 
                 mainViewModel.SearchBoxEnabled = true;
                 mainViewModel.InitReady = true;

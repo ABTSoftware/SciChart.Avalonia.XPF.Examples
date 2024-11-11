@@ -21,7 +21,6 @@
 
         <ListBox x:Name="FilesListBox"
                  Grid.Column="0"
-                 Margin="0"
                  Padding="0,5"
                  HorizontalAlignment="Stretch"
                  VerticalAlignment="Stretch"
@@ -35,7 +34,7 @@
 
         <RichTextBox Grid.Column="1"
                      IsReadOnly="True"
-                     Margin="5"
+                     Margin="5,5,2,5"
                      BorderThickness="0"                     
                      Background="Transparent"
                      Foreground="WhiteSmoke"
