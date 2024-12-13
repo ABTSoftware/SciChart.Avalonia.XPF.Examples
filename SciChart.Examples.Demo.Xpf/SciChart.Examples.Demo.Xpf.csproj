@@ -1,51 +1,44 @@
-﻿<Project Sdk="Xpf.Sdk/1.4.0-cibuild001853">
-
-	<PropertyGroup>
-		<OutputType>WinExe</OutputType>
-		<TargetFrameworks>net6.0-windows</TargetFrameworks>
-		<UseWPF>True</UseWPF>
-		<UseWindowsForms>True</UseWindowsForms>
-		<ApplicationIcon>SciChartAvaloniaIcon.ico</ApplicationIcon>
-		<LangVersion>Latest</LangVersion>
-		<OutputPath>..\..\Build.Avalonia.XPF\$(Configuration)</OutputPath>
-		<!-- <DefineConstants>HIDE3D</DefineConstants> -->
-	</PropertyGroup>
-	
-	<ItemGroup>
-    <!-- Put your Avalonia XPF License Key below -->
-    <RuntimeHostConfigurationOption Include="AvaloniaUI.Xpf.LicenseKey" Value="[Avalonia XPF License Key]" />
-	</ItemGroup>
-	
-	<ItemGroup>
-		<None Remove="SciChartAvaloniaIcon.ico" />
-		<Resource Include="SciChartAvaloniaIcon.ico" />
-	</ItemGroup>
-	
-	<ItemGroup>
-		<PackageReference Include="DotNetProjects.WpfToolkit.Input" Version="6.0.90" />
-		<PackageReference Include="RestSharp" Version="106.15.0" />
-		<PackageReference Include="MahApps.Metro.IconPacks.Material" Version="4.11.0" />
-		<PackageReference Include="SciChart.Wpf.UI" Version="3.2.268" />
-    <PackageReference Include="SciChart.Avalonia.XPF" Version="*-*" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<ProjectReference Include="..\SciChart.Examples\SciChart.Examples.csproj" />
-		<ProjectReference Include="..\SciChart.Examples.Demo.Lib\SciChart.Examples.Demo.Lib.csproj" />
+<Project Sdk="Xpf.Sdk/1.4.0-cibuild001853">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFrameworks>net6.0-windows</TargetFrameworks>
+    <UseWPF>True</UseWPF>
+    <UseWindowsForms>True</UseWindowsForms>
+    <ApplicationIcon>SciChartAvaloniaIcon.ico</ApplicationIcon>
+    <LangVersion>Latest</LangVersion>
+    <OutputPath>bin\$(Configuration)</OutputPath>
+    <!-- <DefineConstants>HIDE3D</DefineConstants> -->
+  </PropertyGroup>
+  <ItemGroup>
+    <RuntimeHostConfigurationOption Include="AvaloniaUI.Xpf.LicenseKey" Value="YOUR_LICENSE_KEY" />
   </ItemGroup>
-	
-	<ItemGroup>
-		<Compile Update="Properties\Settings.Designer.cs">
-			<DesignTimeSharedInput>True</DesignTimeSharedInput>
-			<AutoGen>True</AutoGen>
-			<DependentUpon>Settings.settings</DependentUpon>
-		</Compile>
-	</ItemGroup>
-
-	<ItemGroup>
-		<None Update="Properties\Settings.settings">
-			<Generator>SettingsSingleFileGenerator</Generator>
-			<LastGenOutput>Settings.Designer.cs</LastGenOutput>
-		</None>
-	</ItemGroup>
+  <ItemGroup>
+    <None Remove="SciChartAvaloniaIcon.ico" />
+    <Resource Include="SciChartAvaloniaIcon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="MahApps.Metro.IconPacks.Material" Version="4.11.0" />
+    <!-- Explicit package to address Xpf vulnerabilities -->
+    <PackageReference Include="System.IO.Packaging" Version="8.0.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SciChart.Examples\SciChart.Examples.csproj" />
+    <ProjectReference Include="..\SciChart.Examples.Demo.Lib\SciChart.Examples.Demo.Lib.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Properties\Settings.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="SciChart.Avalonia.XPF" Version="0.9.3.28185-beta" />
+  </ItemGroup>
 </Project>

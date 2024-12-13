@@ -45,7 +45,7 @@ namespace SciChart.Examples.Demo.Lib.Helpers.ProjectExport
         {
             //ExampleTitle;PackageName;PackageVersion
             "AudioAnalyzerDemo;NAudio;1.10.0",
-            "VitalSignsMonitorDemo;System.Reactive;3.1.1"
+            "VitalSignsMonitorDemo;System.Reactive;4.4.1"
         };
 
         public const string ExampleTheme = "Navy";
@@ -63,6 +63,8 @@ namespace SciChart.Examples.Demo.Lib.Helpers.ProjectExport
 
         public static readonly XNamespace PresentationXmlns = "http://schemas.microsoft.com/winfx/2006/xaml/presentation";
         public static readonly XNamespace XXmlns = "http://schemas.microsoft.com/winfx/2006/xaml";
+
+        public static int VersionMajor => int.Parse(SciChartRuntimeInfo.GetVersion()?.Split('.')[0].Trim('v') ?? "0");
 
         public static string WriteProject(Example example, string exportPath, string libsPath)
         {
@@ -289,10 +291,6 @@ namespace SciChart.Examples.Demo.Lib.Helpers.ProjectExport
                 {
                     if (string.IsNullOrEmpty(libsPath))
                     {
-                        // Get version in format [major].*-*
-                        var version = SciChartRuntimeInfo.GetVersion();
-                        var major = version?.Split('.')[0].Trim('v') ?? "*";
-
                         // Get NuGet packages list
                         var packages = isXpfExport ? SciChartXpfNuGetPackages : SciChartNuGetPackages;
 
@@ -301,7 +299,7 @@ namespace SciChart.Examples.Demo.Lib.Helpers.ProjectExport
                         {
                             var el = new XElement("PackageReference",
                                 new XAttribute("Include", asmPackage),
-                                new XAttribute("Version", $"{major}.*-*"));
+                                new XAttribute("Version", $"{VersionMajor}.*-*"));
 
                             elements[0].Add(el);
                         }

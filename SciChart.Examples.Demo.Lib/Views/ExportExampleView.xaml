@@ -103,7 +103,7 @@
                        Margin="0,15,0,0"
                        Foreground="{DynamicResource FeedbackExportHeaderForegroundBrush}">
                 <Run Text="Please select how to reference SciChart libraries"/>
-                <Run Text="{Binding ExportMajorVersion, Mode=OneWay, StringFormat='(requires v{0}.x)'}"/>
+                <Run Text="{Binding ExportVersionMajor, Mode=OneWay, StringFormat='(requires v{0}.x)'}"/>
             </TextBlock>
 
             <RadioButton Grid.Row="6"

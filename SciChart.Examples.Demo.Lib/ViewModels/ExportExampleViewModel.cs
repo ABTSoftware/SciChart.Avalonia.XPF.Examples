@@ -24,7 +24,7 @@ namespace SciChart.Examples.Demo.Lib.ViewModels
             // Do not forget to check and update the ExportExampleView.xaml
             IsFolderPath = SciChartRuntimeInfo.IsXPF;
 
-            ExportMajorVersion = SciChartRuntimeInfo.GetVersion()?.Split('.')[0].Trim('v') ?? "*";
+            ExportVersionMajor = ProjectWriter.VersionMajor;
             LibrariesPath = ExportExampleHelper.TryAutomaticallyFindAssemblies();
 
             SelectExportPathCommand = new ActionCommand(() =>
@@ -99,7 +99,7 @@ namespace SciChart.Examples.Demo.Lib.ViewModels
         public ActionCommand ExportCommand { get; }
         public ActionCommand CancelCommand { get; }
 
-        public string ExportMajorVersion { get; }
+        public int ExportVersionMajor { get; }
 
         public bool IsXpfExport { get; }
 

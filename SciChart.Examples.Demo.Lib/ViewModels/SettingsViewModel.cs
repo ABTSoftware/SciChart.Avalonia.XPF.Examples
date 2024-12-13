@@ -265,6 +265,9 @@ namespace SciChart.Examples.Demo.Lib.ViewModels
                 .Throttle(TimeSpan.FromMilliseconds(1))
                 .Subscribe(t =>
                 {
+#if !XPF
+                    VisualXcceleratorEngine.EnableForceWaitForGPU = t.Item2;
+#endif
                     RecreateStyles();
                 })
                 .DisposeWith(this);
@@ -283,6 +286,11 @@ namespace SciChart.Examples.Demo.Lib.ViewModels
                     {
                         var renderSettings = new VxRenderSettings
                         {
+#if !XPF
+                            DirectXMode = UseD3D9
+                                ? DirectXMode.DirectX9c
+                                : DirectXMode.AutoDetect,
+#endif
                             FullScreenAntiAliasingMode = Use3DAA4x
                                 ? FullScreenAntiAliasingMode.MSAA4x
                                 : FullScreenAntiAliasingMode.None

@@ -19,6 +19,11 @@ namespace SciChart.Examples.Demo.Lib.Common.Converters
             if (value is SettingsViewModel settingViewModel)
             {
                 var renderer = Activator.CreateInstance(settingViewModel.SelectedRenderer);
+                if (renderer is VisualXcceleratorRenderSurface vxRenderSurface)
+                {
+                    vxRenderSurface.UseAlternativeFillSource = settingViewModel.UseAlternativeFillSource;
+                }
+
                 selectedRenderer = renderer ?? DependencyProperty.UnsetValue;
             }
 #endif

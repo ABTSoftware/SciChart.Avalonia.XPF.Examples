@@ -8,7 +8,6 @@ using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using Microsoft.Win32;
-using SciChart.Charting.Visuals;
 using SciChart.Core.Utility;
 using SciChart.Examples.Demo.Lib.Common;
 using SciChart.Examples.Demo.Lib.Helpers.Navigation;
@@ -29,13 +28,9 @@ namespace SciChart.Examples.Demo.Lib.Helpers.ProjectExport
         static ExportExampleHelper()
         {
             DefaultExportPath = AppDomain.CurrentDomain.BaseDirectory + FolderName + "\\";
-
-            AssemblyVersion = GetSciChartVersion();
         }
 
         public static string DefaultExportPath { get; }
-
-        public static string AssemblyVersion { get; }
 
         public static string ScriptPath
         {
@@ -223,11 +218,16 @@ namespace SciChart.Examples.Demo.Lib.Helpers.ProjectExport
         private static bool IsAssemblyVersionMatch(string folderPath, string assemblyName)
         {
             string fullPath = Path.Combine(folderPath, assemblyName);
+            string fileVersion = FileVersionInfo.GetVersionInfo(fullPath).FileVersion;
+            string libVersion = SciChartRuntimeInfo.GetVersion();
 
-            var pattern = new Regex(@"^\d+\.\d+");
-            bool isMatch = pattern.Match(FileVersionInfo.GetVersionInfo(fullPath).FileVersion).Value == pattern.Match(AssemblyVersion).Value;
+            if (!string.IsNullOrEmpty(fileVersion) && !string.IsNullOrEmpty(libVersion))
+            {
+                var pattern = new Regex("[0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]+");
+                return pattern.Match(fileVersion).Value == pattern.Match(libVersion).Value;
+            }
 
-            return isMatch;
+            return false;
         }
 
         private static string GetAssemblyPathFromRegistry()
@@ -254,13 +254,6 @@ namespace SciChart.Examples.Demo.Lib.Helpers.ProjectExport
             }
 
             return null;
-        }
-
-        private static string GetSciChartVersion()
-        {
-            var assemblyName = new AssemblyName(typeof(SciChartSurface).Assembly.FullName);
-
-            return assemblyName.Version.ToString();
-        }    
+        }  
     }
 }

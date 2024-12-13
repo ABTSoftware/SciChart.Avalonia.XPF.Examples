@@ -1,73 +1,70 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
-
-	<PropertyGroup>
-		<TargetFrameworks>net6.0-windows</TargetFrameworks>
-		<EnableWindowsTargeting>True</EnableWindowsTargeting>
-		<UseWPF>True</UseWPF>
-		<UseWindowsForms>True</UseWindowsForms>
-		<OutputType>Library</OutputType>
-		<LangVersion>Latest</LangVersion>
-		<OutputPath>..\..\Build.WPF\$(Configuration)</OutputPath>
-		<!-- <DefineConstants>HIDE3D</DefineConstants> -->
-	</PropertyGroup>
-
-	<PropertyGroup>
-		<IsXPF>False</IsXPF>
-	</PropertyGroup>
-
-	<!-- SolutionDir/Name is undefined for non-IDE solution build (e.g. dotnet build) -->
-	<Import Project="$(SolutionDir)\$(SolutionName).targets" Condition="!$(SolutionDir.Contains('Undefined')) AND Exists('$(SolutionDir)\$(SolutionName).targets')" />
-
-	<PropertyGroup Condition="'$(IsXPF)'=='True'">
-		<DefineConstants>$(DefineConstants);XPF</DefineConstants>
-		<OutputPath>..\..\Build.Avalonia.XPF\$(Configuration)</OutputPath>
-	</PropertyGroup>
-	
-	<ItemGroup>
-		<None Remove="Helpers\HtmlExport\*.html" />
-		<None Remove="Helpers\ProjectExport\Templates\*.txt" />
-		<None Remove="Resources\*.dat" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<EmbeddedResource Include="Helpers\HtmlExport\*.html" />
-		<EmbeddedResource Include="Helpers\ProjectExport\Templates\*.txt" />
-		<EmbeddedResource Include="Resources\*.dat" />
-	</ItemGroup>
-
-	<ItemGroup Condition="'$(TargetFramework)' == 'net462'">
-		<Reference Include="ReachFramework" />
-		<Reference Include="System" />
-		<Reference Include="System.Data" />
-		<Reference Include="System.Drawing" />
-		<Reference Include="System.Printing" />
-		<Reference Include="System.Runtime.Serialization" />
-		<Reference Include="System.ServiceModel" />
-		<Reference Include="System.Windows" />
-		<Reference Include="System.Windows.Forms" />
-		<Reference Include="System.Xml" />
-		<Reference Include="Microsoft.CSharp" />
-		<Reference Include="System.Core" />
-		<Reference Include="System.Xml.Linq" />
-		<Reference Include="System.Data.DataSetExtensions" />
-		<Reference Include="System.Xaml">
-			<RequiredTargetFramework>4.0</RequiredTargetFramework>
-		</Reference>
-		<Reference Include="WindowsBase" />
-		<Reference Include="PresentationCore" />
-		<Reference Include="PresentationFramework" />
-	</ItemGroup>
-	
-	<ItemGroup>
-		<PackageReference Include="DotNetProjects.WpfToolkit.Input" Version="6.0.90" />
-		<PackageReference Include="RestSharp" Version="106.15.0" />
-		<PackageReference Include="MahApps.Metro.IconPacks.Material" Version="4.11.0" />
-		<PackageReference Include="SciChart.Wpf.UI" Version="3.2.268" />
-    <PackageReference Include="SciChart.Avalonia.XPF" Version="*-*" />
-	</ItemGroup>
-	
-	<ItemGroup>
-		<ProjectReference Include="..\SciChart.Examples\SciChart.Examples.csproj" />
+<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+  <PropertyGroup>
+    <TargetFrameworks>net6.0-windows</TargetFrameworks>
+    <EnableWindowsTargeting>True</EnableWindowsTargeting>
+    <UseWPF>True</UseWPF>
+    <UseWindowsForms>True</UseWindowsForms>
+    <OutputType>Library</OutputType>
+    <LangVersion>Latest</LangVersion>
+    <OutputPath>bin\$(Configuration)</OutputPath>
+    <!-- <DefineConstants>HIDE3D</DefineConstants> -->
+  </PropertyGroup>
+  <PropertyGroup>
+    <IsXPF>False</IsXPF>
+  </PropertyGroup>
+  <!-- SolutionDir/Name is undefined for non-IDE solution build (e.g. dotnet build) -->
+  <Import Project="$(SolutionDir)\$(SolutionName).targets" Condition="!$(SolutionDir.Contains('Undefined')) AND Exists('$(SolutionDir)\$(SolutionName).targets')" />
+  <PropertyGroup Condition="'$(IsXPF)'=='True'">
+    <DefineConstants>$(DefineConstants);XPF</DefineConstants>
+    <OutputPath>bin\$(Configuration)</OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Remove="Helpers\HtmlExport\*.html" />
+    <None Remove="Helpers\ProjectExport\Templates\*.txt" />
+    <None Remove="Resources\*.dat" />
   </ItemGroup>
-	
+  <ItemGroup>
+    <EmbeddedResource Include="Helpers\HtmlExport\*.html" />
+    <EmbeddedResource Include="Helpers\ProjectExport\Templates\*.txt" />
+    <EmbeddedResource Include="Resources\*.dat" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net462'">
+    <Reference Include="ReachFramework" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Printing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Windows" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="DotNetProjects.WpfToolkit.Input" Version="6.0.90" />
+    <PackageReference Include="RestSharp" Version="106.15.0" />
+    <PackageReference Include="MahApps.Metro.IconPacks.Material" Version="4.11.0" />
+    <PackageReference Include="SciChart.Wpf.UI" Version="3.2.268" />
+    <!-- Explicit package to address SciChart.Wpf.UI vulnerabilities -->
+    <PackageReference Include="System.Reactive" Version="4.4.1" />
+    <PackageReference Include="System.Reactive.Core" Version="4.4.1" />
+    <PackageReference Include="System.Reactive.Interfaces" Version="4.4.1" />
+    <PackageReference Include="System.Reactive.Linq" Version="4.4.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SciChart.Examples\SciChart.Examples.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="SciChart.Avalonia.XPF" Version="0.9.3.28185-beta" />
+  </ItemGroup>
 </Project>
