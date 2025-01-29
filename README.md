@@ -36,7 +36,7 @@ add the Microsoft package signing key to your list of trusted keys and add the p
 After you have registered the Microsoft package repository, you can install .NET through the package manager 
 with the apt install <package-name> command. 
 To install .NET 6.0 SDK, use the following command:
-> sudo apt install dotnet-sdk-6.0
+> sudo apt install dotnet-sdk-6.0 -y
 
 ### Installing SciChart Dependencies
 Open the Terminal and run the following commands.
@@ -47,23 +47,23 @@ Installing PKG configuration:
 > sudo apt install pkg-config -y
 
 Installing build tools:
-> sudo apt install build-essential
+> sudo apt install build-essential -y
 
 Installing OpenGL and GLEW:
-> sudo apt install libgl1-mesa-dev libglew-dev
+> sudo apt install libgl1-mesa-dev libglew-dev -y
 
 Installing SDL2:
-> sudo apt install libsdl2-dev libsdl2-2.0-0 -y
+> sudo apt install libsdl2-2.0-0 -y
 
 Installing FreeType2:
-> sudo apt install libfreetype-dev
+> sudo apt install libfreetype-dev -y
 
 Installing Sodium
-> sudo apt install libsodium-dev
+> sudo apt install libsodium-dev -y
 
 ### Installing Avalonia XPF Dependencies
 Run the following command to install Avalonia XPF dependencies: libice6, libsm6, libfontconfig1, libgdiplus.
-> sudo apt install libice6 libsm6 libfontconfig1 libgdiplus
+> sudo apt install libice6 libsm6 libfontconfig1 libgdiplus -y
 
 # Installing IDE
 ## Windows OS
