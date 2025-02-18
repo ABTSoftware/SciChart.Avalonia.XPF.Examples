@@ -1,6 +1,0 @@
-<Project>
-	<Import Condition="Exists('CommonVersion.targets')" Project="CommonVersion.targets" />
-	<PropertyGroup>
-		<DoNotCopyLocalIfInGac>True</DoNotCopyLocalIfInGac>
-	</PropertyGroup>
-</Project>

@@ -6,7 +6,7 @@
     <OutputPath>bin\$(Configuration)</OutputPath>
   </PropertyGroup>
   <PropertyGroup>
-    <Copyright>Copyright © 2011-2024</Copyright>
+    <Copyright>Copyright © 2011-2025</Copyright>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
     <FileVersion>1.0.0.0</FileVersion>
   </PropertyGroup>

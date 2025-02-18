@@ -9,10 +9,9 @@
     <!-- <DefineConstants>HIDE3D</DefineConstants> -->
   </PropertyGroup>
   <PropertyGroup>
-    <IsXPF>False</IsXPF>
+    <IsXPF>True</IsXPF>
   </PropertyGroup>
   <!-- SolutionDir/Name is undefined for non-IDE solution build (e.g. dotnet build) -->
-  <Import Project="$(SolutionDir)\$(SolutionName).targets" Condition="!$(SolutionDir.Contains('Undefined')) AND Exists('$(SolutionDir)\$(SolutionName).targets')" />
   <PropertyGroup Condition="'$(IsXPF)'=='True'">
     <DefineConstants>$(DefineConstants);XPF</DefineConstants>
     <OutputPath>bin\$(Configuration)</OutputPath>
@@ -59,6 +58,6 @@
     <EmbeddedResource Remove="Examples\SeeFeaturedApplication\TenorCurves3DChart\*.*" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="SciChart.Avalonia.XPF" Version="0.9.3.28185-beta" />
+    <PackageReference Include="SciChart.Avalonia.XPF" Version="1.0.0.28205" />
   </ItemGroup>
 </Project>

@@ -39,6 +39,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="SciChart.Avalonia.XPF" Version="0.9.3.28185-beta" />
+    <PackageReference Include="SciChart.Avalonia.XPF" Version="1.0.0.28205" />
   </ItemGroup>
 </Project>
