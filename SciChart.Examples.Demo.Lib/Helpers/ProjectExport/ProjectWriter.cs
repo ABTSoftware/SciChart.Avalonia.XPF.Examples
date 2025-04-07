@@ -162,12 +162,11 @@ namespace SciChart.Examples.Demo.Lib.Helpers.ProjectExport
 
                     CopyNativeLibs(sourcePath, exportDirPath, "Debug", "win-x64");
                     CopyNativeLibs(sourcePath, exportDirPath, "Debug", "win-x86");
+                    CopyNativeLibs(sourcePath, exportDirPath, "Debug", "linux-x64");
 
                     CopyNativeLibs(sourcePath, exportDirPath, "Release", "win-x64");
                     CopyNativeLibs(sourcePath, exportDirPath, "Release", "win-x86");
-
-                    CopyNativeLibs(sourcePath, exportDirPath, "Debug", "linux-x64");
-                    CopyNativeLibs(sourcePath, exportDirPath, "Release", "linux-x64");             
+                    CopyNativeLibs(sourcePath, exportDirPath, "Release", "linux-x64");
                 }
 
                 return projectName;
@@ -182,44 +181,70 @@ namespace SciChart.Examples.Demo.Lib.Helpers.ProjectExport
         {
             var nativeSourcePath = Path.Combine(sourcePath, "runtimes", runtime, "native");
 
-            if (Directory.Exists(nativeSourcePath))
+            if (!Directory.Exists(nativeSourcePath))
             {
-                var nativeLibs = new List<string>();
+                nativeSourcePath = sourcePath;
+            }
 
-                if (runtime.Contains("win"))
+            var nativeLibPaths = new List<string>(5);
+
+            if (runtime.Contains("win"))
+            {
+                var nativeDllNames = new[]
                 {
-                    nativeLibs.Add("AbtLicensingNative.dll");
-                    nativeLibs.Add("VXccelEngine2D.dll");
+                    "AbtLicensingNative.dll",
+                    "VXccelEngine2D.dll",
 #if !HIDE3D
-                    nativeLibs.Add("VXccelEngine3D.dll");
+                    "VXccelEngine3D.dll",
 #endif
-                    nativeLibs.Add("D3DCompiler_47.dll");
-                    nativeLibs.Add("glew32.dll");
-                }
-                else if (runtime.Contains("linux"))
+                    "D3DCompiler_47.dll",
+                    "glew32.dll"
+                };
+
+                foreach (var dllName in nativeDllNames)
                 {
-                    nativeLibs.Add("AbtLicensingNative.so");
-                    nativeLibs.Add("VXccelEngine2D.so");
-#if !HIDE3D
-                    nativeLibs.Add("VXccelEngine3D.so");
-#endif
-                }
+                    var nativeDllPath = Path.Combine(nativeSourcePath, dllName);
 
-                if (nativeLibs.Any())
-                {
-                    var configDestPath = Path.Combine(exportPath, "bin", config, "net6.0-windows");
-                    var nativeDestPath = Path.Combine(configDestPath, "runtimes", runtime, "native");
-
-                    Directory.CreateDirectory(nativeDestPath);
-
-                    foreach (var nativeLib in nativeLibs)
+                    if (File.Exists(nativeDllPath))
                     {
-                        var libSourcePath = Path.Combine(nativeSourcePath, nativeLib);
-                        var libDestPath = Path.Combine(nativeDestPath, nativeLib);
-
-                        if (File.Exists(libSourcePath))
-                            File.Copy(libSourcePath, libDestPath, true);
+                        nativeLibPaths.Add(nativeDllPath);
                     }
+                }
+            }
+            else if (runtime.Contains("linux"))
+            {
+                var nativeSoNames = new[]
+                {
+                    "AbtLicensingNative.so",
+                    "VXccelEngine2D.so",
+#if !HIDE3D
+                    "VXccelEngine3D.so"
+#endif
+                };
+
+                foreach (var soName in nativeSoNames)
+                {
+                    var nativeSoPath = Path.Combine(nativeSourcePath, soName);
+
+                    if (File.Exists(nativeSoPath))
+                    {
+                        nativeLibPaths.Add(nativeSoPath);
+                    }
+                }
+            }
+
+            if (nativeLibPaths.Any())
+            {
+                var configDestPath = Path.Combine(exportPath, "bin", config, "net6.0-windows");
+                var nativeDestPath = Path.Combine(configDestPath, "runtimes", runtime, "native");
+
+                Directory.CreateDirectory(nativeDestPath);
+
+                foreach (var libPath in nativeLibPaths)
+                {
+                    var libName = Path.GetFileName(libPath);
+
+                    File.Copy(libPath, Path.Combine(nativeDestPath, libName), true);
                 }
             }
         }
@@ -246,7 +271,7 @@ namespace SciChart.Examples.Demo.Lib.Helpers.ProjectExport
         {
             var themeText = ThemeLoader.LoadThemeFile(themeName);
             var themeXaml = XDocument.Parse(themeText);
-            
+
             if (themeXaml.Root != null)
             {
                 var mergedDictionaries = themeXaml.Root
@@ -258,7 +283,7 @@ namespace SciChart.Examples.Demo.Lib.Helpers.ProjectExport
                 var style = new XElement(PresentationXmlns + "Style",
                     new XAttribute(XNamespace.Xmlns + "s3D", "http://schemas.abtsoftware.co.uk/scichart3D"),
                     new XAttribute("TargetType", "{x:Type s3D:SciChart3DSurface}"));
-                        
+
                 var setter = new XElement(PresentationXmlns + "Setter",
                     new XAttribute("Property", "s:ThemeManager.Theme"),
                     new XAttribute("Value", ExampleTheme == "Navy" ? "SciChartv7Navy" : "SciChartv4Dark"));
@@ -317,7 +342,7 @@ namespace SciChart.Examples.Demo.Lib.Helpers.ProjectExport
 
                     // Add package references for specific example NuGet packages
                     var exampleTitle = Regex.Replace(example.Title, @"\s", string.Empty);
-                    var examplePackages = ExamplesNuGetPackages.Where(p => p.StartsWith(exampleTitle));                   
+                    var examplePackages = ExamplesNuGetPackages.Where(p => p.StartsWith(exampleTitle));
                     if (examplePackages.Any())
                     {
                         foreach (var package in examplePackages)
@@ -423,7 +448,7 @@ namespace SciChart.Examples.Demo.Lib.Helpers.ProjectExport
                 {
                     var classNs = xClassAttribute.Value;
                     var index = classNs.LastIndexOf('.');
-                    
+
                     if (index > 0)
                     {
                         xamlFileName = classNs.Substring(index + 1, classNs.Length - index - 1);
