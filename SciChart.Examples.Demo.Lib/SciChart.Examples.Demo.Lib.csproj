@@ -64,6 +64,6 @@
     <ProjectReference Include="..\SciChart.Examples\SciChart.Examples.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="SciChart.Avalonia.XPF" Version="1.0.1.28222" />
+    <PackageReference Include="SciChart.Avalonia.XPF" Version="1.0.1.28225" />
   </ItemGroup>
 </Project>

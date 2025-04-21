@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using SciChart.Charting.Common.Extensions;
@@ -155,19 +154,21 @@ namespace SciChart.Examples.Demo.Lib.Helpers.ProjectExport
                     sw.Dispose();
                 }
 
+                /*
                 if (isXpfExport && !string.IsNullOrEmpty(libsPath))
                 {
-                    var assemblyPath = Assembly.GetExecutingAssembly().Location;
-                    var sourcePath = Path.GetFullPath(Path.GetDirectoryName(assemblyPath));
+                    var assemblyDirPath = SciChartRuntimeInfo.GetAssemblyDirectoryPath();
+                    var sourceDirPath = Path.GetFullPath(assemblyDirPath);
 
-                    CopyNativeLibs(sourcePath, exportDirPath, "Debug", "win-x64");
-                    CopyNativeLibs(sourcePath, exportDirPath, "Debug", "win-x86");
-                    CopyNativeLibs(sourcePath, exportDirPath, "Debug", "linux-x64");
+                    CopyNativeLibs(sourceDirPath, exportDirPath, "Debug", "win-x64");
+                    CopyNativeLibs(sourceDirPath, exportDirPath, "Debug", "win-x86");
+                    CopyNativeLibs(sourceDirPath, exportDirPath, "Debug", "linux-x64");
 
-                    CopyNativeLibs(sourcePath, exportDirPath, "Release", "win-x64");
-                    CopyNativeLibs(sourcePath, exportDirPath, "Release", "win-x86");
-                    CopyNativeLibs(sourcePath, exportDirPath, "Release", "linux-x64");
+                    CopyNativeLibs(sourceDirPath, exportDirPath, "Release", "win-x64");
+                    CopyNativeLibs(sourceDirPath, exportDirPath, "Release", "win-x86");
+                    CopyNativeLibs(sourceDirPath, exportDirPath, "Release", "linux-x64");
                 }
+                */
 
                 return projectName;
             }
@@ -177,66 +178,50 @@ namespace SciChart.Examples.Demo.Lib.Helpers.ProjectExport
             }
         }
 
+        /*
         private static void CopyNativeLibs(string sourcePath, string exportPath, string config, string runtime)
         {
-            var nativeSourcePath = Path.Combine(sourcePath, "runtimes", runtime, "native");
-
-            if (!Directory.Exists(nativeSourcePath))
-            {
-                nativeSourcePath = sourcePath;
-            }
-
-            var nativeLibPaths = new List<string>(5);
+            var nativeLibNames = new List<string>();
+            var nativeLibPaths = new List<string>();
 
             if (runtime.Contains("win"))
             {
-                var nativeDllNames = new[]
-                {
-                    "AbtLicensingNative.dll",
-                    "VXccelEngine2D.dll",
+                nativeLibNames.Add("AbtLicensingNative.dll");
+                nativeLibNames.Add("VXccelEngine2D.dll");
 #if !HIDE3D
-                    "VXccelEngine3D.dll",
+                nativeLibNames.Add("VXccelEngine3D.dll");
 #endif
-                    "D3DCompiler_47.dll",
-                    "glew32.dll"
-                };
-
-                foreach (var dllName in nativeDllNames)
-                {
-                    var nativeDllPath = Path.Combine(nativeSourcePath, dllName);
-
-                    if (File.Exists(nativeDllPath))
-                    {
-                        nativeLibPaths.Add(nativeDllPath);
-                    }
-                }
+                nativeLibNames.Add("D3DCompiler_47.dll");
+                nativeLibNames.Add("glew32.dll");
             }
             else if (runtime.Contains("linux"))
             {
-                var nativeSoNames = new[]
-                {
-                    "AbtLicensingNative.so",
-                    "VXccelEngine2D.so",
+                nativeLibNames.Add("AbtLicensingNative.so");
+                nativeLibNames.Add("VXccelEngine2D.so");
 #if !HIDE3D
-                    "VXccelEngine3D.so"
+                nativeLibNames.Add("VXccelEngine3D.so");
 #endif
+            }
+
+            foreach (var libName in nativeLibNames)
+            {
+                var paths = new[]
+                {
+                    Path.Combine(sourcePath, "runtimes", runtime, "native", libName),
+                    Path.Combine(sourcePath, libName)
                 };
 
-                foreach (var soName in nativeSoNames)
-                {
-                    var nativeSoPath = Path.Combine(nativeSourcePath, soName);
+                var nativeLibPath = paths.FirstOrDefault(File.Exists);
 
-                    if (File.Exists(nativeSoPath))
-                    {
-                        nativeLibPaths.Add(nativeSoPath);
-                    }
+                if (!string.IsNullOrEmpty(nativeLibPath))
+                {
+                    nativeLibPaths.Add(nativeLibPath);
                 }
             }
 
             if (nativeLibPaths.Any())
             {
-                var configDestPath = Path.Combine(exportPath, "bin", config, "net6.0-windows");
-                var nativeDestPath = Path.Combine(configDestPath, "runtimes", runtime, "native");
+                var nativeDestPath = Path.Combine(exportPath, "bin", config, "net6.0-windows", "runtimes", runtime, "native");
 
                 Directory.CreateDirectory(nativeDestPath);
 
@@ -248,6 +233,7 @@ namespace SciChart.Examples.Demo.Lib.Helpers.ProjectExport
                 }
             }
         }
+        */
 
         private static string GetFileName(string fullName)
         {

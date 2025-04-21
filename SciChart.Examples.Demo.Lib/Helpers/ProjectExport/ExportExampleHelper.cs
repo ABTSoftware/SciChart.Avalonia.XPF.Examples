@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
@@ -122,13 +121,13 @@ namespace SciChart.Examples.Demo.Lib.Helpers.ProjectExport
 
         public static string TryAutomaticallyFindAssemblies()
         {
-            var folderPath = GetFolderFromAssemblyPath();
+            var assemblyDirPath = SciChartRuntimeInfo.GetAssemblyDirectoryPath();
 
-            if (!string.IsNullOrEmpty(folderPath))
+            if (!string.IsNullOrEmpty(assemblyDirPath))
             {
-                var isFound = SearchForCoreAssemblies(folderPath);
+                var isFound = SearchForCoreAssemblies(assemblyDirPath);
 
-                return isFound ? folderPath : GetAssemblyPathFromRegistry();
+                return isFound ? assemblyDirPath : GetAssemblyPathFromRegistry();
             }
 
             return null;
@@ -187,23 +186,6 @@ namespace SciChart.Examples.Demo.Lib.Helpers.ProjectExport
                 fs.WriteLine(")");
                 fs.WriteLine("");
             }
-        }
-
-        private static string GetFolderFromAssemblyPath()
-        {
-            var assemblyPath = Assembly.GetExecutingAssembly().Location;
-
-            if (!string.IsNullOrEmpty(assemblyPath))
-            {
-                var index = assemblyPath.LastIndexOf(Path.DirectorySeparatorChar);
-
-                if (index > 0)
-                {
-                    return assemblyPath.Substring(0, index + 1);
-                }
-            }
-
-            return null;
         }
 
         private static bool IsAssemblyExist(string folderPath, string assemblyName)

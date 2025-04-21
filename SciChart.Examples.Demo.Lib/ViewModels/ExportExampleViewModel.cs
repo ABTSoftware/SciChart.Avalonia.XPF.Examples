@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using SciChart.Charting.Common.Helpers;
 using SciChart.Core.Utility;
 using SciChart.Examples.Demo.Lib.Common;
@@ -17,20 +18,18 @@ namespace SciChart.Examples.Demo.Lib.ViewModels
         {
             _parent = parent;
 
+            IsFolderPath = false;
+
             IsXpfExport = SciChartRuntimeInfo.IsXPF;
             IsXpfLicense = SciChartRuntimeInfo.IsXPF;
-
-            // TODO This code must be removed after uploading XPF NuGet package
-            // Do not forget to check and update the ExportExampleView.xaml
-            IsFolderPath = SciChartRuntimeInfo.IsXPF;
 
             ExportVersionMajor = ProjectWriter.VersionMajor;
             LibrariesPath = ExportExampleHelper.TryAutomaticallyFindAssemblies();
 
             SelectExportPathCommand = new ActionCommand(() =>
             {
-                var dialog = new System.Windows.Forms.FolderBrowserDialog();
-                if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                var dialog = new FolderBrowserDialog();
+                if (dialog.ShowDialog() == DialogResult.OK)
                 {
                     ExportPath = dialog.SelectedPath;
                 }
@@ -38,8 +37,8 @@ namespace SciChart.Examples.Demo.Lib.ViewModels
 
             SelectLibraryCommand = new ActionCommand(() =>
             {
-                var dialog = new System.Windows.Forms.FolderBrowserDialog();
-                if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                var dialog = new FolderBrowserDialog();
+                if (dialog.ShowDialog() == DialogResult.OK)
                 {
                     LibrariesPath = dialog.SelectedPath;
                 }
