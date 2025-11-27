@@ -93,7 +93,7 @@
 
             <controls:WatermarkedAutocomplete x:Name="SearchBox"
                                               Grid.Column="1"
-                                              Height="46"
+                                              Height="48"
                                               Width="400"
                                               Margin="10,0"
                                               HorizontalAlignment="Stretch"
@@ -117,14 +117,6 @@
                     Style="{StaticResource SettingsButtonStyle}" />
         </Grid>
 
-        <controls:AutomationNavigateButton Grid.Row="0"                                           
-                                           Height="24"
-                                           Width="200"
-                                           VerticalAlignment="Top"
-                                           HorizontalAlignment="Center"
-                                           Content="FlaUI.Navigate"
-                                           AutomationProperties.AutomationId="ShellControl.Navigate"/>
-
         <abt:ExceptionViewer Grid.Row="0"
                              Grid.RowSpan="2"
                              Margin="10"
@@ -140,11 +132,12 @@
                                        navigation:Navigator.StartPage="{Binding HomePage, Mode=OneTime}" />
 
         <Border Grid.Row="1"
-                Opacity="0"              
+                Opacity="0"
+                Background="Transparent"
                 tz:Transitionz.Opacity="{tz:OpacityParams From=0, To=1, Duration=200, TransitionOn=Visibility}"
                 tz:Transitionz.Visibility="{Binding SearchText, Converter={StaticResource IsEmptyStringConverter}, FallbackValue='Collapsed'}">
 
-            <views:SearchView HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="20"/>
+            <views:SearchView HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
 
         </Border>
 

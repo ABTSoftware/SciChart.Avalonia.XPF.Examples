@@ -26,7 +26,7 @@
 
     <Style x:Key="NavigationViewListBoxItemContainerStyle" TargetType="ListBoxItem">
         <Setter Property="MinHeight" Value="36"/>
-        <Setter Property="Margin" Value="0,10,0,0"/>
+        <Setter Property="Margin" Value="0,5"/>
         <Setter Property="HorizontalContentAlignment" Value="Left"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="AutomationProperties.AutomationId" Value="{Binding Path=.}"/>
@@ -168,7 +168,7 @@
 
     <Style x:Key="SearchItemContainerStyle" TargetType="ListBoxItem">
         <Setter Property="MinHeight" Value="36"/>
-        <Setter Property="Margin" Value="0,10,0,0"/>
+        <Setter Property="Margin" Value="0,5"/>
         <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
         <Setter Property="VerticalContentAlignment" Value="Stretch"/>
         <Setter Property="Template">

@@ -1,7 +1,7 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
+using System.Windows.Automation.Peers;
+using SciChart.Examples.Demo.Lib.Automation;
 using SciChart.Examples.Demo.Lib.Bootstrapper;
-using SciChart.Examples.Demo.Lib.Common;
 using SciChart.Examples.Demo.Lib.ViewModels;
 using SciChart.UI.Bootstrap;
 using Unity;
@@ -16,21 +16,13 @@ namespace SciChart.Examples.Demo.Xpf
 
             ServiceLocator.Container.Resolve<IBootstrapper>().WhenInit += (s, e) =>
             {
-                Action operation = () => { DataContext = ServiceLocator.Container.Resolve<IMainWindowViewModel>(); };
-                Dispatcher.BeginInvoke(operation);
+                Dispatcher.BeginInvoke(() => DataContext = ServiceLocator.Container.Resolve<IMainWindowViewModel>());
             };
+        }
 
-            // Maximise a window that is too large for the screen 
-            if (Width > SystemParameters.WorkArea.Width || Height > SystemParameters.WorkArea.Height)
-            {
-                WindowState = WindowState.Maximized;                
-            }
-
-            // Always topmost if /quickstart mode used by UIAutomationTests
-            if (DemoSettings.Instance.UIAutomationTestMode)
-            {
-                Topmost = true;
-            }
+        protected override AutomationPeer OnCreateAutomationPeer()
+        {
+            return new MainWindowAutomationPeer(this);
         }
     }
 }

@@ -110,7 +110,7 @@
 
                 <!-- Breadcrumb -->
                 <controls:Breadcrumb Grid.Column="0"
-                                     Margin="20,0,10,0"
+                                     Margin="20,0"
                                      BreadcrumbItems="{Binding Path=BreadCrumbViewModel.BreadCrumbItemViewModels}"
                                      HomeCommand="{Binding Path=BreadCrumbViewModel.BreadCrumbItemViewModels[0].Command}">
 
@@ -257,7 +257,7 @@
                         Background="{DynamicResource InfoPanelBackgroundBrush}"
                         SizeChanged="OnExamplesPopupSizeChanged">
 
-                    <Grid Margin="0,20,0,0">
+                    <Grid Margin="0,15,0,0">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="*" />
@@ -281,7 +281,7 @@
                                    Style="{StaticResource TipsHeaderTextBlockStyle}"/>
 
                         <Button Grid.Column="2"
-                                Margin="20,0"
+                                Margin="15,0"
                                 HorizontalAlignment="Right"
                                 VerticalAlignment="Center"
                                 Command="{Binding HideDescriptionCommand}"
@@ -290,11 +290,11 @@
                         <ScrollViewer Grid.Row="1"
                                       Grid.Column="0"
                                       Grid.ColumnSpan="3"
-                                      Margin="20,20,2,2"
+                                      Margin="20,15,2,2"
                                       HorizontalScrollBarVisibility="Disabled"
                                       VerticalScrollBarVisibility="Auto">
 
-                            <RichTextBox Margin="-5,0,15,20"
+                            <RichTextBox Margin="-5,0,15,15"
                                          Background="Transparent"
                                          BorderThickness="0"
                                          Foreground="#FFC2C4CB"                                    

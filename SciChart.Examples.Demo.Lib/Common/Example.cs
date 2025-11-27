@@ -159,6 +159,11 @@ namespace SciChart.Examples.Demo.Lib.Common
 
         public ExampleUsage Usage { get; set; }
 
+        public string GetExampleUri()
+        {
+            return $"{TopLevelCategory}/{Group}/{Title}";
+        }
+
         public Dictionary<string, string> SourceFiles
         {
             get

@@ -25,7 +25,7 @@ namespace SciChart.Examples.Demo.Xpf
         private Bootstrapper _bootstrapper;
 
         private const string DevMode = "/DEVMODE";
-        private const string QuickStart = "/UIAUTOMATIONTESTMODE";
+        private const string TestMode = "/UIAUTOMATIONTESTMODE";
         private const int SplashDelay = 3000;
 
         public App()
@@ -75,7 +75,7 @@ namespace SciChart.Examples.Demo.Xpf
                 DeveloperModManager.Manage.IsDeveloperMode = true;
             }
 
-            if (e.Args.Contains(QuickStart, StringComparer.InvariantCultureIgnoreCase))
+            if (e.Args.Contains(TestMode, StringComparer.InvariantCultureIgnoreCase))
             {
                 // Used in automation testing, disable animations and delays in transitions 
                 DemoSettings.Instance.UIAutomationTestMode = true;

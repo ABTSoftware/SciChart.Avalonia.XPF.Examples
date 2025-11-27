@@ -88,7 +88,7 @@
 
     <!-- Example List -->
 
-    <SolidColorBrush x:Key="ExampleListGroupSeparatorBrush" Color="#7040434E"/>
+    <SolidColorBrush x:Key="ExampleListGroupSeparatorBrush" Color="#8040434E"/>
     <SolidColorBrush x:Key="ExampleListSortComboBoxBackgroundBrush" Color="#FF181825"/>
     <SolidColorBrush x:Key="ExampleListSortComboBoxSortLabelBrush" Color="#FF80838E"/>
 
@@ -116,7 +116,7 @@
     <!-- Example Navigation View -->
 
     <SolidColorBrush x:Key="ExampleNavigationViewBackgroundBrush" Color="#FF2F3A51"/>
-    <SolidColorBrush x:Key="ExampleNavigationViewSeparatorBrush" Color="#FF454D60"/>
+    <SolidColorBrush x:Key="ExampleNavigationViewSeparatorBrush" Color="#FF384357"/>
     <SolidColorBrush x:Key="ExampleNavigationViewForegroundBrush" Color="#FFE3E3E3"/>
 
     <SolidColorBrush x:Key="ExampleNavigationViewItemBackgroundBrush" Color="#FF2A354B"/>
@@ -126,7 +126,7 @@
     <!-- Settings View -->
 
     <SolidColorBrush x:Key="SettingsViewBackgroundBrush" Color="#FF2F3A51"/>
-    <SolidColorBrush x:Key="SettingsViewSeparatorBrush" Color="#FF454D60"/>
+    <SolidColorBrush x:Key="SettingsViewSeparatorBrush" Color="#FF384357"/>
     <SolidColorBrush x:Key="SettingsViewForegroundBrush" Color="#FFE3E3E3"/>
 
     <SolidColorBrush x:Key="DevModeButtonForegroundBrush" Color="#FF8F94A1"/>
@@ -140,7 +140,7 @@
     <!-- Feedback / Export View -->
 
     <SolidColorBrush x:Key="FeedbackExportViewBackgroundBrush" Color="#FF2F3A51"/>
-    <SolidColorBrush x:Key="FeedbackExportViewSeparatorBrush" Color="#FF454D60"/>
+    <SolidColorBrush x:Key="FeedbackExportViewSeparatorBrush" Color="#FF384357"/>
     <SolidColorBrush x:Key="FeedbackExportHeaderForegroundBrush" Color="#FFE3E3E3"/>
     <SolidColorBrush x:Key="FeedbackExportMessageForegroundBrush" Color="#FF8F94A1"/>
     <SolidColorBrush x:Key="FeedbackExportSuccessForegroundBrush" Color="#FF64BAE4"/>
@@ -148,7 +148,7 @@
 
     <!-- Search View -->
 
-    <SolidColorBrush x:Key="SearchViewSeparatorBrush" Color="#FF40434E"/>
+    <SolidColorBrush x:Key="SearchViewSeparatorBrush" Color="#8040434E"/>
     <SolidColorBrush x:Key="SearchViewNoResultsForegroundBrush" Color="#30E3E3E3"/>
 
     <SolidColorBrush x:Key="SearchViewItemForegroundBrush" Color="#FFE3E3E3"/>
