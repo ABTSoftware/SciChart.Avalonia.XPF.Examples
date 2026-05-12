@@ -18,6 +18,7 @@
         
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
         <ext:SciChartInteractionToolbar Grid.RowSpan="2">
@@ -56,9 +57,103 @@
             </ext:FlyoutMenuButton>
         </ext:SciChartInteractionToolbar>
 
-        <!--  Render SciChart using Visual Xccelerator Render Surface  -->
+        <!--  Render SciChart using High Speed Render Surface  -->
         <s:SciChartSurface x:Name="ChartSurface1"
                            Grid.Row="0"
+                           Grid.Column="1"
+                           ViewportManager="{Binding ViewportManager, Mode=OneWay}"
+                           s:RenderSurfaceExtensions.RenderSurfaceType="HighSpeedRenderSurface">
+
+            <s:SciChartSurface.RenderableSeries>
+                <!--  Toggle Line and MountainSeries visibility bound to same data via the toggle buttons  -->
+                <s:FastLineRenderableSeries DataSeries="{Binding DataSeries, Mode=OneWay}"
+                                            IsVisible="{Binding Path=IsChecked, Mode=TwoWay, Source={x:Reference UseLineSeries}}"
+                                            StrokeThickness="{Binding Path=Value, Source={x:Reference strokeThicknessSlider}}"/>
+
+                <s:FastMountainRenderableSeries DataSeries="{Binding DataSeries, Mode=OneWay}"
+                                                IsVisible="{Binding Path=IsChecked, Mode=TwoWay, Source={x:Reference UseMountainSeries}}"
+                                                StrokeThickness="{Binding Path=Value, Source={x:Reference strokeThicknessSlider}}"/>
+            </s:SciChartSurface.RenderableSeries>
+
+            <s:SciChartSurface.ChartModifier>
+                <s:ModifierGroup s:MouseManager.MouseEventGroup="SharedModifierGroup">
+                    <s:RubberBandXyZoomModifier ReceiveHandledEvents="True" IsEnabled="{Binding Path=IsChecked, Source={x:Reference enableZoom}}"/>
+                    <s:ZoomPanModifier ReceiveHandledEvents="True" ClipModeX="None" XyDirection="XDirection" ZoomExtentsY="False" IsEnabled="{Binding Path=IsChecked, Source={x:Reference enablePan}}"/>
+                    <s:ZoomExtentsModifier ReceiveHandledEvents="True" />
+                </s:ModifierGroup>
+            </s:SciChartSurface.ChartModifier>
+
+            <s:SciChartSurface.XAxis>
+                <s:NumericAxis VisibleRange="{Binding SharedXVisibleRange, Mode=TwoWay}" />
+            </s:SciChartSurface.XAxis>
+            <s:SciChartSurface.YAxis>
+                <s:NumericAxis VisibleRange="{Binding SharedYVisibleRange, Mode=TwoWay}"/>
+            </s:SciChartSurface.YAxis>
+
+            <s:SciChartSurface.Annotations>
+                <s:TextAnnotation AnnotationCanvas="AboveChart"
+                                  CoordinateMode="Relative"
+                                  FontSize="28"
+                                  FontWeight="Bold"
+                                  HorizontalAnchorPoint="Center"
+                                  Opacity="0.3"
+                                  Text="High Speed Rasterizer"
+                                  VerticalAnchorPoint="Center"
+                                  X1="0.5"
+                                  Y1="0.5" />
+            </s:SciChartSurface.Annotations>
+        </s:SciChartSurface>
+
+        <!--  Render SciChart using High Quality Render Surface  -->  
+        <s:SciChartSurface x:Name="ChartSurface2"
+                           Grid.Row="0"
+                           Grid.Column="2"
+                           ViewportManager="{Binding ViewportManager, Mode=OneWay}"
+                           s:RenderSurfaceExtensions.RenderSurfaceType="HighQualityRenderSurface">
+
+            <s:SciChartSurface.RenderableSeries>
+                <!--  Toggle Line and MountainSeries visibility bound to same data via the toggle buttons  -->
+                <s:FastLineRenderableSeries DataSeries="{Binding DataSeries, Mode=OneWay}"
+                                            IsVisible="{Binding Path=IsChecked, Mode=TwoWay, Source={x:Reference UseLineSeries}}"
+                                            StrokeThickness="{Binding Path=Value, Source={x:Reference strokeThicknessSlider}}"/>
+
+                <s:FastMountainRenderableSeries DataSeries="{Binding DataSeries, Mode=OneWay}"
+                                                IsVisible="{Binding Path=IsChecked, Mode=TwoWay, Source={x:Reference UseMountainSeries}}"
+                                                StrokeThickness="{Binding Path=Value, Source={x:Reference strokeThicknessSlider}}"/>
+            </s:SciChartSurface.RenderableSeries>
+
+            <s:SciChartSurface.ChartModifier>
+                <s:ModifierGroup s:MouseManager.MouseEventGroup="SharedModifierGroup">
+                    <s:RubberBandXyZoomModifier ReceiveHandledEvents="True" IsEnabled="{Binding Path=IsChecked, Source={x:Reference enableZoom}}"/>
+                    <s:ZoomPanModifier ReceiveHandledEvents="True" ClipModeX="None" XyDirection="XDirection" ZoomExtentsY="False" IsEnabled="{Binding Path=IsChecked, Source={x:Reference enablePan}}"/>
+                    <s:ZoomExtentsModifier ReceiveHandledEvents="True" />
+                </s:ModifierGroup>
+            </s:SciChartSurface.ChartModifier>
+
+            <s:SciChartSurface.XAxis>
+                <s:NumericAxis VisibleRange="{Binding SharedXVisibleRange, Mode=TwoWay}" />
+            </s:SciChartSurface.XAxis>
+            <s:SciChartSurface.YAxis>
+                <s:NumericAxis VisibleRange="{Binding SharedYVisibleRange, Mode=TwoWay}"/>
+            </s:SciChartSurface.YAxis>
+
+            <s:SciChartSurface.Annotations>
+                <s:TextAnnotation AnnotationCanvas="AboveChart"
+                                  CoordinateMode="Relative"
+                                  FontSize="28"
+                                  FontWeight="Bold"
+                                  HorizontalAnchorPoint="Center"
+                                  Opacity="0.3"
+                                  Text="High Quality Rasterizer"
+                                  VerticalAnchorPoint="Center"
+                                  X1="0.5"
+                                  Y1="0.5" />
+            </s:SciChartSurface.Annotations>
+        </s:SciChartSurface>
+
+        <!--  Render SciChart using Visual Xccelerator Render Surface  -->
+        <s:SciChartSurface x:Name="ChartSurface3"
+                           Grid.Row="1"
                            Grid.Column="1"
                            ViewportManager="{Binding ViewportManager, Mode=OneWay}"
                            s:RenderSurfaceExtensions.RenderSurfaceType="VisualXcceleratorRenderSurface">
@@ -104,8 +199,8 @@
         </s:SciChartSurface>
 
         <!--  Render SciChart using Xaml Render Surface  -->
-        <s:SciChartSurface x:Name="ChartSurface2"
-                           Grid.Row="0"
+        <s:SciChartSurface x:Name="ChartSurface4"
+                           Grid.Row="1"
                            Grid.Column="2"
                            ViewportManager="{Binding ViewportManager, Mode=OneWay}"
                            s:RenderSurfaceExtensions.RenderSurfaceType="XamlRenderSurface">

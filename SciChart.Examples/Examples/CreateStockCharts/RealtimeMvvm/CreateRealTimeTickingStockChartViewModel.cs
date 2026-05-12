@@ -21,6 +21,7 @@ using System.Windows.Input;
 using SciChart.Charting.Common.Helpers;
 using SciChart.Charting.Model.ChartSeries;
 using SciChart.Charting.Model.DataSeries;
+using SciChart.Core.Extensions;
 using SciChart.Data.Model;
 using SciChart.Examples.ExternalDependencies.Common;
 using SciChart.Examples.ExternalDependencies.Data;
@@ -35,10 +36,14 @@ namespace SciChart.Examples.Examples.CreateStockCharts.RealtimeMvvm
         private readonly MovingAverage _sma50 = new MovingAverage(50);
 
         private PriceBar _lastPrice;
-        private IndexRange _xVisibleRange;
+        private DateRange _xVisibleRange;
 
         private int _selectedStrokeThickness;
         private string _selectedSeriesStyle;
+
+        private bool _autoSimplify;
+        private double _simplifyOpenThreshold;
+        private double _simplifyCloseThreshold;
 
         private ObservableCollection<IRenderableSeriesViewModel> _seriesViewModels;
 
@@ -85,8 +90,6 @@ namespace SciChart.Examples.Examples.CreateStockCharts.RealtimeMvvm
             }
         }
 
-        public double BarTimeFrame { get; } = TimeSpan.FromMinutes(5).TotalSeconds;
-
         public ICommand TickCommand => new ActionCommand(() => OnNewPrice(_marketDataService.GetNextBar()));
         
         public ICommand StartUpdatesCommand => new ActionCommand(() => _marketDataService.SubscribePriceUpdate(OnNewPrice)); 
@@ -117,11 +120,16 @@ namespace SciChart.Examples.Examples.CreateStockCharts.RealtimeMvvm
 
                 if (_selectedSeriesStyle == "OHLC")
                 {
-                    SeriesViewModels[0] = new OhlcRenderableSeriesViewModel
+                    var viewModel = new OhlcRenderableSeriesViewModel
                     {
                         DataSeries = SeriesViewModels[0].DataSeries,
                         StyleKey = "BaseRenderableSeriesStyle"
                     };
+                    AutoSimplify = viewModel.AutoSimplify;
+                    SimplifyCloseThreshold = viewModel.SimplifyCloseThresholdPx;
+                    SimplifyOpenThreshold = viewModel.SimplifyOpenThresholdPx;
+                    
+                    SeriesViewModels[0] = viewModel;
                 }                   
                 else if (_selectedSeriesStyle == "Candlestick")
                 {
@@ -150,9 +158,57 @@ namespace SciChart.Examples.Examples.CreateStockCharts.RealtimeMvvm
 
                 OnPropertyChanged("SeriesViewModels");
             }
-        }      
+        }
 
-        public IndexRange XVisibleRange
+        public bool AutoSimplify
+        {
+            get => _autoSimplify;
+            set
+            {
+                if (_autoSimplify != value)
+                {
+                    _autoSimplify = value;
+                    OnPropertyChanged(nameof(AutoSimplify));
+
+                    if (SeriesViewModels[0] is OhlcRenderableSeriesViewModel ohlc)
+                        ohlc.AutoSimplify = value;
+                }
+            }
+        }
+
+        public double SimplifyOpenThreshold
+        {
+            get => _simplifyOpenThreshold;
+            set
+            {
+                if (_simplifyOpenThreshold != value)
+                {
+                    _simplifyOpenThreshold = value;
+                    OnPropertyChanged(nameof(SimplifyOpenThreshold));
+
+                    if (SeriesViewModels[0] is OhlcRenderableSeriesViewModel ohlc)
+                        ohlc.SimplifyOpenThresholdPx = value;
+                }
+            }
+        }
+
+        public double SimplifyCloseThreshold
+        {
+            get => _simplifyCloseThreshold;
+            set
+            {
+                if (_simplifyCloseThreshold != value)
+                {
+                    _simplifyCloseThreshold = value;
+                    OnPropertyChanged(nameof(SimplifyCloseThreshold));
+
+                    if (SeriesViewModels[0] is OhlcRenderableSeriesViewModel ohlc)
+                        ohlc.SimplifyCloseThresholdPx = value;
+                }
+            }
+        }
+
+        public DateRange XVisibleRange
         {
             get => _xVisibleRange;
             set
@@ -186,10 +242,10 @@ namespace SciChart.Examples.Examples.CreateStockCharts.RealtimeMvvm
 
                     // If the latest appending point is inside the viewport (i.e. not off the edge of the screen)
                     // then scroll the viewport 1 bar, to keep the latest bar at the same place
-                    if (XVisibleRange.Max > ds0.Count)
+                    if (XVisibleRange.Max > ds0.XMax.ToDateTime())
                     {
                         var existingRange = _xVisibleRange;
-                        var newRange = new IndexRange(existingRange.Min + 1, existingRange.Max + 1);
+                        var newRange = new DateRange(existingRange.Min.AddMinutes(5), existingRange.Max.AddMinutes(5));
                         XVisibleRange = newRange;
                     }
                 }

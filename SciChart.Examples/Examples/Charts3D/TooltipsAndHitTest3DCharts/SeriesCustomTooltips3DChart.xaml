@@ -8,13 +8,6 @@
              xmlns:t3D="clr-namespace:SciChart.Charting3D.Modifiers.Tooltip3D;assembly=SciChart.Charting3D">
 
     <UserControl.Resources>
-
-        <DropShadowEffect x:Key="DropShadowEffect"
-                          BlurRadius="5"
-                          Direction="-45"
-                          ShadowDepth="10"
-                          Color="Black" />
-
         <Style x:Key="TooltipStyle" TargetType="s:TooltipControl">
             <Setter Property="Template">
                 <Setter.Value>
@@ -22,11 +15,11 @@
                         <Border Background="#ff6495ed"
                                 BorderBrush="#ff4d81dd"
                                 BorderThickness="2"
-                                Effect="{StaticResource DropShadowEffect}"
                                 Opacity="0.9"
                                 Padding="5">
 
-                            <ContentPresenter Content="{TemplateBinding DataContext}" ContentTemplate="{TemplateBinding ContentTemplate}" />
+                            <ContentPresenter Content="{TemplateBinding DataContext}"
+                                              ContentTemplate="{TemplateBinding ContentTemplate}" />
                         </Border>
                     </ControlTemplate>
                 </Setter.Value>

@@ -1,11 +1,11 @@
 ﻿<ExampleDefinition xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <View>Examples/ModifyAxisBehaviour/CategoryVsValueAxis.xaml</View>
   <ViewModel>Examples.ModifyAxisBehaviour.CategoryVsValueAxisViewModel</ViewModel>
-  <ImagePath></ImagePath>
+	<ImagePath>/SciChart.Examples;component/Resources/Images/CategoryVsValueAxis.png</ImagePath>
   <IconPath>IconAxis3D</IconPath>
   <ToolTipDescription>Demonstrates switching from Value to Category axis dynamically</ToolTipDescription>
   <Description>
-    This example demonstrates the CategoryNumericAxis type - a new Category axis which has been added to v4.1 of SciChart WPF, which behaves like a CategoryDateTimeAxis but allows numeric values on the XAxis instead of dates.
+    This example demonstrates the IndexNumericAxis type - a new Category axis introduced in v8.7 of SciChart WPF. It enables smooth scrolling of a chart and precise positioning between data points. IndexNumericAxis allows numeric values on the XAxis, while the IndexDateTimeAxis type supports date values.
 
     Using a simple attached property we are able to change axis type. Take a look at the source-code to see how we do this.
 

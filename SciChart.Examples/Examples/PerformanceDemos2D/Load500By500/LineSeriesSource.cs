@@ -13,6 +13,7 @@
 // without any warranty. It is provided "AS IS" without warranty of any kind, either
 // expressed or implied. 
 // *************************************************************************************
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -21,6 +22,7 @@ using System.Windows.Media;
 using SciChart.Charting.Model.DataSeries;
 using SciChart.Charting.Visuals;
 using SciChart.Charting.Visuals.RenderableSeries;
+using SciChart.Charting3D.RenderableSeries;
 using SciChart.Examples.ExternalDependencies.Common;
 
 namespace SciChart.Examples.Examples.PerformanceDemos2D.Load500By500
@@ -30,9 +32,11 @@ namespace SciChart.Examples.Examples.PerformanceDemos2D.Load500By500
     /// </summary>
     public class LineSeriesSource
     {
-        public static readonly DependencyProperty DataSeriesProperty = DependencyProperty.RegisterAttached
-            ("DataSeries", typeof(IEnumerable<IDataSeries>), typeof(LineSeriesSource),
-            new PropertyMetadata(default(IEnumerable<IDataSeries>), OnDataSeriesDependencyPropertyChanged));
+        public static readonly DependencyProperty DataSeriesProperty =
+            DependencyProperty.RegisterAttached("DataSeries", typeof(IEnumerable<IDataSeries>),
+                                                typeof(LineSeriesSource),
+                                                new PropertyMetadata(default(IEnumerable<IDataSeries>),
+                                                                     OnDataSeriesDependencyPropertyChanged));
 
         private static readonly SeriesStrokeProvider SeriesStrokeProvider;
 
