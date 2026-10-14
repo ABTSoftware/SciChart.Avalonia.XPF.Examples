@@ -19,7 +19,7 @@
 
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition/>
         </Grid.RowDefinitions>
 
         <ext:SciChartInteractionToolbar Grid.RowSpan="2" x:Name="UserToolbar" TargetSurface="{Binding Source={x:Reference Name=sciChart}}">
@@ -57,7 +57,7 @@
                 <s:CustomAnnotation CoordinateMode="Relative" 
                                     HorizontalAnchorPoint="Left"
                                     VerticalAnchorPoint="Top" 
-                                    Margin="5,135,0,0" 
+                                    Margin="5,125,0,0" 
                                     X1="0" Y1="0">
 
                     <Border CornerRadius="5" Background="{StaticResource MainThemeTransparentSolidBrush}">
@@ -84,20 +84,16 @@
                 </s:CustomAnnotation>
             </s:SciChartSurface.Annotations>
         </s:SciChartSurface>
-        
-        <Border Grid.Row="0"
-                Grid.Column="1"
-                Margin="5,5,50,5"
-                CornerRadius="5"
-                Background="#33FFFFFF"
-                IsHitTestVisible="False">
 
-            <s:SciChartPerformanceOverlay FontWeight="Bold"
-                                          Background="Transparent"
-                                          Foreground="#FFF"
-                                          Padding="10"
-                                          IsHitTestVisible="False"
-                                          TargetSurface="{Binding Source={x:Reference Name=sciChart}}"/>
-        </Border>
+        <s:SciChartPerformanceOverlay Grid.Column="1"
+                                      Grid.Row="0"
+                                      Margin="0,0,50,0"
+                                      VerticalAlignment="Top"
+                                      Background="#33FFFFFF"
+                                      FontWeight="Bold"
+                                      Foreground="#FFF"
+                                      Padding="10"
+                                      IsHitTestVisible="False"
+                                      TargetSurface="{Binding Source={x:Reference Name=sciChart}}" />
     </Grid>
 </UserControl>

@@ -36,9 +36,6 @@ namespace SciChart.Examples
         public string ToolTipDescription { get; set; }
         public List<string> CodeFiles { get; set; }
         public List<Features> Features { get; set; }
-        public SafeXmlBool IsShowcaseExample { get; set; }
-        public string ShowcaseImagePath { get; set; }
-        public string ShowcaseDescription { get; set; }
     }
 
     public struct SafeXmlBool : IXmlSerializable
@@ -55,7 +52,7 @@ namespace SciChart.Examples
             return new SafeXmlBool { _value = value };
         }
 
-        public readonly XmlSchema GetSchema()
+        public XmlSchema GetSchema()
         {
             return null;
         }
@@ -65,7 +62,7 @@ namespace SciChart.Examples
             _value = reader.ReadElementContentAsString().ToLowerInvariant() == "true";
         }
 
-        public readonly void WriteXml(XmlWriter writer)
+        public void WriteXml(XmlWriter writer)
         {
             writer.WriteString(_value ? "True" : "False");
         }

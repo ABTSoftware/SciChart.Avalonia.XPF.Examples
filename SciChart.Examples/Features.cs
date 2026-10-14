@@ -38,6 +38,7 @@ namespace SciChart.Examples
         Gaps,
         Gridlines,
         Heatmap,
+        HighQuality,
         HiLow,
         HitTest,
         Impulse,
@@ -86,6 +87,8 @@ namespace SciChart.Examples
         VerticalChartGroup,
         Viewport3D,
         XAML,
-        Zoom
+        Zoom,
+        MarketProfile,
+        VolumeProfile,
     }
 }

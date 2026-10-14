@@ -29,9 +29,8 @@ namespace SciChart.Examples.Examples.CreateStockCharts.MultiPane
 {
     public class CreateMultiPaneStockChartsViewModel : BaseViewModel
     {
-        private IndexRange _xAxisVisibleRange;
+        private DateRange _xAxisVisibleRange;
         private ObservableCollection<BaseChartPaneViewModel> _chartPaneViewModels = new ObservableCollection<BaseChartPaneViewModel>();
-        private readonly ICommand _closePaneCommand;
         private bool _isPanEnabled;
         private bool _isZoomEnabled;
         private string _verticalChartGroupId;
@@ -41,7 +40,7 @@ namespace SciChart.Examples.Examples.CreateStockCharts.MultiPane
         {
             ZoomModeCommand = new ActionCommand(SetZoomMode);
             PanModeCommand = new ActionCommand(SetPanMode);
-            ZoomExtentsCommand = new ActionCommand(ZoomExtends);
+            ZoomExtentsCommand = new ActionCommand(ZoomExtents);
 
             // Get prices and append for the main price chart (Candlestick)
             var instrumentPriceData = DataManager.Instance.GetPriceData(Instrument.EurUsd.Value, TimeFrame.Daily);
@@ -60,74 +59,74 @@ namespace SciChart.Examples.Examples.CreateStockCharts.MultiPane
             SetZoomMode();
         }
 
-        private void ZoomExtends()
+        private void ZoomExtents()
         {
             _viewportManager.AnimateZoomExtents(TimeSpan.FromMilliseconds(500));
         }
 
-        public IEnumerable<string> AllThemes { get { return ThemeManager.AllThemes; } }
+        public IEnumerable<string> AllThemes => ThemeManager.AllThemes;
 
-        public ICommand ZoomModeCommand { get; private set; }
+        public ICommand ZoomModeCommand { get; }
 
-        public ICommand PanModeCommand { get; private set; }
+        public ICommand PanModeCommand { get; }
 
-        public ICommand ZoomExtentsCommand { get; private set; }
+        public ICommand ZoomExtentsCommand { get; }
 
         public string VerticalChartGroupId
         {
-            get { return _verticalChartGroupId; }
+            get => _verticalChartGroupId;
             set
             {
                 if (_verticalChartGroupId == value) return;
                 _verticalChartGroupId = value;
-                OnPropertyChanged("VerticalChartGroupId");
+                OnPropertyChanged(nameof(VerticalChartGroupId));
             }
         }    
 
         /// <summary>
         /// Shared XAxis VisibleRange for all charts
         /// </summary>
-        public IndexRange XVisibleRange
+        public DateRange XVisibleRange
         {
-            get { return _xAxisVisibleRange; }
+            get => _xAxisVisibleRange;
             set
             {
                 if (Equals(_xAxisVisibleRange, value)) return;
 
                 _xAxisVisibleRange = value;
-                OnPropertyChanged("XVisibleRange");
+                OnPropertyChanged(nameof(XVisibleRange));
             }
         }        
 
         public ObservableCollection<BaseChartPaneViewModel> ChartPaneViewModels
         {
-            get { return _chartPaneViewModels; }
+            get => _chartPaneViewModels;
             set
             {
                 if (_chartPaneViewModels == value) return;
 
                 _chartPaneViewModels = value;
-                OnPropertyChanged("ChartPaneViewModels");
+                OnPropertyChanged(nameof(ChartPaneViewModels));
             }
         }
 
         public bool IsPanEnabled
         {
-            get { return _isPanEnabled; }
+            get => _isPanEnabled;
             set
             {
                 _isPanEnabled = value;
-                OnPropertyChanged("IsPanEnabled");
+                OnPropertyChanged(nameof(IsPanEnabled));
             }
         }
 
         public bool IsZoomEnabled
         {
-            get { return _isZoomEnabled; }
+            get => _isZoomEnabled;
             set
             {
                 _isZoomEnabled = value;
-                OnPropertyChanged("IsZoomEnabled");
+                OnPropertyChanged(nameof(IsZoomEnabled));
             }
         }  
 

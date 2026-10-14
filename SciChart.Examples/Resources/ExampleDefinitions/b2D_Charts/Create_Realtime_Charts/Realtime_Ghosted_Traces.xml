@@ -1,7 +1,7 @@
 ﻿<ExampleDefinition xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <View>Examples/CreateRealtimeChart/RealTimeGhostedTraces.xaml</View>
   <ViewModel />
-  <ImagePath>/SciChart.Examples;component/Resources/Images/ExampleImages/demoGhostedTraces.png</ImagePath>
+	<ImagePath>/SciChart.Examples;component/Resources/Images/RealtimeGhostedTraces.png</ImagePath>
   <IconPath>IconRealtime</IconPath>
   <ToolTipDescription>This example shows persistence of old traces giving a 'ghosted' effect. As new series are drawn older series are made increasingly transparent until they become invisible. 
     This example uses a background-thread Timer with variable interval of 20ms - 500ms to demonstrate the effect. 
@@ -11,11 +11,12 @@
 
     [b][i]Tip![/i][/b]
 
-    For maximum performance use the [url='https://www.scichart.com/documentation/win/current/webframe.html#Enabling%20The%20Visual%20Xccelerator%20Engine.html']Visual Xccelerator Engine[/url].
+    This example looks a lot better using the new [url='http://www.scichart.com/documentation/win/current/SciChart.Drawing~SciChart.Drawing.HighQualityRasterizer.HighQualityRenderSurface.html']HighQualityRenderSurface[/url] due to its superior handling of transparency. For maximum performance use the [url='https://www.scichart.com/documentation/win/current/webframe.html#Enabling%20The%20Visual%20Xccelerator%20Engine.html']Visual Xccelerator Engine[/url].
 
     [b]Documentation Links[/b]
 
     - [url='https://www.scichart.com/performance-tips']Performance Tips and Tricks[/url]
+    - [url='https://www.scichart.com/documentation/win/current/webframe.html#Renderer_Plugins.html']High Quality vs. High Speed vs. DirectX Renderer Plugins[/url]
     - [url='https://www.scichart.com/scichart-wpf-v6-the-worlds-fastest-wpf-charts/']How Fast is SciChart's WPF Chart? DirectX vs. Software Comparison[/url]
   </Description>
   <CodeFiles>

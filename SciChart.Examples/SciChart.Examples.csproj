@@ -6,7 +6,6 @@
     <OutputType>Library</OutputType>
     <LangVersion>Latest</LangVersion>
     <OutputPath>bin\$(Configuration)</OutputPath>
-    <!-- <DefineConstants>HIDE3D</DefineConstants> -->
   </PropertyGroup>
   <PropertyGroup>
     <IsXPF>True</IsXPF>
@@ -28,36 +27,43 @@
     <EmbeddedResource Include="Examples\**\*.*" />
     <EmbeddedResource Include="Themes\**\*.xaml" />
   </ItemGroup>
+  <ItemGroup Condition="'$(IsXPF)'=='False'">
+    <PackageReference Include="NAudio" Version="1.10.0" />
+    <EmbeddedResource Remove="Resources\ExampleDefinitions\b2D_Charts\Styling_and_Theming\Using_Renderer_Plugins.xml" />
+    <EmbeddedResource Remove="Resources\ExampleDefinitions\b2D_Charts\Export_a_Chart\Screenshot_Options_in_Chart.xml" />
+    <Page Remove="Examples\StyleAChart\UseRendererPlugins*.*" />
+    <Content Remove="Examples\StyleAChart\UseRendererPlugins*.*" />
+    <Compile Remove="Examples\StyleAChart\UseRendererPlugins*.*" />
+    <EmbeddedResource Remove="Examples\StyleAChart\UseRendererPlugins*.*" />
+    <Page Remove="Examples\ExportAChart\ScreenshotsChart\*.*" />
+    <Content Remove="Examples\ExportAChart\ScreenshotsChart\*.*" />
+    <Compile Remove="Examples\ExportAChart\ScreenshotsChart\*.*" />
+    <EmbeddedResource Remove="Examples\ExportAChart\ScreenshotsChart\*.*" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(IsXPF)'=='True'">
+    <EmbeddedResource Remove="Resources\ExampleDefinitions\cFeatured_Apps\Performance_Demos_and_Showcases\Audio_Analyzer_Demo.xml" />
+    <EmbeddedResource Remove="Resources\ExampleDefinitions\b2D_Charts\Styling_and_Theming\Use_High_Quality_Rendering.xml" />
+    <EmbeddedResource Remove="Resources\ExampleDefinitions\b2D_Charts\Export_a_Chart\Export_and_Screenshot_Options_in_Chart.xml" />
+    <Page Remove="Examples\SeeFeaturedApplication\AudioAnalyzer\*.*" />
+    <Content Remove="Examples\SeeFeaturedApplication\AudioAnalyzer\*.*" />
+    <Compile Remove="Examples\SeeFeaturedApplication\AudioAnalyzer\*.*" />
+    <EmbeddedResource Remove="Examples\SeeFeaturedApplication\AudioAnalyzer\*.*" />
+    <Page Remove="Examples\StyleAChart\UseHighQualityRendering*.*" />
+    <Content Remove="Examples\StyleAChart\UseHighQualityRendering*.*" />
+    <Compile Remove="Examples\StyleAChart\UseHighQualityRendering*.*" />
+    <EmbeddedResource Remove="Examples\StyleAChart\UseHighQualityRendering*.*" />
+    <Page Remove="Examples\ExportAChart\ExportAndScreenshotsChart\*.*" />
+    <Content Remove="Examples\ExportAChart\ExportAndScreenshotsChart\*.*" />
+    <Compile Remove="Examples\ExportAChart\ExportAndScreenshotsChart\*.*" />
+    <EmbeddedResource Remove="Examples\ExportAChart\ExportAndScreenshotsChart\*.*" />
+  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="System.Buffers" Version="4.6.0" />
     <PackageReference Include="System.Reactive" Version="4.4.1" />
   </ItemGroup>
   <ItemGroup>
   </ItemGroup>
-  <ItemGroup Condition="!$(DefineConstants.Contains('HIDE3D'))">
-  </ItemGroup>
-  <ItemGroup Condition="$(DefineConstants.Contains('HIDE3D'))">
-    <!-- Definitions -->
-    <EmbeddedResource Remove="Resources\ExampleDefinitions\a3D_Charts\**\*.xml" />
-    <EmbeddedResource Remove="Resources\ExampleDefinitions\cFeatured_Apps\Financial_Charts\Tenor_Curves_3D_Chart.xml" />
-    <EmbeddedResource Remove="Resources\ExampleDefinitions\cFeatured_Apps\Scientific_Charts\LIDAR_PointCloud_3D_Demo.xml" />
-    <!-- Charts3D -->
-    <Page Remove="Examples\Charts3D\**\*.*" />
-    <Content Remove="Examples\Charts3D\**\*.*" />
-    <Compile Remove="Examples\Charts3D\**\*.*" />
-    <EmbeddedResource Remove="Examples\Charts3D\**\*.*" />
-    <!-- Lidar3DPointCloud -->
-    <Page Remove="Examples\SeeFeaturedApplication\Lidar3DPointCloudDemo\*.*" />
-    <Content Remove="Examples\SeeFeaturedApplication\Lidar3DPointCloudDemo\*.*" />
-    <Compile Remove="Examples\SeeFeaturedApplication\Lidar3DPointCloudDemo\*.*" />
-    <EmbeddedResource Remove="Examples\SeeFeaturedApplication\Lidar3DPointCloudDemo\*.*" />
-    <!-- TenorCurves3DChart -->
-    <Page Remove="Examples\SeeFeaturedApplication\TenorCurves3DChart\*.*" />
-    <Content Remove="Examples\SeeFeaturedApplication\TenorCurves3DChart\*.*" />
-    <Compile Remove="Examples\SeeFeaturedApplication\TenorCurves3DChart\*.*" />
-    <EmbeddedResource Remove="Examples\SeeFeaturedApplication\TenorCurves3DChart\*.*" />
-  </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="SciChart.Avalonia.XPF" Version="1.2.0.28247" />
+    <PackageReference Include="SciChart.Avalonia.XPF" Version="2.0.0.28304" />
   </ItemGroup>
 </Project>

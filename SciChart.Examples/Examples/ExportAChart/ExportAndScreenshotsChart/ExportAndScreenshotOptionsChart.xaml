@@ -35,19 +35,27 @@
                     </StackPanel>
                 </ext:FlyoutMenuButton.PopupContent>
             </ext:FlyoutMenuButton>
-
-            <ext:FlyoutMenuButton ToolTipService.ToolTip="Export to PNG">
+            
+            <ext:FlyoutMenuButton ToolTipService.ToolTip="Export to PNG/XPS">
                 <ext:ToolbarIcon Kind="Export" Style="{StaticResource ToolbarButtonIconStyle}"/>
                 <ext:FlyoutMenuButton.PopupContent>
                     <StackPanel Margin="5" MinWidth="120" Orientation="Vertical">
                         <TextBlock Text="Export Options" Style="{StaticResource FlyoutMenuHeaderStyle}"/>
+                        <Button Click="ExportToXPS" Content="XPS" ToolTip="Export XPS"/>
+                        <Button Click="ExportToXPSBig" Content="XPSb" ToolTip="Export XPS Big"/>
                         <Button Click="ExportToPng" Content="PNG" ToolTip="Export PNG"/>
                         <Button Click="ExportPngInMemory" Content="PNGb" ToolTip="Export PNG Big"/>
                     </StackPanel>
                 </ext:FlyoutMenuButton.PopupContent>
             </ext:FlyoutMenuButton>
+
+            <Button Click="OnPrintClick" ToolTip="Print" Style="{StaticResource DefaultButtonStyle}">
+                <ext:ToolbarIcon Kind="PrinterOutline" Style="{StaticResource ToolbarButtonIconStyle}"/>
+            </Button>
+            
         </ext:SciChartInteractionToolbar>
 
+        <!--  This Panel need for printing  -->
         <Grid Grid.Column="1">
 
             <s:SciChartSurface x:Name="sciChart">

@@ -40,12 +40,12 @@ namespace SciChart.Examples.Examples.Charts3D.Customize3DChart.AddGeometry3D
         {
             // Setting the position of scene entities will be used back when sorting them from camera perspective back to front
             using (TSRVector3 centerPosition = new TSRVector3(
-                    0.5f * (topLeft.x + bottomRight.x),
-                    0.5f * (topLeft.y + bottomRight.y),
-                    0.5f * (topLeft.z + bottomRight.z)))
+                    0.5f*(topLeft.x + bottomRight.x),
+                    0.5f*(topLeft.y + bottomRight.y), 
+                    0.5f*(topLeft.z + bottomRight.z)))
             {
                 SetPosition(centerPosition);
-            }
+            }                        
 
             this._topLeft = topLeft;
             this._bottomRight = bottomRight;
@@ -57,9 +57,7 @@ namespace SciChart.Examples.Examples.Charts3D.Customize3DChart.AddGeometry3D
         /// </summary>
         public override eSCRTSceneEntityKind GetKind()
         {
-            return _cubeColor.A == 255
-                ? eSCRTSceneEntityKind.SCRT_SCENE_ENTITY_KIND_OPAQUE
-                : eSCRTSceneEntityKind.SCRT_SCENE_ENTITY_KIND_TRANSPARENT;
+            return _cubeColor.A == 255 ? eSCRTSceneEntityKind.SCRT_SCENE_ENTITY_KIND_OPAQUE : eSCRTSceneEntityKind.SCRT_SCENE_ENTITY_KIND_TRANSPARENT;
         }
 
         /// <summary>
@@ -71,24 +69,21 @@ namespace SciChart.Examples.Examples.Charts3D.Customize3DChart.AddGeometry3D
             float bottomRightCoordX = _bottomRight.X;
             float bottomRightCoordY = _bottomRight.Y;
             float bottomRightCoordZ = _bottomRight.Z;
-
             float topLeftCoordX = _topLeft.X;
             float topLeftCoordY = _topLeft.Y;
             float topLeftCoordZ = _topLeft.Z;
 
-            //            1-----------0
-            // y         /|          /|
-            // |        / |         / |
-            // |       5-----------4  |
-            // |       |  |        |  |
-            // |       |  2--------|--3
-            // |   z   | /         | /
-            // |  /    |/          |/    
-            // | /     6-----------7        
-            // |/___________x
-
-            Vector3[] corners =
-            {
+            // y          1--------0
+            // |         /|       /|
+            // |       5--------4  |
+            // |       |  |     |  |
+            // |       |  |     |  |
+            // |       |  2--------3
+            // |  z    | /      |/    
+            // | /     6--------7        
+            // |/
+            // ----------- X
+            Vector3[] corners = {
                 new Vector3(topLeftCoordX, topLeftCoordY, topLeftCoordZ), //0
                 new Vector3(bottomRightCoordX, topLeftCoordY, topLeftCoordZ), //1
                 new Vector3(bottomRightCoordX, bottomRightCoordY, topLeftCoordZ), //2
@@ -99,8 +94,7 @@ namespace SciChart.Examples.Examples.Charts3D.Customize3DChart.AddGeometry3D
                 new Vector3(topLeftCoordX, bottomRightCoordY, bottomRightCoordZ), //7
             };
 
-            Vector3[] normals =
-            {
+            Vector3[] normals = {
                 new Vector3(+0.0f, +0.0f, -1.0f), //front
                 new Vector3(+0.0f, +0.0f, +1.0f), //back
                 new Vector3(+1.0f, +0.0f, +0.0f), //right
@@ -109,14 +103,13 @@ namespace SciChart.Examples.Examples.Charts3D.Customize3DChart.AddGeometry3D
                 new Vector3(+0.0f, -1.0f, +0.0f), //bottom
             };
 
-            var upAxis = Viewport3D.ViewportOrientation;
-
+            eSCRTUpAxis upaxis = VXccelEngine3D.GetUpAxis();
             // We create a mesh context. There are various mesh render modes. The simplest is Triangles
             // For this mode we have to draw a single triangle (three vertices) for each corner of the cube
             using (var meshContext = BeginLitMesh(TSRRenderMode.TRIANGLES))
             {
                 // Set the Rasterizer State for this entity 
-                if (upAxis == Viewport3DOrientation.ZAxisUp)
+                if (upaxis == eSCRTUpAxis.Z_UP)
                 {
                     VXccelEngine3D.PushRasterizerState(RasterizerStates.Default.TSRRasterizerState);
                 }
@@ -124,13 +117,12 @@ namespace SciChart.Examples.Examples.Charts3D.Customize3DChart.AddGeometry3D
                 {
                     VXccelEngine3D.PushRasterizerState(RasterizerStates.CullBackFacesState.TSRRasterizerState);
                 }
-
+                
                 // Set the color before drawing vertices
                 meshContext.SetVertexColor(_cubeColor);
-
+            
                 // Pass Entity ID value for a hit test purpose
                 ulong selectionColor = VXccelEngine3D.EncodeSelectionId(EntityId, 0);
-
                 meshContext.SetSelectionId(selectionColor);
 
                 // Now draw the triangles. Each face of the cube is made up of two triangles
@@ -142,7 +134,7 @@ namespace SciChart.Examples.Examples.Charts3D.Customize3DChart.AddGeometry3D
                 SetVertex(meshContext, corners[2]);
                 SetVertex(meshContext, corners[0]);
                 SetVertex(meshContext, corners[3]);
-
+            
                 // Right side face
                 SetNormal(meshContext, normals[2]);
                 SetVertex(meshContext, corners[1]);
@@ -151,7 +143,7 @@ namespace SciChart.Examples.Examples.Charts3D.Customize3DChart.AddGeometry3D
                 SetVertex(meshContext, corners[1]);
                 SetVertex(meshContext, corners[6]);
                 SetVertex(meshContext, corners[5]);
-
+            
                 // Top face
                 SetNormal(meshContext, normals[4]);
                 SetVertex(meshContext, corners[2]);
@@ -160,7 +152,7 @@ namespace SciChart.Examples.Examples.Charts3D.Customize3DChart.AddGeometry3D
                 SetVertex(meshContext, corners[7]);
                 SetVertex(meshContext, corners[2]);
                 SetVertex(meshContext, corners[3]);
-
+            
                 // Left side face
                 SetNormal(meshContext, normals[3]);
                 SetVertex(meshContext, corners[3]);
@@ -169,7 +161,7 @@ namespace SciChart.Examples.Examples.Charts3D.Customize3DChart.AddGeometry3D
                 SetVertex(meshContext, corners[3]);
                 SetVertex(meshContext, corners[4]);
                 SetVertex(meshContext, corners[7]);
-
+            
                 // Back face
                 SetNormal(meshContext, normals[1]);
                 SetVertex(meshContext, corners[7]);
@@ -178,7 +170,7 @@ namespace SciChart.Examples.Examples.Charts3D.Customize3DChart.AddGeometry3D
                 SetVertex(meshContext, corners[7]);
                 SetVertex(meshContext, corners[4]);
                 SetVertex(meshContext, corners[5]);
-
+            
                 // Bottom face 
                 SetNormal(meshContext, normals[5]);
                 SetVertex(meshContext, corners[0]);
@@ -222,23 +214,22 @@ namespace SciChart.Examples.Examples.Charts3D.Customize3DChart.AddGeometry3D
                     SetVertex(lineContext, v);
                 }
                 SetVertex(lineContext, vertices.First());
-
                 lineContext.Freeze();
                 lineContext.Draw();
             }
         }
 
-        private static void SetVertex(IImmediateLitMeshContext meshContext, Vector3 vector3)
+        private void SetVertex(IImmediateLitMeshContext meshContext, Vector3 vector3)
         {
             meshContext.SetVertex3(vector3.X, vector3.Y, vector3.Z);
         }
 
-        private static void SetVertex(ILinesMesh linesContext, Vector3 vector3)
+        private void SetVertex(ILinesMesh linesContext, Vector3 vector3)
         {
             linesContext.SetVertex3(vector3.X, vector3.Y, vector3.Z);
         }
 
-        private static void SetNormal(IImmediateLitMeshContext meshContext, Vector3 vector3)
+        private void SetNormal(IImmediateLitMeshContext meshContext, Vector3 vector3)
         {
             meshContext.Normal3(vector3.X, vector3.Y, vector3.Z);
         }

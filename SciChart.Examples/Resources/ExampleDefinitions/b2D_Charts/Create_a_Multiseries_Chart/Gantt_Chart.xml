@@ -1,7 +1,7 @@
 ﻿<ExampleDefinition xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<View>Examples/CreateMultiseriesChart/GanttChart/GanttChartView.xaml</View>
 	<ViewModel>Examples.CreateMultiseriesChart.GanttChart.GanttChartViewModel</ViewModel>
-	<ImagePath/>
+	<ImagePath>/SciChart.Examples;component/Resources/Images/GanttChart.png</ImagePath>
 	<IconPath>IconGantt</IconPath>
 	<ToolTipDescription>Shows how to create a Gantt chart</ToolTipDescription>
 	<Description>
@@ -37,9 +37,8 @@
 		<string>Resources/ExampleSourceFiles/CreateMultiseriesChart/GanttChart/GanttChartViewModel.cs.txt</string>
 		<string>Resources/ExampleSourceFiles/CreateMultiseriesChart/GanttChart/GanttItemViewModel.cs.txt</string>
 		<string>Resources/ExampleSourceFiles/CreateMultiseriesChart/GanttChart/GanttTextLabelProvider.cs.txt</string>
-		<string>Resources/ExampleSourceFiles/CreateMultiseriesChart/GanttChart/GridItemsPanelBehavior.cs.txt</string>
-		<string>Resources/ExampleSourceFiles/CreateMultiseriesChart/GanttChart/GridItemsScrollBehavior.cs.txt</string>
-		<string>Resources/ExampleSourceFiles/CreateMultiseriesChart/GanttChart/WeekDaysAxisCalendar.cs.txt</string>
+		<string>Resources/ExampleSourceFiles/CreateMultiseriesChart/GanttChart/GanttScrollBehavior.cs.txt</string>
+    <string>Resources/ExampleSourceFiles/CreateMultiseriesChart/GanttChart/WeekDaysAxisCalendar.cs.txt</string>
 	</CodeFiles>
 	<Features>
 		<Features>Custom</Features>

@@ -27,7 +27,7 @@
             <ext:FlyoutMenuButton ToolTipService.ToolTip="Theme changing"
                                   Visibility="{Binding Source={x:Static ext:DeveloperModManager.Manage},
                                                        Path=IsDeveloperMode,
-                                                       Converter={StaticResource InverseBoolToVisibilityConverter}}">
+                                                       Converter={StaticResource BoolSwitchVisibilityConverter}}">
 
                 <ext:ToolbarIcon Kind="Brush" Height="16" Width="16" Style="{StaticResource ToolbarButtonIconStyle}"/>
                 <ext:FlyoutMenuButton.PopupContent>

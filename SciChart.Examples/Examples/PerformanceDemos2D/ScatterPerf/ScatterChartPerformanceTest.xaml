@@ -124,9 +124,9 @@
                 <s:CustomAnnotation CoordinateMode="Relative" 
                                     HorizontalAnchorPoint="Left"
                                     VerticalAnchorPoint="Top" 
-                                    Margin="5,135,0,0" 
+                                    Margin="5,125,0,0" 
                                     X1="0" Y1="0">
-
+                    
                     <Border CornerRadius="5" Background="{StaticResource MainThemeTransparentSolidBrush}">
                         <StackPanel Orientation="Horizontal" Margin="5">
                             <TextBlock FontSize="16" 
@@ -153,20 +153,15 @@
                                   Opacity="0.9"/>
             </s:SciChartSurface.Annotations>
         </s:SciChartSurface>
-        
-        <Border Grid.Column="1"
-                Margin="5,5,50,5"
-                CornerRadius="5"
-                Background="#33FFFFFF"
-                VerticalAlignment="Top"
-                IsHitTestVisible="False">
 
-            <s:SciChartPerformanceOverlay FontWeight="Bold"
-                                          Background="Transparent"
-                                          Foreground="#FFF"
-                                          Padding="10"
-                                          IsHitTestVisible="False"
-                                          TargetSurface="{Binding Source={x:Reference Name=sciChart}}"/>
-        </Border>
+        <s:SciChartPerformanceOverlay Grid.Column="1"
+                                      Margin="0,0,50,0"
+                                      VerticalAlignment="Top"
+                                      Background="#33FFFFFF"
+                                      FontWeight="Bold"
+                                      Foreground="#FFF"
+                                      Padding="10"
+                                      IsHitTestVisible="False"
+                                      TargetSurface="{Binding Source={x:Reference Name=sciChart}}" />
     </Grid>
 </UserControl>

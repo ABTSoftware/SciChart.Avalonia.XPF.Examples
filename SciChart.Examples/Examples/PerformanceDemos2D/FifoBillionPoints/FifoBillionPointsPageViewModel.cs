@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Media;
 using SciChart.Charting.Common.Helpers;
 using SciChart.Charting.Model.ChartSeries;
 using SciChart.Charting.Model.DataSeries;
+using SciChart.Charting3D.RenderableSeries;
 using SciChart.Core.Extensions;
 using SciChart.Examples.ExternalDependencies.Common;
 
@@ -47,10 +46,14 @@ namespace SciChart.Examples.Examples.PerformanceDemos2D.FifoBillionPoints
             AllPointCounts.Add(new PointCount("50 Million", 5, 10_000_000));
 
             // If you have 8GB of RAM or more you can render 100M (will require just 1GB but to be safe...)
-            AllPointCounts.Add(new PointCount("100 Million", 5, 20_000_000));
+            if (SystemMemoryInfo.GetPhysicalMemoryGB() >= 8)
+            {
+                AllPointCounts.Add(new PointCount("100 Million", 5, 20_000_000));
+            }
 
+            // Add further test cases depending on system RAM and 64/32bit status and how much RAM
             // 1 Billion points requires 8GB of free RAM or it will hit swap drive 
-            if (Environment.Is64BitProcess)
+            if (Environment.Is64BitProcess && SystemMemoryInfo.GetPhysicalMemoryGB() >= 16)
             {
                 // Note: these point counts require the experimental VisualXccelerator.EnableImpossibleMode flag set to true on the chart 
                 AllPointCounts.Add(new PointCount("500 Million", 5, 100_000_000));
@@ -64,7 +67,7 @@ namespace SciChart.Examples.Examples.PerformanceDemos2D.FifoBillionPoints
             SelectedPointCount = AllPointCounts.Last();
         }
 
-        public string PerformanceWarnings { get; private set; }
+        public string PerformanceWarnings { get; }
 
         public bool HasWarnings => !string.IsNullOrEmpty(PerformanceWarnings);
 
@@ -175,29 +178,21 @@ namespace SciChart.Examples.Examples.PerformanceDemos2D.FifoBillionPoints
         {
             var seriesColors = new Color[]
             {
-                ColorFromUInt(0xFF50C7E0),
-                ColorFromUInt(0xFFF48420),
-                ColorFromUInt(0xFF882B91),
-                ColorFromUInt(0xFF30BC9A),
-                ColorFromUInt(0xFFEC0F6C),
-                ColorFromUInt(0xFF364BA0),
+                ColorUtil.FromUInt(0xFF50C7E0),
+                ColorUtil.FromUInt(0xFFF48420),
+                ColorUtil.FromUInt(0xFF882B91),
+                ColorUtil.FromUInt(0xFF30BC9A),
+                ColorUtil.FromUInt(0xFFEC0F6C),
+                ColorUtil.FromUInt(0xFF364BA0),
             };
 
-            List<IRenderableSeriesViewModel> result = null;
-            var generateSeriesDataTask = new Task<List<IRenderableSeriesViewModel>>(() =>
+            return await Task.Run(() =>
             {
                 // Create N series of M points async. Return to calling code to set on the chart 
                 IRenderableSeriesViewModel[] series = new IRenderableSeriesViewModel[seriesCount];
 
-                CancellationTokenSource cts = new();
-                ParallelOptions options = new()
-                {
-                    CancellationToken = cts.Token,
-                    MaxDegreeOfParallelism = Environment.ProcessorCount
-                };
-
                 // We generate data in parallel as just generating 1,000,000,000 points takes a long time no matter how fast your chart is! 
-                Parallel.For(0, seriesCount, options, i =>
+                Parallel.For(0, seriesCount, i =>
                 {
                     // Temporary buffer for fast filling of DataSeries
                     var xBuffer = new float[AppendCount];
@@ -206,35 +201,25 @@ namespace SciChart.Examples.Examples.PerformanceDemos2D.FifoBillionPoints
                     var randomSeed = i * short.MaxValue;
                     var randomWalkGenerator = new Rand(randomSeed);
 
-                    XyDataSeries<float, float> xyDataSeries = null;
-                    // Creation of XyDataSeries with Capacity allocates the memory immediately
-                    // Catch any OutOfMemory exceptions
-                    try
+                    var xyDataSeries = new XyDataSeries<float, float>
                     {
-                        xyDataSeries = new XyDataSeries<float, float>
+                        // Required for scrolling / streaming 'first in first out' charts
+                        FifoCapacity = pointCount,
+
+                        Capacity = pointCount,
+
+                        // Optional to improve performance when you know in advance whether 
+                        // data is sorted ascending and contains float.NaN or not 
+                        DataDistributionCalculator = new UserDefinedDistributionCalculator<float, float>
                         {
-                            // Required for scrolling / streaming 'first in first out' charts
-                            FifoCapacity = pointCount,
+                            ContainsNaN = false,
+                            IsEvenlySpaced = true,
+                            IsSortedAscending = true,
+                        },
 
-                            Capacity = pointCount,
-
-                            // Optional to improve performance when you know in advance whether 
-                            // data is sorted ascending and contains float.NaN or not 
-                            DataDistributionCalculator = new UserDefinedDistributionCalculator<float, float>
-                            {
-                                ContainsNaN = false,
-                                IsEvenlySpaced = true,
-                                IsSortedAscending = true,
-                            },
-
-                            // Just associate a random walk generator with the series for more consistent random generation
-                            Tag = randomWalkGenerator
-                        };
-                    }
-                    catch
-                    {
-                        cts.Cancel();
-                    }
+                        // Just associate a random walk generator with the series for more consistent random generation
+                        Tag = randomWalkGenerator
+                    };
 
                     int yOffset = i * 2;
                     for (int j = 0; j < pointCount; j += AppendCount)
@@ -258,25 +243,6 @@ namespace SciChart.Examples.Examples.PerformanceDemos2D.FifoBillionPoints
 
                 return series.ToList();
             });
-
-            // Run the task
-            try
-            {
-                generateSeriesDataTask.Start();
-                result = await generateSeriesDataTask;
-            }
-            catch
-            {
-                // Any exceptions during data generation mean that we cannot proceed
-                result.Clear();
-
-                PerformanceWarnings += "Low system RAM, try on 16GB machine.";
-                        
-                OnPropertyChanged(nameof(PerformanceWarnings));
-                OnPropertyChanged(nameof(HasWarnings));
-            }
-
-            return result;
         }
 
         private static Color GetRandomColor()
@@ -284,25 +250,27 @@ namespace SciChart.Examples.Examples.PerformanceDemos2D.FifoBillionPoints
             return Color.FromRgb(Rand.NextByte(55), Rand.NextByte(55), Rand.NextByte(55));
         }
 
-        private static Color ColorFromUInt(uint color)
+        private string GetPerformanceWarnings()
         {
-            return Color.FromArgb((byte)(color >> 24), (byte)(color >> 16), (byte)(color >> 8), (byte)color);
-        }
-
-        private static string GetPerformanceWarnings()
-        {
-            var warnings = new StringBuilder();
 #if DEBUG
             // Debug mode is the cause of all performance woes. Try release mode?
-            warnings.Append("Debug mode is slow, try Release. ");           
+            var warnings = new List<string> { "Debug mode is slow, try Release." };
+#else
+            var warnings = new List<string>();
 #endif
             if (Debugger.IsAttached)
             {
                 // Its considerably slower to run the code when debugger is attached. Warn the user
-                warnings.Append("Debugger is attached, try without. ");
+                warnings.Add("Debugger is attached, try without.");
             }
 
-            return warnings.ToString();
+            if (SystemMemoryInfo.GetPhysicalMemoryGB() <= 8)
+            {
+                // Hmm, time to upgrade? :) 
+                warnings.Add("Low system RAM, try on 16GB machine.");
+            }
+
+            return warnings.Any() ? "Performance warnings! " + string.Join(" ", warnings) : null;
         }
 
         private void OnPause()
@@ -340,7 +308,7 @@ namespace SciChart.Examples.Examples.PerformanceDemos2D.FifoBillionPoints
             }
 
             // For example purposes, we're including GC.Collect. We don't recommend you do this in a production app
-            await Task.Run(() => GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced));
+            await Task.Run(()=>GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced));
 
             LoadingMessage = null;
         }

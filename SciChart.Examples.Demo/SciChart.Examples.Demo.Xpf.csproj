@@ -1,0 +1,66 @@
+<!-- In Xpf.Sdk 1.6.0, VxTextureBrush renders gradient colors incorrectly -->
+<Project Sdk="Xpf.Sdk/1.4.0-cibuild001853">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFrameworks>net6.0-windows</TargetFrameworks>
+    <UseWPF>True</UseWPF>
+    <UseWindowsForms>True</UseWindowsForms>
+    <ApplicationIcon>SciChartIconAvalonia256x256.ico</ApplicationIcon>
+    <LangVersion>Latest</LangVersion>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <DefineConstants>$(DefineConstants);XPF</DefineConstants>
+    <OutputPath>bin\$(Configuration)</OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <RuntimeHostConfigurationOption Include="AvaloniaUI.Xpf.LicenseKey" Value="YOUR_LICENSE_KEY" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Remove="MainWindow.xaml*" />
+    <Content Remove="MainWindow.xaml*" />
+    <Compile Remove="MainWindow.xaml*" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Helpers\HtmlExport\*" />
+    <None Remove="Helpers\ProjectExport\Templates\*" />
+    <None Remove="Resources\Fonts\*" />
+    <None Remove="Resources\codeStopwords.dat" />
+    <None Remove="Resources\stopwords.dat" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Helpers\HtmlExport\*" />
+    <EmbeddedResource Include="Helpers\ProjectExport\Templates\*" />
+    <EmbeddedResource Include="Resources\codeStopwords.dat" />
+    <EmbeddedResource Include="Resources\stopwords.dat" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Fonts\Marlett.ttf" />
+    <Resource Include="Resources\Fonts\NEUROPOL.ttf" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="DotNetProjects.WpfToolkit.Input" Version="6.0.90" />
+    <PackageReference Include="RestSharp" Version="106.15.0" />
+    <PackageReference Include="MahApps.Metro.IconPacks.Material" Version="4.11.0" />
+    <PackageReference Include="SciChart.Wpf.UI" Version="4.0.271" />
+    <!-- Explicit package to address Xpf vulnerabilities -->
+    <PackageReference Include="System.IO.Packaging" Version="8.0.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SciChart.Examples\SciChart.Examples.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Properties\Settings.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="SciChart.Avalonia.XPF" Version="2.0.0.28304" />
+  </ItemGroup>
+</Project>

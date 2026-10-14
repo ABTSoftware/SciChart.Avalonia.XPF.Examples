@@ -1,9 +1,16 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
+using System.Xml.Serialization;
 using Microsoft.Win32;
+using SciChart.Charting.Common.Extensions;
 using SciChart.Charting.Model.DataSeries;
+using SciChart.Charting.Visuals;
+using SciChart.Charting.Visuals.Axes;
+using SciChart.Charting.Visuals.Axes.LabelProviders;
 using SciChart.Core;
 using SciChart.Examples.ExternalDependencies.Common;
 using SciChart.Examples.ExternalDependencies.Data;
@@ -24,7 +31,7 @@ namespace SciChart.Examples.Examples.ExportAChart.ExportAndScreenshotsChart
         private void OnLoaded_SciChartSurface(object sender, RoutedEventArgs e)
         {
             // Create multiple DataSeries to store OHLC candlestick data, and Xy moving average data
-            var dataSeries0 = new OhlcDataSeries<DateTime, double>() { SeriesName = "Light Blue" };
+            var dataSeries0 = new OhlcDataSeries<DateTime, double>() {SeriesName = "Light Blue"};
             var dataSeries1 = new XyDataSeries<DateTime, double>() { SeriesName = "Violet" };
             var dataSeries2 = new XyDataSeries<DateTime, double>() { SeriesName = "Aqua" };
             var dataSeries3 = new XyDataSeries<DateTime, double>() { SeriesName = "Rosy" };
@@ -58,6 +65,24 @@ namespace SciChart.Examples.Examples.ExportAChart.ExportAndScreenshotsChart
             sciChart.ZoomExtents();
         }
 
+        private void ExportToXPS(object sender, RoutedEventArgs e)
+        {
+            string filePath;
+            if(GetAndCheckPath("XPS | *.xps", out filePath))
+            {
+                sciChart.ExportToFile(filePath, ExportType.Xps, true);
+            }
+        }
+
+        private void ExportToXPSBig(object sender, RoutedEventArgs e)
+        {    
+            string filePath;
+            if(GetAndCheckPath("XPS | *.xps", out filePath))
+            {
+                sciChart.ExportToFile(filePath, ExportType.Xps, true, new Size(2000, 2000));
+            }
+        }
+
         private void ExportToPng(object sender, RoutedEventArgs e)
         {
             if (GetAndCheckPath("PNG | *.png", out string filePath))
@@ -72,6 +97,11 @@ namespace SciChart.Examples.Examples.ExportAChart.ExportAndScreenshotsChart
             {
                 sciChart.ExportToFile(filePath, ExportType.Png, false, new Size(2000, 1500));
             }
+        }
+        
+        private void OnPrintClick(object sender, RoutedEventArgs e)
+        {
+            sciChart.Print();
         }
 
         private static bool GetAndCheckPath(string filter, out string path)

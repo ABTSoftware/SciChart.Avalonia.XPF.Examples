@@ -92,9 +92,9 @@ namespace SciChart.Examples
                 }
                 else
                 {
-                    string exampleFolder = codeFile.Replace("Resources/ExampleSourceFiles/", "");
+                    var exampleFolder = codeFile.Replace("Resources/ExampleSourceFiles/", "");
                     exampleFolder = exampleFolder.Substring(0, exampleFolder.LastIndexOf("/", StringComparison.InvariantCulture));
-                    res.GithubUrl = Urls.GithubExampleRootUrl + exampleFolder;
+                    res.GithubUrl = string.Format("{0}/{1}", Urls.GithubExampleRootUrl.Trim('/'), exampleFolder.Trim('/'));
                 }
 
                 return res;
@@ -110,6 +110,7 @@ namespace SciChart.Examples
             Assembly assembly = typeof(ExampleLoader).Assembly;
 
             var names = assembly.GetManifestResourceNames();
+
             var allExampleSourceFiles = names.Where(x => x.Contains("SciChart.Examples.Examples"));
 
             var find = name.Replace('/', '.').Replace(".txt", string.Empty).Replace("Resources.ExampleSourceFiles.", string.Empty);
@@ -145,8 +146,7 @@ namespace SciChart.Examples
                 using (var s = assembly.GetManifestResourceStream(xmlResource))
                 using (var sr = new StreamReader(s))
                 {
-                    string exampleKeyString = xmlResource.Replace("SciChart.Examples.Resources.ExampleDefinitions.", string.Empty)
-                        .Replace("SciChart.Examples.SL.Resources.ExampleDefinitions.", string.Empty);
+                    string exampleKeyString = xmlResource.Replace("SciChart.Examples.Resources.ExampleDefinitions.", string.Empty);
 
                     string[] chunks = exampleKeyString.Split('.');
                     var exampleKey = new ExampleKey()
@@ -163,7 +163,12 @@ namespace SciChart.Examples
 
         private string Trim(string str, bool skipFirstChar = false)
         {
-            var trimmed = str.Replace("_", " ").Trim();
+            var trimmed = str
+                .Replace("___", " & ")
+                .Replace("_and_", " & ")
+                .Replace("_", " ")
+                .Trim();     
+
             if (skipFirstChar)
             {
                 trimmed = trimmed.Substring(1, trimmed.Length - 1);

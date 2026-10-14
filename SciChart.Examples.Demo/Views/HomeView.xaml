@@ -1,0 +1,46 @@
+﻿<UserControl x:Class="SciChart.Examples.Demo.Views.HomeView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:controls="clr-namespace:SciChart.Examples.Demo.Controls"
+             xmlns:tz="http://schemas.abtsoftware.co.uk/transitionz"
+             xmlns:views="clr-namespace:SciChart.Examples.Demo.Views"
+             AutomationProperties.AutomationId="HomeView">
+
+    <Grid tz:Transitionz.Opacity="{tz:OpacityParams From=0, To=1, Duration=1000, BeginTime=500, TransitionOn=Once}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="350" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <Border Background="{DynamicResource NavigationTreeViewBackgroundBrush}"
+                OpacityMask="{StaticResource VerticalFadeOpacityBrush}" />
+
+        <controls:NavigationTreeView Background="Transparent"
+                                     BorderThickness="0"
+                                     Margin="20,0,0,0"
+                                     ScrollViewer.VerticalScrollBarVisibility="Auto" 
+                                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"                                
+                                     ItemContainerStyle="{StaticResource NavigationTreeViewItemStyle}"
+                                     ItemsSource="{Binding EverythingViewModel.ExampleNodes}"                                 
+                                     SelectedNode="{Binding EverythingViewModel.SelectedExampleNode, Mode=TwoWay}">
+                     
+            <controls:NavigationTreeView.ItemTemplate>
+                <HierarchicalDataTemplate ItemsSource="{Binding Children}">
+                    <TextBlock Text="{Binding Name}"
+                               Margin="0,0,10,0"
+                               VerticalAlignment="Center"
+                               Style="{StaticResource NavigationTreeViewTextBlockStyle}"/>
+                </HierarchicalDataTemplate>
+            </controls:NavigationTreeView.ItemTemplate>
+        </controls:NavigationTreeView>
+
+        <ScrollViewer Grid.Column="1"
+                      BorderThickness="0"
+                      CanContentScroll="False"
+                      VerticalScrollBarVisibility="Auto"
+                      PreviewMouseWheel="EverythingScrollViewer_PreviewMouseWheel"
+                      HorizontalScrollBarVisibility="Disabled">
+            <views:EverythingView />
+        </ScrollViewer>
+    </Grid>
+</UserControl>

@@ -10,13 +10,7 @@
              mc:Ignorable="d">
 
     <UserControl.Resources>
-
-        <DropShadowEffect x:Key="DropShadowEffect"
-                          BlurRadius="5"
-                          Direction="-45"
-                          ShadowDepth="10"
-                          Color="Black" />
-
+        
         <Style x:Key="TooltipStyle1" TargetType="s:TooltipControl">
             <Setter Property="Template">
                 <Setter.Value>
@@ -24,7 +18,6 @@
                         <Border Background="#ff6495ed"
                                 BorderBrush="#ff4d81dd"
                                 BorderThickness="2"
-                                Effect="{StaticResource DropShadowEffect}"
                                 Margin="0,0,10,10"         
                                 Padding="5"
                                 Opacity="0.9">
@@ -43,7 +36,6 @@
                         <Border Background="{StaticResource SecondaryThemeSolidBrush}"
                                 BorderBrush="{StaticResource ExtraThemeStrokeBrush_5}"
                                 BorderThickness="2"
-                                Effect="{StaticResource DropShadowEffect}"
                                 Margin="0,0,10,10"         
                                 Padding="5"
                                 Opacity="0.9">
@@ -61,7 +53,6 @@
                         <Border Background="{StaticResource SecondaryThemeSolidBrush}"
                                 BorderBrush="{StaticResource ExtraThemeStrokeBrush_5}"
                                 BorderThickness="2"
-                                Effect="{StaticResource DropShadowEffect}"
                                 Margin="0,0,10,10"         
                                 Padding="5"
                                 Opacity="0.9">
@@ -234,12 +225,10 @@
                                       ReceiveHandledEvents="True" />
                     <s:TooltipModifier x:Name="TooltipModifier" IsEnabled="False" ReceiveHandledEvents="True" />
                     <s:VerticalSliceModifier IsEnabled="True">
-                        <s:VerticalSliceModifier.VerticalLines>
-                            <s:VerticalLineAnnotation IsEditable="True"
-                                                      LabelPlacement="Axis"
-                                                      ShowLabel="True"
-                                                      X1="1250" />
-                        </s:VerticalSliceModifier.VerticalLines>
+                        <s:VerticalLineAnnotation IsEditable="True"
+                                                  LabelPlacement="Axis"
+                                                  ShowLabel="True"
+                                                  X1="1250" />
                     </s:VerticalSliceModifier>
                 </s:ModifierGroup>
             </s:SciChartSurface.ChartModifier>

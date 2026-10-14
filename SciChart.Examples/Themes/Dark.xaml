@@ -1,6 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:s="http://schemas.abtsoftware.co.uk/scichart">
+                    xmlns:s="http://schemas.abtsoftware.co.uk/scichart"
+                    xmlns:s3D="http://schemas.abtsoftware.co.uk/scichart3D">
 
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/SciChart.Examples.ExternalDependencies;component/Themes/Dark.xaml"/>
@@ -197,7 +198,12 @@
     <Style TargetType="{x:Type s:SciChartParallelCoordinateSurface}">
         <Setter Property="s:ThemeManager.Theme" Value="SciChartv4Dark"/>
     </Style>
-    
+
+    <Style TargetType="{x:Type s3D:SciChart3DSurface}">
+        <Setter Property="IsFpsCounterVisible" Value="False"/>
+        <Setter Property="s:ThemeManager.Theme" Value="SciChartv4Dark"/>
+    </Style>
+
     <Style TargetType="{x:Type s:SciChartOverview}">
         <Setter Property="s:ThemeManager.Theme" Value="SciChartv4Dark"/>
     </Style>

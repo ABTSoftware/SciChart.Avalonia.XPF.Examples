@@ -1,8 +1,0 @@
-{
-  "profiles": {
-    "SciChart.Examples.Demo.Xpf": {
-      "commandName": "Project",
-      "nativeDebugging": true
-    }
-  }
-}
