@@ -1,4 +1,19 @@
-﻿using System;
+﻿// *************************************************************************************
+// SCICHART® Copyright SciChart Ltd. 2011-2026. All rights reserved.
+//
+// Web:     http://www.scichart.com
+// Support: support@scichart.com
+// Sales:   sales@scichart.com
+//
+// SplashView.xaml.cs is part of the SCICHART® Examples. Permission is hereby granted
+// to modify, create derivative works, distribute and publish any part of this source
+// code whether for commercial, private or personal use.
+//
+// The SCICHART® examples are distributed in the hope that they will be useful, but
+// without any warranty. It is provided "AS IS" without warranty of any kind, either
+// expressed or implied.
+// *************************************************************************************
+using System;
 using System.Windows;
 using System.Windows.Controls;
 using SciChart.Core.Extensions;
@@ -12,9 +27,9 @@ namespace SciChart.Examples.Demo.Views
         {
             InitializeComponent();
 #if XPF
-            vTextBlock.Text = $"SciChart Avalonia XPF SDK {SciChartRuntimeInfo.GetVersion()}.";
+            ProductTextRun.Text = $"SciChart Avalonia XPF SDK {SciChartRuntimeInfo.GetVersion()}.";
 #else
-            vTextBlock.Text = $"SciChart WPF SDK {SciChartRuntimeInfo.GetVersion()}.";
+            ProductTextRun.Text = $"SciChart WPF SDK {SciChartRuntimeInfo.GetVersion()}. The World's Fastest WPF Charts.";
 #endif
         }
 

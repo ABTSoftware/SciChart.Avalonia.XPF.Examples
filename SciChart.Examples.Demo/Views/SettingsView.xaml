@@ -29,7 +29,7 @@
             <Setter Property="FontSize" Value="12"/>
         </Style>
     </UserControl.Resources>
-    
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="20"/>
@@ -110,7 +110,7 @@
                         <CheckBox Margin="0,5"
                                   Content="Software (High Speed / Low Quality)"
                                   ToolTip="Render all examples using the High Speed renderer plugin"
-                                  s:ToggleButtonExtensions.GroupName="SettingsRenderGroup" 
+                                  s:ToggleButtonExtensions.GroupName="SettingsRenderGroup"
                                   Style="{StaticResource SettingsCheckBoxStyle}"
                                   IsChecked="{Binding SelectedRenderer, Mode=TwoWay, Converter={StaticResource RendererConverter}, ConverterParameter='HighSpeedRenderSurface'}"
                                   Visibility="{Binding IsSoftwareRendererVisible, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"/>
@@ -132,23 +132,23 @@
                                   IsEnabled="{Binding IsHardwareAccelerated, Mode=OneWay}"
                                   IsChecked="{Binding SelectedRenderer, Mode=TwoWay, Converter={StaticResource RendererConverter}, ConverterParameter='VisualXcceleratorRenderSurface'}"/>
 
+                        <!-- Checked = GPU->CPU readback (most compatible; the default on Windows).
+                             Unchecked = zero-copy present (the default on Linux) -->
                         <CheckBox Margin="25,5"
-                                  Content="Use Alternative Fill Source (DirectX Only)"
-                                  ToolTip="Uses an alternative method (not D3DImage) to render DirectX Content. Can help compatibility issues on some machines"
+                                  Content="Use Alternative Fill Source"
+                                  ToolTip="Checked: read the frame back into a bitmap (most compatible). Unchecked: present the frame without copying it (faster; may not work on certain hardware). Changing this rebuilds the chart surfaces."
                                   AutomationProperties.AutomationId="Settings.UseAlternativeFillSource"
                                   Style="{StaticResource SettingsCheckBoxStyle}"
                                   IsEnabled="{Binding IsVxRenderer, Mode=OneWay}"
-                                  IsChecked="{Binding UseAlternativeFillSource, Mode=TwoWay}"
-                                  Visibility="{Binding IsDirectXActive, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                                  IsChecked="{Binding UseAlternativeFillSource, Mode=TwoWay}"/>
 
                         <CheckBox Margin="25,5"
-                                  Content="Enable Force Wait for GPU (DirectX Only)"
-                                  ToolTip="Enables waiting for GPU before presenting DirectX content to WPF. Can help compatibility issues on some machines"
+                                  Content="Enable Force Wait for GPU"
+                                  ToolTip="Waits for the GPU to finish rendering before presenting each frame. Can help compatibility issues on some machines"
                                   AutomationProperties.AutomationId="Settings.EnableForceWaitForGpu"
                                   Style="{StaticResource SettingsCheckBoxStyle}"
                                   IsEnabled="{Binding IsVxRenderer, Mode=OneWay}"
-                                  IsChecked="{Binding EnableForceWaitForGPU, Mode=TwoWay}"
-                                  Visibility="{Binding IsDirectXActive, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                                  IsChecked="{Binding EnableForceWaitForGPU, Mode=TwoWay}"/>
 
                         <CheckBox Margin="0,5"
                                   Content="Vector (XAML Based)"
@@ -157,64 +157,59 @@
                                   Style="{StaticResource SettingsCheckBoxStyle}"
                                   IsChecked="{Binding SelectedRenderer, Mode=TwoWay, Converter={StaticResource RendererConverter}, ConverterParameter='XamlRenderSurface'}"/>
 
+                        <!-- Dev tools (Dev Mode only): graphics backend (DirectX 11/12, Vulkan/OpenGL) and adapter
+                             selection. Empty in the deployed Demo -->
+
+                        <StackPanel Visibility="{Binding IsDeveloperMode,
+                                                 Source={x:Static ext:DeveloperModManager.Manage},
+                                                 Converter={StaticResource BoolToVisibilityConverter}}">
+
+                            <ContentControl Focusable="False"
+                                            Content="{Binding DevToolsSettings, Mode=OneWay}"/>
+
+                        </StackPanel>
+
                         <!-- DirectX Settings -->
 
                         <StackPanel Visibility="{Binding IsDirectXActive, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
 
-                        <Rectangle Height="1"
-                                   Margin="0,10,0,0"
-                                   Fill="{DynamicResource SettingsViewSeparatorBrush}"
-                                   HorizontalAlignment="Stretch"
-                                   SnapsToDevicePixels="True"
-                                   UseLayoutRounding="True"/>
+                            <Rectangle Height="1"
+                                       Margin="0,10,0,0"
+                                       Fill="{DynamicResource SettingsViewSeparatorBrush}"
+                                       HorizontalAlignment="Stretch"
+                                       SnapsToDevicePixels="True"
+                                       UseLayoutRounding="True"/>
 
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="Visual Xccelerator Engine Settings"
-                                       Style="{StaticResource SettingsGroupHeaderStyle}"/>
-                            <icons:PackIconMaterial Kind="Autorenew"
-                                                    Height="18"
-                                                    Width="18"
-                                                    Margin="5,5,0,0"
-                                                    VerticalAlignment="Center"
-                                                    HorizontalAlignment="Center"
-                                                    Foreground="{DynamicResource SettingsViewForegroundBrush}"
-                                                    Visibility="{Binding IsD3DBusy, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"/>
-                        </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Visual Xccelerator Engine Settings"
+                                           Style="{StaticResource SettingsGroupHeaderStyle}"/>
+                                <icons:PackIconMaterial Kind="Autorenew"
+                                                        Height="18"
+                                                        Width="18"
+                                                        Margin="5,5,0,0"
+                                                        VerticalAlignment="Center"
+                                                        HorizontalAlignment="Center"
+                                                        Foreground="{DynamicResource SettingsViewForegroundBrush}"
+                                                        Visibility="{Binding IsD3DBusy, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                            </StackPanel>
 
                         <StackPanel Orientation="Vertical" IsEnabled="{Binding IsD3DBusy, Mode=OneWay, Converter={StaticResource InverseBoolConverter}}">
 
-                            <CheckBox x:Name="useDirectX11Checkbox"
-                                      Margin="0,5"
-                                      Content="Use DirectX 11"
-                                      ToolTip="Render all 3D Charts (and 2D Charts when VX Engine) using DirectX11 (where available)"
-                                      s:ToggleButtonExtensions.GroupName="DirectXSettingsGroup" 
-                                      Style="{StaticResource SettingsCheckBoxStyle}"
-                                      IsChecked="{Binding UseD3D11, Mode=TwoWay}"
-                                      Visibility="{Binding IsD3DVisible, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                                <CheckBox Margin="0,5"
+                                          Content="AntiAliasing (None)"
+                                          ToolTip="Render all charts without AntiAliasing"
+                                          s:ToggleButtonExtensions.GroupName="AASettingsGroup"
+                                          Style="{StaticResource SettingsCheckBoxStyle}"
+                                          IsChecked="{Binding Use3DAANone, Mode=TwoWay}"/>
 
-                            <CheckBox Margin="0,5"
-                                      Content="Use DirectX 9c"
-                                      ToolTip="Render all 3D Charts (and 2D Charts when VX Engine) using DirectX9 (where available)"
-                                      s:ToggleButtonExtensions.GroupName="DirectXSettingsGroup"
-                                      Style="{StaticResource SettingsCheckBoxStyle}"
-                                      IsChecked="{Binding UseD3D9, Mode=TwoWay}"
-                                      Visibility="{Binding IsD3DVisible, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                                <CheckBox Margin="0,5"
+                                          Content="AntiAliasing (4x MSAA)"
+                                          ToolTip="Render all charts with 4x Multi Sample AntiAliasing"
+                                          s:ToggleButtonExtensions.GroupName="AASettingsGroup"
+                                          Style="{StaticResource SettingsCheckBoxStyle}"
+                                          IsChecked="{Binding Use3DAA4x, Mode=TwoWay}"/>
 
-                            <CheckBox Margin="0,5"
-                                      Content="AntiAliasing (None)"
-                                      ToolTip="Render all charts without AntiAliasing"
-                                      s:ToggleButtonExtensions.GroupName="AASettingsGroup"
-                                      Style="{StaticResource SettingsCheckBoxStyle}"
-                                      IsChecked="{Binding Use3DAANone, Mode=TwoWay}"/>
-
-                            <CheckBox Margin="0,5"
-                                      Content="AntiAliasing (4x MSAA)"
-                                      ToolTip="Render all charts with 4x Multi Sample AntiAliasing"
-                                      s:ToggleButtonExtensions.GroupName="AASettingsGroup"
-                                      Style="{StaticResource SettingsCheckBoxStyle}"
-                                      IsChecked="{Binding Use3DAA4x, Mode=TwoWay}"/>
-
-                        </StackPanel>
+                            </StackPanel>
                         </StackPanel>
 
                         <!-- Viewport 3D Orientation -->
@@ -226,7 +221,7 @@
                                    SnapsToDevicePixels="True"
                                    UseLayoutRounding="True"/>
 
-                        <TextBlock Text="Viewport 3D Orientation" 
+                        <TextBlock Text="Viewport 3D Orientation"
                                    Style="{StaticResource SettingsGroupHeaderStyle}"/>
 
                         <StackPanel Margin="0,5"
@@ -294,17 +289,11 @@
                                   Visibility="{Binding IsSimdVisible, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"/>
 
                         <CheckBox Margin="25,5"
-                                  Content="Enable Impossible mode (Experimental)"
-                                  ToolTip="Enables an experimental mode which gives impossible performance in real-time big-data charts (Billions of points)"
+                                  Content="Enable Impossible mode"
+                                  ToolTip="Enables a mode which gives impossible performance in real-time big-data charts (Billions of points)"
                                   Style="{StaticResource SettingsCheckBoxStyle}"
                                   IsEnabled="{Binding IsChecked, ElementName=EnableCppCheckbox}"
                                   IsChecked="{Binding EnableImpossibleMode, Mode=TwoWay}"/>
-
-                        <CheckBox Margin="0,5"
-                                  Content="Enable Extreme Drawing Manager (Legacy)"
-                                  ToolTip="LEGACY: Superceded by VisualXccelerator engine. Enable / disable extreme drawing manager for faster, more accurate lines drawing"
-                                  Style="{StaticResource SettingsCheckBoxStyle}"
-                                  IsChecked="{Binding EnableExtremeDrawingManager, Mode=TwoWay}"/>
 
                         <!-- Feedback -->
 
@@ -343,7 +332,7 @@
                                   Style="{StaticResource SettingsCheckBoxStyle}"
                                   IsChecked="{Binding IsDeveloperMode, Source={x:Static ext:DeveloperModManager.Manage}}" />
 
-                        <StackPanel Margin="0,10" 
+                        <StackPanel Margin="0,10"
                                     Orientation="Vertical"
                                     HorizontalAlignment="Left"
                                     Visibility="{Binding IsDeveloperMode,

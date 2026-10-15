@@ -10,7 +10,7 @@
     <s3D:SciChart3DSurface x:Name="sciChart3DSurface"
                            WorldDimensions="400,400,400"
                            BorderThickness="0"
-                           s3D:ZxAxisPlane.AxisPlaneVisibilityMode="NegativeSide"
+                           s3D:ZxAxisPlane.AxisPlaneVisibilityMode="AxisPlaneVisibilityNegativeSide"
                            s3D:XyAxisPlane.IsPlaneVisible="False"
                            s3D:ZyAxisPlane.IsPlaneVisible="False">
       <s3D:SciChart3DSurface.Camera>

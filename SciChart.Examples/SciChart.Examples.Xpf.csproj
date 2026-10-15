@@ -1,0 +1,51 @@
+<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+  <PropertyGroup>
+    <AssemblyName>SciChart.Examples</AssemblyName>
+    <RootNamespace>SciChart.Examples</RootNamespace>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <EnableWindowsTargeting>True</EnableWindowsTargeting>
+    <UseWPF>True</UseWPF>
+    <OutputType>Library</OutputType>
+    <LangVersion>Latest</LangVersion>
+    <DefineConstants>$(DefineConstants);XPF</DefineConstants>
+    <OutputPath>bin\$(Configuration)</OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Remove="Resources\ExampleDefinitions\**\*.xml" />
+    <None Remove="Resources\Images\*.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\*.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\ExampleDefinitions\**\*.xml" />
+    <EmbeddedResource Include="Examples\**\*.*" />
+    <EmbeddedResource Include="Themes\**\*.xaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Remove="Resources\ExampleDefinitions\cFeatured_Apps\Performance_Demos_and_Showcases\Audio_Analyzer_Demo.xml" />
+    <EmbeddedResource Remove="Resources\ExampleDefinitions\b2D_Charts\Styling_and_Theming\Use_High_Quality_Rendering.xml" />
+    <EmbeddedResource Remove="Resources\ExampleDefinitions\b2D_Charts\Export_a_Chart\Export_and_Screenshot_Options_in_Chart.xml" />
+    <Page Remove="Examples\SeeFeaturedApplication\AudioAnalyzer\*.*" />
+    <Content Remove="Examples\SeeFeaturedApplication\AudioAnalyzer\*.*" />
+    <Compile Remove="Examples\SeeFeaturedApplication\AudioAnalyzer\*.*" />
+    <EmbeddedResource Remove="Examples\SeeFeaturedApplication\AudioAnalyzer\*.*" />
+    <Page Remove="Examples\StyleAChart\UseHighQualityRendering*.*" />
+    <Content Remove="Examples\StyleAChart\UseHighQualityRendering*.*" />
+    <Compile Remove="Examples\StyleAChart\UseHighQualityRendering*.*" />
+    <EmbeddedResource Remove="Examples\StyleAChart\UseHighQualityRendering*.*" />
+    <Page Remove="Examples\ExportAChart\ExportAndScreenshotsChart\*.*" />
+    <Content Remove="Examples\ExportAChart\ExportAndScreenshotsChart\*.*" />
+    <Compile Remove="Examples\ExportAChart\ExportAndScreenshotsChart\*.*" />
+    <EmbeddedResource Remove="Examples\ExportAChart\ExportAndScreenshotsChart\*.*" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="System.Buffers" Version="4.6.0" />
+    <PackageReference Include="System.Reactive" Version="4.4.1" />
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="SciChart.Avalonia.XPF" Version="3.0.0.10777" />
+  </ItemGroup>
+</Project>

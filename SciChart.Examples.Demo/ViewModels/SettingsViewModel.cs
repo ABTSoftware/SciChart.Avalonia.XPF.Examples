@@ -1,9 +1,25 @@
-﻿using System;
+﻿// *************************************************************************************
+// SCICHART® Copyright SciChart Ltd. 2011-2026. All rights reserved.
+//
+// Web:     http://www.scichart.com
+// Support: support@scichart.com
+// Sales:   sales@scichart.com
+//
+// SettingsViewModel.cs is part of the SCICHART® Examples. Permission is hereby granted
+// to modify, create derivative works, distribute and publish any part of this source
+// code whether for commercial, private or personal use.
+//
+// The SCICHART® examples are distributed in the hope that they will be useful, but
+// without any warranty. It is provided "AS IS" without warranty of any kind, either
+// expressed or implied.
+// *************************************************************************************
+using System;
 using System.Linq;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Data;
+using System.Windows.Threading;
 using SciChart.Charting;
 using SciChart.Charting.Common.AttachedProperties;
 using SciChart.Charting.Common.Extensions;
@@ -14,6 +30,7 @@ using SciChart.Charting3D;
 using SciChart.Core.Utility;
 using SciChart.Data.Numerics.PointResamplers;
 using SciChart.Drawing.VisualXcceleratorRasterizer;
+using SciChart.Examples.Demo.Common;
 using SciChart.Examples.Demo.Common.Converters;
 using SciChart.Examples.Demo.Helpers;
 using SciChart.Examples.Demo.Helpers.Navigation;
@@ -21,7 +38,6 @@ using SciChart.Examples.Examples.HeatmapChartTypes.PolarHeatmapCustomization;
 using SciChart.UI.Bootstrap;
 using SciChart.UI.Reactive;
 using SciChart.UI.Reactive.Observability;
-using FullScreenAntiAliasingMode = SciChart.Drawing.VisualXcceleratorRasterizer.FullScreenAntiAliasingMode;
 
 #if !XPF
 using System.Threading.Tasks;
@@ -49,29 +65,28 @@ namespace SciChart.Examples.Demo.ViewModels
         {
             WithTrait<AllowFeedbackSettingBehaviour>();
 
+            // Engine restarts and RecreateStyles must run on the UI thread; Throttle leaves the
+            // handler on a pool thread. Bound to Application.Current.Dispatcher, not
+            // DispatcherSchedulerEx.Current: this ctor is resolved on a thread-pool thread.
+            var uiScheduler = Application.Current != null
+                ? (IScheduler)new DispatcherSchedulerEx(Application.Current.Dispatcher)
+                : Scheduler.CurrentThread;
+            
             VersionInfo = $"{SciChartRuntimeInfo.GetVersion()} ({SciChartRuntimeInfo.GetTargetFramework()})";
-
+            
             if (VisualXcceleratorEngine.SupportsHardwareAcceleration && !VisualXcceleratorEngine.IsGpuBlacklisted)
             {
                 IsHardwareAccelerated = true;
 
-                if (VisualXcceleratorEngine.ActiveGraphicsAPI == VxGraphicsAPI.DirectX)
+                // Always force wait for draw in UIAutomationTestMode
+                EnableForceWaitForGPU = App.UIAutomationTestMode;
+
+                if (SciChartRuntimeInfo.IsWindowsPlatform)
                 {
                     IsDirectXActive = true;
 
-                    if (!SciChartRuntimeInfo.IsXPF)
-                    {
-                        IsD3DVisible = true;
-
-                        UseD3D9 = VisualXcceleratorEngine.DirectXMode == DirectXMode.DirectX9c;
-                        UseD3D11 = VisualXcceleratorEngine.DirectXMode == DirectXMode.DirectX11;
-
-                        // Always force wait for draw in UIAutomationTestMode 
-                        EnableForceWaitForGPU = App.UIAutomationTestMode;
-                    }
-
-                    Use3DAA4x = VisualXcceleratorEngine.AntiAliasingMode == FullScreenAntiAliasingMode.MSAA4x;
-                    Use3DAANone = VisualXcceleratorEngine.AntiAliasingMode == FullScreenAntiAliasingMode.None;
+                    Use3DAA4x= VisualXcceleratorEngine.GraphicsApiInfo.AntiAliasingMode == FullScreenAntiAliasingMode.MSAA4x;
+                    Use3DAANone = VisualXcceleratorEngine.GraphicsApiInfo.AntiAliasingMode == FullScreenAntiAliasingMode.None;
                 }
             }
 
@@ -83,16 +98,17 @@ namespace SciChart.Examples.Demo.ViewModels
 
             Is3DZAxisUp = false;
             Is3DZAxisUpOverridden = false;
-            UseAlternativeFillSource = true;
+            // Seed from the actual current present mode (the dev tools may have set it from the command
+            // line) instead of hardcoding readback, so the Settings toggle doesn't stomp the requested mode.
+            UseAlternativeFillSource = VisualXcceleratorEngine.UseAlternativeFillSource;
 
             EnableResamplingCPlusPlus = true;
-            EnableExtremeDrawingManager = false;
             EnableImpossibleMode = false;
 
 #if !XPF
             IsSoftwareRendererVisible = true;
             SelectedRenderer = IsHardwareAccelerated
-            	? typeof(VisualXcceleratorRenderSurface)
+                ? typeof(VisualXcceleratorRenderSurface)
                 : typeof(HighSpeedRenderSurface);
 #else
             IsSoftwareRendererVisible = false;
@@ -105,17 +121,17 @@ namespace SciChart.Examples.Demo.ViewModels
                     this.WhenPropertyChanged(x => x.EnableForceWaitForGPU),
                     this.WhenPropertyChanged(x => x.EnableResamplingCPlusPlus),
                     this.WhenPropertyChanged(x => x.EnableImpossibleMode),
-                    this.WhenPropertyChanged(x => x.EnableExtremeDrawingManager),
                     this.WhenPropertyChanged(x => x.SelectedRenderer),
                     Tuple.Create)
                 .Throttle(TimeSpan.FromMilliseconds(100))
+                .ObserveOn(uiScheduler)
                 .Subscribe(tuple =>
                 {
-#if !XPF
-                    Viewport3D.UseAlternativeFillSource = tuple.Item1;
-                    Viewport3D.ForceStallUntilGPUIsIdle = tuple.Item2;
+                    // Both are global and apply to 2D and 3D charts (UseAlternativeFillSource: true = readback,
+                    // false = zero-copy); existing charts switch when they change.
+                    VisualXcceleratorEngine.UseAlternativeFillSource = tuple.Item1;
                     VisualXcceleratorEngine.EnableForceWaitForGPU = tuple.Item2;
-#endif
+
                     RecreateStyles();
                 })
                 .DisposeWith(this);
@@ -123,14 +139,12 @@ namespace SciChart.Examples.Demo.ViewModels
             if (IsDirectXActive)
             {
                 Observable.CombineLatest(
-                        this.WhenPropertyChanged(x => x.UseD3D9),
-                        this.WhenPropertyChanged(x => x.UseD3D11),
                         this.WhenPropertyChanged(x => x.Use3DAANone),
                         this.WhenPropertyChanged(x => x.Use3DAA4x),
                         Tuple.Create)
                     .Skip(1)
                     .Throttle(TimeSpan.FromMilliseconds(100))
-                    .ObserveOn(Scheduler.CurrentThread)
+                    .ObserveOn(uiScheduler)
                     .Subscribe(async tuple =>
                     {
                         try
@@ -139,12 +153,11 @@ namespace SciChart.Examples.Demo.ViewModels
 
                             var renderSettings = new VxRenderSettings
                             {
-#if !XPF
-                                DirectXMode = UseD3D9
-                                    ? DirectXMode.DirectX9c
-                                    : DirectXMode.DirectX11,
-#endif
-                                FullScreenAntiAliasingMode = Use3DAA4x
+                                // Keep the DirectX mode the engine runs with (the dev tools can change it)
+                                DirectXMode = (VisualXcceleratorEngine.GraphicsApiInfo as DirectXGraphicsApiInfo)?.DirectXMode
+                                    ?? DirectXMode.DirectX11,
+                                
+                                FullScreenAntiAliasingMode= Use3DAA4x
                                     ? FullScreenAntiAliasingMode.MSAA4x
                                     : FullScreenAntiAliasingMode.None
                             };
@@ -155,6 +168,11 @@ namespace SciChart.Examples.Demo.ViewModels
 #if !XPF
                                 var task = VisualXcceleratorEngine.RestartEngineAsync(renderSettings);
                                 await Task.WhenAll(task, Task.Delay(1000));
+                                // Keep the 3D engine on the same backend + AA as 2D (Viewport3D has its
+                                // own FullScreenAntiAliasingMode enum). No-ops if already matching.
+                                Viewport3D.Restart3DEngineWith(renderSettings.DirectXMode, Use3DAA4x
+                                        ? FullScreenAntiAliasingMode.MSAA4x
+                                        : FullScreenAntiAliasingMode.None);
 #else
                                 VisualXcceleratorEngine.RestartEngine(renderSettings);
 #endif
@@ -176,6 +194,13 @@ namespace SciChart.Examples.Demo.ViewModels
 
                 })
                 .DisposeWith(this);
+
+#if SCICHART_DEVTOOLS
+            // Dev tools (dev builds only, never deployed): graphics backend and adapter selection. Created on
+            // the UI thread, as this constructor runs on a thread-pool thread
+            Application.Current?.Dispatcher.BeginInvoke(new Action(() =>
+                DevToolsSettings = DevTools.Graphics.GraphicsBackendSettingsView.Create(OnDevToolsEnginesRestarted)));
+#endif
 
             if (!SciChartRuntimeInfo.IsXPF)
             {
@@ -208,25 +233,7 @@ namespace SciChart.Examples.Demo.ViewModels
             set => SetDynamicValue(value);
         }
 
-        public bool IsD3DVisible
-        {
-            get => GetDynamicValue<bool>();
-            set => SetDynamicValue(value);
-        }
-
-        public bool UseD3D11
-        {
-            get => GetDynamicValue<bool>();
-            set => SetDynamicValue(value);
-        }
-
-        public bool UseD3D9
-        {
-            get => GetDynamicValue<bool>();
-            set => SetDynamicValue(value);
-        }
-
-        public bool Use3DAANone
+public bool Use3DAANone
         {
             get => GetDynamicValue<bool>();
             set => SetDynamicValue(value);
@@ -259,6 +266,16 @@ namespace SciChart.Examples.Demo.ViewModels
         public bool IsDropShadowsVisible
         {
             get => GetDynamicValue<bool>();
+            set => SetDynamicValue(value);
+        }
+
+/// <summary>
+        /// The dev tools' graphics backend settings view, shown in Developer Mode. Null unless the Demo is
+        /// built against the SciChart sources with the dev tools (SCICHART_DEVTOOLS).
+        /// </summary>
+        public object DevToolsSettings
+        {
+            get => GetDynamicValue<object>();
             set => SetDynamicValue(value);
         }
 
@@ -299,12 +316,20 @@ namespace SciChart.Examples.Demo.ViewModels
             set => SetDynamicValue(value);
         }
 
-        public bool EnableExtremeDrawingManager
+#if SCICHART_DEVTOOLS
+        // A dev tools backend/adapter change has restarted the engines: rebuild the chart styles so the
+        // surfaces re-create their render targets, and refresh what the Demo shows about the engine.
+        private void OnDevToolsEnginesRestarted()
         {
-            get => GetDynamicValue<bool>();
-            set => SetDynamicValue(value);
+            RecreateStyles();
+
+            // Refresh the "Hardware Acceleration" status label to the new backend.
+            // Dispatched async (off this restart stack) — raising it inline here deadlocks.
+            Application.Current?.Dispatcher.BeginInvoke(DispatcherPriority.Background,
+                () => (ParentViewModel as MainWindowViewModel)?.RefreshHardwareAccelerationInfo());
         }
 
+#endif
         private void RecreateStyles()
         {
             // Default SciChart surfaces
@@ -380,6 +405,10 @@ namespace SciChart.Examples.Demo.ViewModels
             set => SetDynamicValue(value);
         }
 
+        /// <summary>
+        /// This callback is called every time when the SettingsView is opened. It can be used to disable some settings for certain examples.
+        /// At the moment, the Z-Axis Up feature is disabled in some examples.
+        /// </summary>
         public void OnIsVisibleChanged(bool isVisible)
         {
             if (!isVisible) return;
@@ -388,7 +417,8 @@ namespace SciChart.Examples.Demo.ViewModels
 
             if (Navigator.Instance.CurrentPage is ExamplesHostAppPage)
             {
-                Is3DZAxisUpOverridden = Navigator.Instance.CurrentExample.Uri.Contains("ZAxisUp3D");
+                Is3DZAxisUpOverridden = Navigator.Instance.CurrentExample.Uri.Contains("ZAxisUp3D") ||
+                                        Navigator.Instance.CurrentExample.Uri.Contains("Antenna3DRadiationPattern");
             }
             else
             {
@@ -411,7 +441,6 @@ namespace SciChart.Examples.Demo.ViewModels
             overrideStyle.Setters.Add(new Setter(VisualXcceleratorEngine.EnableImpossibleModeProperty, EnableImpossibleMode));
 
             overrideStyle.Setters.Add(new Setter(PerformanceHelper.EnableExtremeResamplersProperty, EnableResamplingCPlusPlus));
-            overrideStyle.Setters.Add(new Setter(PerformanceHelper.EnableExtremeDrawingManagerProperty, EnableExtremeDrawingManager));
 
             var currentTheme = "SciChartv7Navy";
 

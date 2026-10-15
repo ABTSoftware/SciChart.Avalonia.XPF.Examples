@@ -1,7 +1,7 @@
-﻿<ExampleDefinition xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<ExampleDefinition xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<View>Examples/PerformanceDemos2D/OilAndGas/OilAndGasWellsExampleView.xaml</View>
 	<ViewModel>Examples.PerformanceDemos2D.OilAndGas.OilAndGasWellsExampleViewModel</ViewModel>
-	<ImagePath>/SciChart.Examples;component/Resources/Images/OilGasChart.png</ImagePath>
+	<ImagePath>/SciChart.Examples;component/Resources/Images/OilGasChart.jpg</ImagePath>
 	<IconPath>IconRealtime</IconPath>
 	<Description>
 		A common use case in [b]Oil and Gas exploration[/b] is to visualize dashboards of charts arranged vertically. These are used to visualize parameters such as missing drill speed, rock type or hardness, temperature and pressure with increasing well depth.

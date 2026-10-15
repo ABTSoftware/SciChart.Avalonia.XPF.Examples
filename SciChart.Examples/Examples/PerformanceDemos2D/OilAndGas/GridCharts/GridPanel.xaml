@@ -66,7 +66,8 @@
                     <s:SciChartSurface Margin="4"
                                        RenderableSeries="{s:SeriesBinding RenderableSeries}"
                                        XAxes="{s:AxesBinding XAxes}"
-                                       YAxes="{s:AxesBinding YAxes}" />
+                                       YAxes="{s:AxesBinding YAxes}">
+                    </s:SciChartSurface>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>

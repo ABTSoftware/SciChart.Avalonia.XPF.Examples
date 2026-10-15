@@ -1,8 +1,8 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <ExampleDefinition xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <View>Examples/ExportAChart/ExportAndScreenshotsChart/ExportAndScreenshotOptionsChart.xaml</View>
   <ViewModel />
-	<ImagePath>/SciChart.Examples;component/Resources/Images/ExportChart.png</ImagePath>
+	<ImagePath>/SciChart.Examples;component/Resources/Images/ExportChart.jpg</ImagePath>
   <IconPath>IconCandlestick</IconPath>
   <ToolTipDescription>Shows how to use chart printing option and export to XPS and PNG</ToolTipDescription>
   <Description>

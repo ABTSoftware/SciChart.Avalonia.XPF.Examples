@@ -10,19 +10,20 @@
              mc:Ignorable="d">
 
     <UserControl.Resources>
-        
+
         <Style x:Key="TooltipStyle1" TargetType="s:TooltipControl">
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="s:TooltipControl">
-                        <Border Background="#ff6495ed"
-                                BorderBrush="#ff4d81dd"
+                        <Border Background="#D06495ED"
+                                BorderBrush="#FF4D81DD"
                                 BorderThickness="2"
+                                CornerRadius="5"
                                 Margin="0,0,10,10"         
-                                Padding="5"
-                                Opacity="0.9">
+                                Padding="5">
 
-                            <ContentPresenter Content="{TemplateBinding DataContext}" ContentTemplate="{TemplateBinding ContentTemplate}" />
+                            <ContentPresenter Content="{TemplateBinding DataContext}"
+                                              ContentTemplate="{TemplateBinding ContentTemplate}" />
                         </Border>
                     </ControlTemplate>
                 </Setter.Value>
@@ -33,13 +34,15 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="s:TooltipControl">
-                        <Border Background="{StaticResource SecondaryThemeSolidBrush}"
-                                BorderBrush="{StaticResource ExtraThemeStrokeBrush_5}"
+                        <Border Background="#D0F48420"
+                                BorderBrush="#FFFF8305"
                                 BorderThickness="2"
+                                CornerRadius="5"
                                 Margin="0,0,10,10"         
-                                Padding="5"
-                                Opacity="0.9">
-                            <ContentPresenter Content="{TemplateBinding DataContext}" ContentTemplate="{TemplateBinding ContentTemplate}" />
+                                Padding="5">
+                            
+                            <ContentPresenter Content="{TemplateBinding DataContext}"
+                                              ContentTemplate="{TemplateBinding ContentTemplate}" />
                         </Border>
                     </ControlTemplate>
                 </Setter.Value>
@@ -50,16 +53,18 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="s:CursorLabelControl">
-                        <Border Background="{StaticResource SecondaryThemeSolidBrush}"
-                                BorderBrush="{StaticResource ExtraThemeStrokeBrush_5}"
+                        <Border Background="#D030BC9A"
+                                BorderBrush="#FF30BC9A"
                                 BorderThickness="2"
+                                CornerRadius="5"
                                 Margin="0,0,10,10"         
-                                Padding="5"
-                                Opacity="0.9">
-                            <ItemsControl Margin="6" ItemsSource="{Binding DataContext.SeriesData.SeriesInfo, RelativeSource={RelativeSource TemplatedParent}}">
+                                Padding="5">
+                            
+                            <ItemsControl ItemsSource="{Binding DataContext.SeriesData.SeriesInfo, RelativeSource={RelativeSource TemplatedParent}}">
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate DataType="s:SeriesInfo">
-                                        <ContentControl Content="{Binding}" ContentTemplate="{Binding Path=RenderableSeries.(s:CursorModifier.TooltipTemplate)}" />
+                                        <ContentControl Content="{Binding}"
+                                                        ContentTemplate="{Binding Path=RenderableSeries.(s:CursorModifier.TooltipTemplate)}" />
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
@@ -71,28 +76,38 @@
 
         <Style x:Key="CursorLineStyle" TargetType="Line">
             <Setter Property="StrokeThickness" Value="1" />
-            <Setter Property="Stroke" Value="{StaticResource ExtraThemeStrokeBrush_2}" />
+            <Setter Property="Stroke" Value="#FF30BC9A" />
         </Style>
 
         <Style x:Key="CursorAxisLabelStyle" TargetType="s:AxisLabelControl">
-            <Setter Property="Background" Value="{StaticResource ExtraThemeStrokeBrush_4}" />
-            <Setter Property="Foreground" Value="White" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="s:AxisLabelControl">
+                        <Border Background="#FF364BA0"
+                                BorderThickness="0"
+                                CornerRadius="5"
+                                Padding="5,2">
+
+                            <ContentPresenter Content="{TemplateBinding DataContext}"
+                                              ContentTemplate="{TemplateBinding ContentTemplate}" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
         </Style>
 
-        <!--  Label used in cursors  -->
         <Style x:Key="HintDataItemsStyle" TargetType="TextBlock">
             <Setter Property="Foreground" Value="White" />
-            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="FontWeight" Value="SemiBold" />
             <Setter Property="FontFamily" Value="Arial" />
             <Setter Property="FontSize" Value="13" />
-            <Setter Property="Margin" Value="3,2,2,2" />
+            <Setter Property="Margin" Value="2" />
         </Style>
-
 
         <DataTemplate x:Key="RolloverTooltipTemplate1" DataType="s:SeriesInfo">
             <StackPanel Orientation="Vertical">
                 <TextBlock Style="{StaticResource HintDataItemsStyle}" Text="RM" />
-                <TextBlock Style="{StaticResource HintDataItemsStyle}" Text="{Binding SeriesName, StringFormat='{}{0}:'}" />
+                <TextBlock Style="{StaticResource HintDataItemsStyle}" Text="{Binding SeriesName}" />
                 <TextBlock Style="{StaticResource HintDataItemsStyle}" Text="{Binding FormattedYValue}" />
             </StackPanel>
         </DataTemplate>
@@ -100,15 +115,15 @@
         <DataTemplate x:Key="RolloverTooltipTemplate2" DataType="s:SeriesInfo">
             <StackPanel Orientation="Vertical">
                 <TextBlock Style="{StaticResource HintDataItemsStyle}" Text="{Binding FormattedYValue}" />
-                <TextBlock Style="{StaticResource HintDataItemsStyle}" Text="{Binding SeriesName, StringFormat='{}{0}:'}" />
+                <TextBlock Style="{StaticResource HintDataItemsStyle}" Text="{Binding SeriesName}" />
                 <TextBlock Style="{StaticResource HintDataItemsStyle}" Text="RM" />
             </StackPanel>
         </DataTemplate>
 
         <DataTemplate x:Key="VerticalSliceTooltipTemplate1" DataType="s:SeriesInfo">
             <StackPanel Orientation="Vertical">
-                <TextBlock Style="{StaticResource HintDataItemsStyle}" Text="VCM" />
-                <TextBlock Style="{StaticResource HintDataItemsStyle}" Text="{Binding SeriesName, StringFormat='{}{0}:'}" />
+                <TextBlock Style="{StaticResource HintDataItemsStyle}" Text="VSM" />
+                <TextBlock Style="{StaticResource HintDataItemsStyle}" Text="{Binding SeriesName}" />
                 <TextBlock Style="{StaticResource HintDataItemsStyle}" Text="{Binding FormattedYValue}" />
             </StackPanel>
         </DataTemplate>
@@ -116,8 +131,8 @@
         <DataTemplate x:Key="VerticalSliceTooltipTemplate2" DataType="s:SeriesInfo">
             <StackPanel Orientation="Vertical">
                 <TextBlock Style="{StaticResource HintDataItemsStyle}" Text="{Binding FormattedYValue}" />
-                <TextBlock Style="{StaticResource HintDataItemsStyle}" Text="{Binding SeriesName, StringFormat='{}{0}:'}" />
-                <TextBlock Style="{StaticResource HintDataItemsStyle}" Text="VCM" />
+                <TextBlock Style="{StaticResource HintDataItemsStyle}" Text="{Binding SeriesName}" />
+                <TextBlock Style="{StaticResource HintDataItemsStyle}" Text="VSM" />
             </StackPanel>
         </DataTemplate>
 
@@ -139,7 +154,7 @@
 
         <DataTemplate x:Key="CursorTooltipTemplate1" DataType="s:SeriesInfo">
             <StackPanel Orientation="Horizontal">
-                <TextBlock Style="{StaticResource HintDataItemsStyle}" Text="{Binding SeriesName, StringFormat='{}{0} - '}" />
+                <TextBlock Style="{StaticResource HintDataItemsStyle}" Text="{Binding SeriesName, StringFormat='{}{0}  '}" />
                 <TextBlock Style="{StaticResource HintDataItemsStyle}" Text="{Binding FormattedYValue, StringFormat='{}Y : {0}'}" />
                 <TextBlock Style="{StaticResource HintDataItemsStyle}" Text="{Binding FormattedXValue, StringFormat='{}X : {0}'}" />
             </StackPanel>
@@ -147,16 +162,27 @@
 
         <DataTemplate x:Key="CursorTooltipTemplate2" DataType="s:SeriesInfo">
             <StackPanel Orientation="Horizontal">
-                <TextBlock Style="{StaticResource HintDataItemsStyle}" Text="{Binding SeriesName, StringFormat='{}{0} - '}" />
+                <TextBlock Style="{StaticResource HintDataItemsStyle}" Text="{Binding SeriesName, StringFormat='{}{0}  '}" />
                 <TextBlock Style="{StaticResource HintDataItemsStyle}" Text="{Binding FormattedXValue, StringFormat='{}X : {0}'}" />
                 <TextBlock Style="{StaticResource HintDataItemsStyle}" Text="{Binding FormattedYValue, StringFormat='{}Y : {0}'}" />
             </StackPanel>
         </DataTemplate>
 
-
         <Style x:Key="AxisLabelStyle" TargetType="s:AxisLabelControl">
-            <Setter Property="Background" Value="{StaticResource MainThemeTransparentSolidBrush}" />
-            <Setter Property="BorderBrush" Value="{StaticResource MainThemeSolidBrush}" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="s:AxisLabelControl">
+                        <Border Background="#66F6086C"
+                                BorderThickness="0"
+                                CornerRadius="5"
+                                Padding="5,2">
+
+                            <ContentPresenter Content="{TemplateBinding DataContext}"
+                                              ContentTemplate="{TemplateBinding ContentTemplate}" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
         </Style>
 
         <DataTemplate x:Key="AxisLabelTemplate" DataType="s:AxisInfo">
@@ -206,7 +232,8 @@
             </s:SciChartSurface.XAxes>
 
             <s:SciChartSurface.YAxes>
-                <s:NumericAxis GrowBy="0.05, 0.05" />
+                <s:NumericAxis GrowBy="0.05, 0.05"
+                               s:CursorModifier.AxisLabelContainerStyle="{StaticResource CursorAxisLabelStyle}"/>
             </s:SciChartSurface.YAxes>
 
             <s:SciChartSurface.ChartModifier>

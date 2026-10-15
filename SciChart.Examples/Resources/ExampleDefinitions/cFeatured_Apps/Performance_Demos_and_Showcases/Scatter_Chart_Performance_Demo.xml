@@ -1,7 +1,7 @@
-﻿<ExampleDefinition xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<ExampleDefinition xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <View>Examples/PerformanceDemos2D/ScatterPerf/ScatterChartPerformanceTest.xaml</View>
   <ViewModel></ViewModel>
-	<ImagePath>/SciChart.Examples;component/Resources/Images/ScatterChartPerformanceDemo.png</ImagePath>
+	<ImagePath>/SciChart.Examples;component/Resources/Images/ScatterChartPerformanceDemo.jpg</ImagePath>
   <IconPath>IconRealtime</IconPath>
   <ToolTipDescription>
     Demonstrates the performance of SciChart's XyScatterRenderableSeries by loading 1,000,000 scatter chart points.

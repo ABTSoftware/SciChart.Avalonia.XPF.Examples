@@ -1,7 +1,7 @@
-﻿<ExampleDefinition xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<ExampleDefinition xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <View>Examples/ModifyAxisBehaviour/QuadLeftRightAxes.xaml</View>
   <ViewModel />
-	<ImagePath>/SciChart.Examples;component/Resources/Images/MultipleYAxis.png</ImagePath>
+	<ImagePath>/SciChart.Examples;component/Resources/Images/MultipleYAxis.jpg</ImagePath>
   <IconPath>IconAxis3D</IconPath>
   <ToolTipDescription>Demonstrates a line chart with four series and double left / right Y-Axis. SciChart supports multiple left and right Y-Axes and this example shows in a simple way how to register a line series on each axis</ToolTipDescription>
   <Description>

@@ -1,0 +1,30 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="Icons.xaml"/>
+        <ResourceDictionary Source="OpacityMask.xaml"/>
+        <ResourceDictionary Source="TextBlock.xaml"/>
+        <ResourceDictionary Source="AnimatedImage.xaml"/>
+        <ResourceDictionary Source="Buttons.xaml"/>
+        <ResourceDictionary Source="Breadcrumb.xaml"/>
+        <ResourceDictionary Source="EndlessItemsControl.xaml"/>
+        <ResourceDictionary Source="Hyperlink.xaml"/>
+        <ResourceDictionary Source="ListBox.xaml"/>
+        <ResourceDictionary Source="NavigationTabControl.xaml"/>
+        <ResourceDictionary Source="Scrollbars.xaml"/>
+        <ResourceDictionary Source="ShowcaseControl.xaml"/>
+        <ResourceDictionary Source="Tile.xaml"/>
+        <ResourceDictionary Source="TransitioningFrame.xaml"/>
+        <ResourceDictionary Source="WatermarkedAutocomplete.xaml"/>
+        <ResourceDictionary Source="TreeView.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
+
+    <Style TargetType="CheckBox" BasedOn="{StaticResource ToolbarPopupCheckBoxStyle}"/>
+    <Style TargetType="ComboBox" BasedOn="{StaticResource ToolbarPopupComboBoxStyle}"/>
+    <Style TargetType="DatePicker" BasedOn="{StaticResource ToolbarPopupDatePickerStyle}"/>
+    <Style TargetType="RadioButton" BasedOn="{StaticResource ToolbarPopupRadioButtonStyle}"/>
+    <Style TargetType="Slider" BasedOn="{StaticResource ToolbarPopupSliderStyle}"/>
+    <Style TargetType="TextBox" BasedOn="{StaticResource ToolbarPopupTextBoxStyle}"/>
+
+</ResourceDictionary>

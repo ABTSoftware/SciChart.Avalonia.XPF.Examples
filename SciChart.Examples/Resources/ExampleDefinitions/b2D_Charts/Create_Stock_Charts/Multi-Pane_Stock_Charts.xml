@@ -1,9 +1,9 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <ExampleDefinition xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <View>Examples/CreateStockCharts/MultiPane/CreateMultiPaneStockCharts.xaml</View>
   <ViewModel>Examples.CreateStockCharts.MultiPane.CreateMultiPaneStockChartsViewModel</ViewModel>
   <ViewModel />
-	<ImagePath>/SciChart.Examples;component/Resources/Images/MultiPaneStockChart.png</ImagePath>
+	<ImagePath>/SciChart.Examples;component/Resources/Images/MultiPaneStockChart.jpg</ImagePath>
   <IconPath>IconCandlestick</IconPath>
   <ToolTipDescription>Using the SciChartGroup and SciStockChart control, create's a static multi-pane stock chart with Indicator and Volume panes</ToolTipDescription>
   <Description>

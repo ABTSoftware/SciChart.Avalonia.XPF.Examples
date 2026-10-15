@@ -1,17 +1,17 @@
 ﻿// *************************************************************************************
-// SCICHART® Copyright SciChart Ltd. 2011-2025. All rights reserved.
-//  
-// Web: http://www.scichart.com
-//   Support: support@scichart.com
-//   Sales:   sales@scichart.com
-// 
+// SCICHART® Copyright SciChart Ltd. 2011-2026. All rights reserved.
+//
+// Web:     http://www.scichart.com
+// Support: support@scichart.com
+// Sales:   sales@scichart.com
+//
 // CubeGeometry.cs is part of the SCICHART® Examples. Permission is hereby granted
 // to modify, create derivative works, distribute and publish any part of this source
-// code whether for commercial, private or personal use. 
-// 
+// code whether for commercial, private or personal use.
+//
 // The SCICHART® examples are distributed in the hope that they will be useful, but
 // without any warranty. It is provided "AS IS" without warranty of any kind, either
-// expressed or implied. 
+// expressed or implied.
 // *************************************************************************************
 using System.Linq;
 using System.Windows.Media;
@@ -106,24 +106,14 @@ namespace SciChart.Examples.Examples.Charts3D.Customize3DChart.AddGeometry3D
             eSCRTUpAxis upaxis = VXccelEngine3D.GetUpAxis();
             // We create a mesh context. There are various mesh render modes. The simplest is Triangles
             // For this mode we have to draw a single triangle (three vertices) for each corner of the cube
-            using (var meshContext = BeginLitMesh(TSRRenderMode.TRIANGLES))
+            eSCRTCullMode cullMode = (upaxis == eSCRTUpAxis.Z_UP) ? eSCRTCullMode.SCRTCullModeFront : eSCRTCullMode.SCRTCullModeBack;
+            using (var meshContext = BeginLitMesh(cullMode, TSRRenderMode.TRIANGLES))
             {
-                // Set the Rasterizer State for this entity 
-                if (upaxis == eSCRTUpAxis.Z_UP)
-                {
-                    VXccelEngine3D.PushRasterizerState(RasterizerStates.Default.TSRRasterizerState);
-                }
-                else
-                {
-                    VXccelEngine3D.PushRasterizerState(RasterizerStates.CullBackFacesState.TSRRasterizerState);
-                }
-                
                 // Set the color before drawing vertices
                 meshContext.SetVertexColor(_cubeColor);
             
                 // Pass Entity ID value for a hit test purpose
-                ulong selectionColor = VXccelEngine3D.EncodeSelectionId(EntityId, 0);
-                meshContext.SetSelectionId(selectionColor);
+                meshContext.SetSelectionId(EntityId);
 
                 // Now draw the triangles. Each face of the cube is made up of two triangles
                 // Front face
@@ -181,11 +171,6 @@ namespace SciChart.Examples.Examples.Charts3D.Customize3DChart.AddGeometry3D
                 SetVertex(meshContext, corners[4]);
             }
 
-            // Revert raster state
-            VXccelEngine3D.PopRasterizerState();
-
-            // Set the Rasterizer State for the cube mesh wireframe 
-            VXccelEngine3D.PushRasterizerState(RasterizerStates.WireframeState.TSRRasterizerState);
 
             // Create a Line Context for a continuous line and draw the outline of the cube 
             var lineColor = Color.FromArgb(0xFF, _cubeColor.R, _cubeColor.G, _cubeColor.B);
@@ -194,9 +179,6 @@ namespace SciChart.Examples.Examples.Charts3D.Customize3DChart.AddGeometry3D
             CreateSquare(2.0f, true, lineColor, new[] { corners[4], corners[5], corners[6], corners[7] });
             CreateSquare(2.0f, true, lineColor, new[] { corners[0], corners[4], corners[7], corners[3] });
             CreateSquare(2.0f, true, lineColor, new[] { corners[5], corners[1], corners[2], corners[6] });
-
-            // Revert raster state
-            VXccelEngine3D.PopRasterizerState();
         }
 
         private void CreateSquare(float lineThickness, bool isAntiAlias, Color lineColor, Vector3[] vertices)
@@ -206,8 +188,7 @@ namespace SciChart.Examples.Examples.Charts3D.Customize3DChart.AddGeometry3D
                 lineContext.SetVertexColor(lineColor);
 
                 // Pass Entity ID value for a hit test purpose
-                ulong selectionColor = VXccelEngine3D.EncodeSelectionId(EntityId, 0);
-                lineContext.SetSelectionId(selectionColor);
+                lineContext.SetSelectionId(EntityId);
 
                 foreach (var v in vertices)
                 {

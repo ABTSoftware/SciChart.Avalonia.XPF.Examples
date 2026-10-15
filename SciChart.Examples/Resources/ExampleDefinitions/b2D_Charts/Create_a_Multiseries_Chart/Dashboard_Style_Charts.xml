@@ -1,7 +1,7 @@
-﻿<ExampleDefinition xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<ExampleDefinition xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <View>Examples/CreateMultiseriesChart/DashboardStyleCharts/DashboardStyleChartsView.xaml</View>
   <ViewModel>Examples.CreateMultiseriesChart.DashboardStyleCharts.DashboardStyleChartsViewModel</ViewModel>
-	<ImagePath>/SciChart.Examples;component/Resources/Images/DashboardStyleCharts.png</ImagePath>
+	<ImagePath>/SciChart.Examples;component/Resources/Images/DashboardStyleCharts.jpg</ImagePath>
   <IconPath>IconStackedColumn</IconPath>
   <ToolTipDescription>Shows how to dynamically change type of chart</ToolTipDescription>
   <Description>
@@ -33,7 +33,7 @@
     <string>Resources/ExampleSourceFiles/CreateMultiseriesChart/DashboardStyleCharts/DashboardStyleChartsViewModel.cs.txt</string>
     <string>Resources/ExampleSourceFiles/CreateMultiseriesChart/DashboardStyleCharts/ExampleListBoxStyle.xaml.txt</string>
     <string>Resources/ExampleSourceFiles/CreateMultiseriesChart/DashboardStyleCharts/LabelForegroundConverter.cs.txt</string>
-    <string>Resources/ExampleSourceFiles/CreateMultiseriesChart/DashboardStyleCharts/RenderebleSeriesStyles.xaml.txt</string>
+    <string>Resources/ExampleSourceFiles/CreateMultiseriesChart/DashboardStyleCharts/RenderableSeriesStyles.xaml.txt</string>
     <string>Resources/ExampleSourceFiles/CreateMultiseriesChart/DashboardStyleCharts/SpacingModeToMaximumSpacingConverter.cs.txt</string>
   </CodeFiles>
   <Features>

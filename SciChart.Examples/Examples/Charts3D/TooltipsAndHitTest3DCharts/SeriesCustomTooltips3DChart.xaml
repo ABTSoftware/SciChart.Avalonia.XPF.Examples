@@ -8,15 +8,17 @@
              xmlns:t3D="clr-namespace:SciChart.Charting3D.Modifiers.Tooltip3D;assembly=SciChart.Charting3D">
 
     <UserControl.Resources>
+
         <Style x:Key="TooltipStyle" TargetType="s:TooltipControl">
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="s:TooltipControl">
-                        <Border Background="#ff6495ed"
-                                BorderBrush="#ff4d81dd"
+                        <Border Background="#D06495ED"
+                                BorderBrush="#FF4D81DD"
                                 BorderThickness="2"
-                                Opacity="0.9"
-                                Padding="5">
+                                CornerRadius="5"
+                                Margin="0,0,10,10"         
+                                Padding="5,2">
 
                             <ContentPresenter Content="{TemplateBinding DataContext}"
                                               ContentTemplate="{TemplateBinding ContentTemplate}" />
@@ -28,31 +30,25 @@
 
         <DataTemplate x:Key="XyzSeriesTooltipTemplate" DataType="cd:BaseXyzSeriesInfo3D">
             <StackPanel>
-                <TextBlock>
-                    <Run FontWeight="Bold" Text="This is the Custom tooltip DataTemplate" />
+                <TextBlock Margin="0,2">
+                    <Run FontWeight="Bold" Text="Custom Tooltip DataTemplate" />
                 </TextBlock>
-                <StackPanel Orientation="Vertical">
-                    <TextBlock>
-                        <Run FontWeight="Bold" Text="VertexId: " />
-                        <Run Text="{Binding VertexId}" />
-                    </TextBlock>
-                    <TextBlock>
-                        <Run FontWeight="Bold" Text="PointMetadata: " />
-                        <Run Text="{Binding PointMetadata.Tag}" />
-                    </TextBlock>
-                    <TextBlock>
-                        <Run FontWeight="Bold" Text="X: " />
-                        <Run Text="{Binding FormattedXValue, Mode=OneWay}" />
-                    </TextBlock>
-                    <TextBlock>
-                        <Run FontWeight="Bold" Text="Y: " />
-                        <Run Text="{Binding FormattedYValue, Mode=OneWay}" />
-                    </TextBlock>
-                    <TextBlock>
-                        <Run FontWeight="Bold" Text="Z: " />
-                        <Run Text="{Binding FormattedZValue, Mode=OneWay}" />
-                    </TextBlock>
-                </StackPanel>
+                <TextBlock Margin="0,2">
+                    <Run FontWeight="Bold" Text="VertexId: " />
+                    <Run FontWeight="Normal" Text="{Binding VertexId}" />
+                </TextBlock>
+                <TextBlock Margin="0,2">
+                    <Run FontWeight="Bold" Text="X: " />
+                    <Run FontWeight="Normal" Text="{Binding FormattedXValue, Mode=OneWay}" />
+                </TextBlock>
+                <TextBlock Margin="0,2">
+                    <Run FontWeight="Bold" Text="Y: " />
+                    <Run FontWeight="Normal" Text="{Binding FormattedYValue, Mode=OneWay}" />
+                </TextBlock>
+                <TextBlock Margin="0,2">
+                    <Run FontWeight="Bold" Text="Z: " />
+                    <Run FontWeight="Normal" Text="{Binding FormattedZValue, Mode=OneWay}" />
+                </TextBlock>
             </StackPanel>
         </DataTemplate>
 

@@ -1,8 +1,8 @@
-﻿<ExampleDefinition xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<ExampleDefinition xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Title>Impulse (Stem) chart</Title>
   <View>Examples/CreateSimpleChart/ImpulseChartExampleView.xaml</View>
   <ViewModel />
-	<ImagePath>/SciChart.Examples;component/Resources/Images/ImpulseStemChart.png</ImagePath>
+	<ImagePath>/SciChart.Examples;component/Resources/Images/ImpulseStemChart.jpg</ImagePath>
   <IconPath>IconImpulse</IconPath>
   <ToolTipDescription>Generates an Impulse-reseponse style chart with optional point-marker in code</ToolTipDescription>
   <Description>

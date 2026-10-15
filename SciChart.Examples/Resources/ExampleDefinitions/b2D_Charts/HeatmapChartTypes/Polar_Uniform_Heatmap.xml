@@ -1,7 +1,7 @@
-﻿<ExampleDefinition xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<ExampleDefinition xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<View>Examples/HeatmapChartTypes/PolarUniformHeatmap/PolarUniformHeatmap.xaml</View>
 	<ViewModel/>
-	<ImagePath>/SciChart.Examples;component/Resources/Images/PolarUniformHeatmap.png</ImagePath>
+	<ImagePath>/SciChart.Examples;component/Resources/Images/PolarUniformHeatmap.jpg</ImagePath>
 	<IconPath>IconHeat</IconPath>
 	<ToolTipDescription>Demonstrates how to create a Polar Uniform Heatmap using SciChart. Accepts a 2D Array of data and has a user-defined color map which can be displayed as a legend over the chart.</ToolTipDescription>
 	<Description>

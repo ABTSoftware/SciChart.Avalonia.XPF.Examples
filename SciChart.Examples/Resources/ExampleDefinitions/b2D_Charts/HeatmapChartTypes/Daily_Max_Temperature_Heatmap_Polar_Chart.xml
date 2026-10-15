@@ -1,7 +1,7 @@
-﻿<ExampleDefinition xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<ExampleDefinition xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<View>Examples/HeatmapChartTypes/PolarHeatmapCustomization/DailyMaxTemperatureHeatmapView.xaml</View>
 	<ViewModel/>
-	<ImagePath>/SciChart.Examples;component/Resources/Images/PolarUniformHeatmapMaxDailyTemperature.png</ImagePath>
+	<ImagePath>/SciChart.Examples;component/Resources/Images/PolarUniformHeatmapMaxDailyTemperature.jpg</ImagePath>
 	<IconPath>IconHeat</IconPath>
 	<ToolTipDescription>Demonstrates how to use SciChart, specifically a Polar Uniform Heatmap to visualize real-world heatmap data.</ToolTipDescription>
 	<Description>
