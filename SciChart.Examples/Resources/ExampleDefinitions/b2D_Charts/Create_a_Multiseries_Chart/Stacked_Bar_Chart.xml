@@ -1,9 +1,9 @@
-﻿<ExampleDefinition xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<ExampleDefinition xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <ChartGroup>CreateAMultiSeriesChart</ChartGroup>
   <Title>Stacked Bar Chart</Title>
   <View>Examples/CreateMultiseriesChart/StackedBarChartExampleView.xaml</View>
   <ViewModel />
-	<ImagePath>/SciChart.Examples;component/Resources/Images/StackedBarChart.png</ImagePath>
+	<ImagePath>/SciChart.Examples;component/Resources/Images/StackedBarChart.jpg</ImagePath>
   <IconPath>IconStackedColumn</IconPath>
   <ChartTypes>Column</ChartTypes>
   <ToolTipDescription>Shows how to create stacked  bar chart</ToolTipDescription>

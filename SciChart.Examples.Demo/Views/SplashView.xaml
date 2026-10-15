@@ -36,21 +36,19 @@
                     Orientation="Vertical"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Top">
-          
-          <StackPanel Orientation="Horizontal">
-                <TextBlock x:Name="vTextBlock"
-                           FontSize="16"
-                           Margin="0,0,5,0"
-                           Foreground="#E3E3E3"
-                           HorizontalAlignment="Center"/>
 
-                <TextBlock FontSize="16"
-                           Foreground="#E3E3E3"
-                           HorizontalAlignment="Center">
-                    <Run Text="Find out more at"/>
-                    <Hyperlink Foreground="{DynamicResource HyperlinkForegroundBrush}" Cursor="Hand" Click="Hyperlink_OnClick">www.scichart.com/blog</Hyperlink>
-                </TextBlock>
-            </StackPanel>
+            <TextBlock FontSize="16"
+                       TextWrapping="Wrap"
+                       TextAlignment="Center"
+                       Foreground="#E3E3E3"                       
+                       HorizontalAlignment="Center"
+                       tz:Transitionz.Opacity="{tz:OpacityParams From=0, To=1, Duration=500, BeginTime=0}">
+                <Run x:Name="ProductTextRun"/>
+                <Run Text="Find out more at"/>
+                <Hyperlink Foreground="{DynamicResource HyperlinkForegroundBrush}" Cursor="Hand" Click="Hyperlink_OnClick">
+                    <Run Text="{x:Static exp:Urls.ReleaseArticle}"/>
+                </Hyperlink>
+            </TextBlock>
 
             <TextBlock FontSize="16"
                        Margin="0,10"

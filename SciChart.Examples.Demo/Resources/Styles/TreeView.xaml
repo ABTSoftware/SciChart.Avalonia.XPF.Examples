@@ -62,12 +62,7 @@
 
                         <ItemsPresenter x:Name="PART_ItemsHost"
                                         Grid.Row="1"
-                                        Grid.ColumnSpan="2"
-                                        Opacity="0">
-                            <ItemsPresenter.LayoutTransform>
-                                <ScaleTransform ScaleY="0" />
-                            </ItemsPresenter.LayoutTransform>
-                        </ItemsPresenter>
+                                        Grid.ColumnSpan="2" />
                     </Grid>
 
                     <ControlTemplate.Triggers>
@@ -81,36 +76,6 @@
                                     <RotateTransform Angle="90" />
                                 </Setter.Value>
                             </Setter>
-                            <MultiTrigger.EnterActions>
-                                <BeginStoryboard>
-                                    <Storyboard>
-                                        <DoubleAnimation Storyboard.TargetName="PART_ItemsHost"
-                                                         Storyboard.TargetProperty="LayoutTransform.ScaleY"
-                                                         To="1"
-                                                         Duration="0:0:0.3" />
-
-                                        <DoubleAnimation Storyboard.TargetName="PART_ItemsHost"
-                                                         Storyboard.TargetProperty="Opacity"
-                                                         To="1"
-                                                         Duration="0:0:0.5" />
-                                    </Storyboard>
-                                </BeginStoryboard>
-                            </MultiTrigger.EnterActions>
-                            <MultiTrigger.ExitActions>
-                                <BeginStoryboard>
-                                    <Storyboard>
-                                        <DoubleAnimation Storyboard.TargetName="PART_ItemsHost"
-                                                         Storyboard.TargetProperty="LayoutTransform.ScaleY"
-                                                         To="0"
-                                                         Duration="0:0:0.3" />
-
-                                        <DoubleAnimation Storyboard.TargetName="PART_ItemsHost"
-                                                         Storyboard.TargetProperty="Opacity"
-                                                         To="0"
-                                                         Duration="0:0:0.5" />
-                                    </Storyboard>
-                                </BeginStoryboard>
-                            </MultiTrigger.ExitActions>
                         </MultiTrigger>
                         <Trigger Property="HasItems" Value="False">
                             <Setter TargetName="Expander" Property="Visibility" Value="Collapsed" />

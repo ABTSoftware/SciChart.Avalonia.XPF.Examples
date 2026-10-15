@@ -1,7 +1,7 @@
-﻿<ExampleDefinition xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<ExampleDefinition xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <View>Examples/InspectDatapoints/SeriesWithMetadata/SeriesWithMetadata.xaml</View>
   <ViewModel />
-	<ImagePath>/SciChart.Examples;component/Resources/Images/SeriesWithMetadata.png</ImagePath>
+	<ImagePath>/SciChart.Examples;component/Resources/Images/SeriesWithMetadata.jpg</ImagePath>
   <IconPath>IconCursor</IconPath>
   <ToolTipDescription>Demonstrates how to use metadata with series.</ToolTipDescription>
   <Description>

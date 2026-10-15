@@ -1,9 +1,28 @@
-﻿using System;
+﻿// *************************************************************************************
+// SCICHART® Copyright SciChart Ltd. 2011-2026. All rights reserved.
+//
+// Web:     http://www.scichart.com
+// Support: support@scichart.com
+// Sales:   sales@scichart.com
+//
+// Navigator.cs is part of the SCICHART® Examples. Permission is hereby granted
+// to modify, create derivative works, distribute and publish any part of this source
+// code whether for commercial, private or personal use.
+//
+// The SCICHART® examples are distributed in the hope that they will be useful, but
+// without any warranty. It is provided "AS IS" without warranty of any kind, either
+// expressed or implied.
+// *************************************************************************************
+using System;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Threading;
 using Unity;
 using SciChart.Charting.HistoryManagers;
+#if !XPF
+using SciChart.Examples.Demo.Controls.BusyIndicator;
+#endif
 using SciChart.Examples.Demo.Helpers.UsageTracking;
 using SciChart.Examples.Demo.ViewModels;
 using SciChart.UI.Bootstrap;
@@ -69,7 +88,7 @@ namespace SciChart.Examples.Demo.Helpers.Navigation
 
         #endregion
 
-        public const string ExampleNavigationPattern = AppConstants.ComponentPath + "Examples/{example}";
+        public const string ExampleNavigationPattern = AppConstants.ExamplesComponentPath + "Examples/{example}";
 
         private readonly IUsageCalculator _usageCalculator;
         private readonly NavigationHistory _history;
@@ -78,6 +97,8 @@ namespace SciChart.Examples.Demo.Helpers.Navigation
         private readonly ExamplesFrame _examplesFrame;
 
         private ApplicationPageWrapper _currentExample;
+
+        private Example _pendingExample;
 
         public AppPage CurrentPage { get; protected set; }
         public AppPage CurrentExample => _currentExample?.AppPage;
@@ -96,7 +117,16 @@ namespace SciChart.Examples.Demo.Helpers.Navigation
 
         public void Navigate(Example example)
         {
-            if (CurrentPage.PageId == AppPage.ExamplesPageId)
+#if !XPF
+            // Also covers GoBack, GoForward and opening the first example from the home page, none of which go through
+            // Module.NavigateToExampleCommand. Show() is idempotent, so the overlap with it is harmless
+            BusyIndicatorService.Instance.Show();
+#endif
+
+            // CurrentPage stays null until the main frame reports its first navigation, and a caller coming from
+            // outside the UI - the UI Automation ValuePattern the smoke tests navigate with - can arrive before
+            // that
+            if (CurrentPage?.PageId == AppPage.ExamplesPageId)
             {
                 if (CanNavigateTo(example))
                 {
@@ -106,7 +136,20 @@ namespace SciChart.Examples.Demo.Helpers.Navigation
             }
             else
             {
-                Navigate(AppPage.ExamplesPageId);
+                // The examples frame does not exist yet, so remember what was asked for and finish the journey
+                // in OnMainFrameAfterNavigation. Without this the example is dropped and the application just
+                // sits on the examples page - which is what a ValuePattern caller gets on the first navigation
+                // after launch, since ExampleView carries the example through a OneTime binding that a caller
+                // arriving from outside the UI cannot rely on having been evaluated yet
+                var navigationAlreadyPending = _pendingExample != null;
+                _pendingExample = example;
+
+                // Re-issuing this would restart the navigation already in flight, and a caller that retries -
+                // as the smoke tests do while waiting for the example - would keep it permanently restarting
+                if (!navigationAlreadyPending)
+                {
+                    Navigate(AppPage.ExamplesPageId);
+                }
             }
         }
 
@@ -170,9 +213,7 @@ namespace SciChart.Examples.Demo.Helpers.Navigation
                 lastExampleView.View = null;
             }
 
-            GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
-            GC.WaitForPendingFinalizers();
-            GC.Collect();
+            ScheduleMemoryCleanup();
         }
 
         public void GoForward()
@@ -213,9 +254,7 @@ namespace SciChart.Examples.Demo.Helpers.Navigation
                 lastExampleView.View = null;
             }
 
-            GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
-            GC.WaitForPendingFinalizers();
-            GC.Collect();
+            ScheduleMemoryCleanup();
         }
 
         private void OnExamplesFrameBeforeNavigation()
@@ -224,9 +263,7 @@ namespace SciChart.Examples.Demo.Helpers.Navigation
             {
                 _currentExample.View = null;
 
-                GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
-                GC.WaitForPendingFinalizers();
-                GC.Collect();
+                ScheduleMemoryCleanup();
             }
         }
 
@@ -252,6 +289,11 @@ namespace SciChart.Examples.Demo.Helpers.Navigation
             }
 
             _usageCalculator.UpdateUsage(CurrentExample);
+
+#if !XPF
+            // Outside the view != null check, so that a failed navigation also clears the indicator
+            BusyIndicatorService.Instance.HideWhenRendered();
+#endif
         }
 
         private void OnMainFrameAfterNavigation()
@@ -263,6 +305,18 @@ namespace SciChart.Examples.Demo.Helpers.Navigation
             NavigateToHomeCommand.RaiseCanExecuteChanged();
 
             _usageCalculator.UpdateUsage(CurrentPage);
+
+            // Deliver an example that was requested before the examples page existed. Cleared unconditionally:
+            // once the main frame has landed somewhere else, the request is stale
+            var pendingExample = _pendingExample;
+            _pendingExample = null;
+
+            if (pendingExample != null && CurrentPage?.PageId == AppPage.ExamplesPageId)
+            {
+                // A no-op when ExampleView's ExampleStartPage binding already opened it - CanNavigateTo(Example)
+                // reports false once the examples frame is on that uri
+                Navigate(pendingExample);
+            }
         }
 
         public AppPage GetCurrentExample()
@@ -364,12 +418,36 @@ namespace SciChart.Examples.Demo.Helpers.Navigation
                 lastExampleView.View = null;
             }
 
-            GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
-            GC.WaitForPendingFinalizers();
-            GC.Collect();
+            ScheduleMemoryCleanup();
         }
 
         #endregion
+
+        private static bool _memoryCleanupPending;
+
+        /// <summary>
+        /// Requests a background (non-blocking) Gen2 collection to release the memory held by the previous example.
+        /// Posted at idle priority so that switching examples is not stalled by a blocking collect on the UI thread.
+        /// We deliberately do not call <see cref="GC.WaitForPendingFinalizers"/> here: the finalizer thread drains the
+        /// queue on its own (which is what releases the SciChart native/GPU resources), whereas waiting for it on the
+        /// UI thread freezes the application and can deadlock against locks held by those finalizers.
+        /// </summary>
+        private static void ScheduleMemoryCleanup()
+        {
+            if (_memoryCleanupPending) return;
+
+            var dispatcher = Application.Current?.Dispatcher;
+            if (dispatcher == null) return;
+
+            // Coalesces rapid example switching into a single collection
+            _memoryCleanupPending = true;
+
+            dispatcher.BeginInvoke(DispatcherPriority.ApplicationIdle, new Action(() =>
+            {
+                _memoryCleanupPending = false;
+                GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced, false); //NOSONAR
+            }));
+        }
 
         public void Push(Example example)
         {

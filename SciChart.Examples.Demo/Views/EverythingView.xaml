@@ -9,30 +9,19 @@
              xmlns:views="clr-namespace:SciChart.Examples.Demo.Views"
              AutomationProperties.AutomationId="EverythingView">
 
-    <UserControl.Resources>
-        <converters:EnumDescriptionConverter x:Key="EnumDescriptionConverter" />
-        <converters:BusyToBlurEffectConverter x:Key="BusyToBlurEffectConverter" BlurRadius="15" />
-    </UserControl.Resources>
+    <controls:ScrollNavigatedItemsControl AutomationProperties.AutomationId="ExamplesItemsControl"
+                                          ItemTemplate="{StaticResource EverythingDataTemplate}"
+                                          ItemsSource="{Binding Path=EverythingViewModel.EverythingSource, Mode=OneWay}"
+                                          NavigatedItem="{Binding EverythingViewModel.NavigatedTileItem, Mode=TwoWay}"
+                                          Style="{StaticResource ItemsControlVirtualizingStyle}">
 
-    <Grid>
-        <Border Effect="{Binding Path=IsBusy, Mode=OneWay, Converter={StaticResource BusyToBlurEffectConverter}}">
-            <controls:ItemsControlWithUIAutomation AutomationProperties.AutomationId="ExamplesWrapPanel"
-                                                   ItemTemplate="{StaticResource EverythingDataTemplate}"
-                                                   ItemsSource="{Binding Path=EverythingViewModel.EverythingSource, Mode=OneWay}"
-                                                   NavigatedItem="{Binding EverythingViewModel.NavigatedTileItem, Mode=TwoWay}">
-                <controls:ItemsControlWithUIAutomation.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <WrapPanel Orientation="Horizontal" />
-                    </ItemsPanelTemplate>
-                </controls:ItemsControlWithUIAutomation.ItemsPanel>
-            </controls:ItemsControlWithUIAutomation>
-        </Border>
-
-        <!-- <mahapps:MetroProgressBar HorizontalAlignment="Stretch"
-                                  VerticalAlignment="Top"
-                                  EllipseDiameter="4"
-                                  Foreground="{DynamicResource ExampleListBusyIndeterminateBrush}"
-                                  IsIndeterminate="True"
-                                  Visibility="{Binding Path=IsBusy, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" /> -->
-    </Grid>
+        <controls:ScrollNavigatedItemsControl.ItemsPanel>
+            <ItemsPanelTemplate>
+                <controls:VirtualizingWrapPanel ItemWidth="300"
+                                                ItemHeight="210"
+                                                FullWidthItemHeight="46"
+                                                CacheLengthRatio="0.5"/>
+            </ItemsPanelTemplate>
+        </controls:ScrollNavigatedItemsControl.ItemsPanel>
+    </controls:ScrollNavigatedItemsControl>
 </UserControl>

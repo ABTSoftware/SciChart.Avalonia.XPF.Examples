@@ -1,8 +1,9 @@
 <!-- In Xpf.Sdk 1.6.0, VxTextureBrush renders gradient colors incorrectly -->
 <Project Sdk="Xpf.Sdk/1.4.0-cibuild001853">
   <PropertyGroup>
+    <RootNamespace>SciChart.Examples.Demo</RootNamespace>
     <OutputType>WinExe</OutputType>
-    <TargetFrameworks>net6.0-windows</TargetFrameworks>
+    <TargetFramework>net6.0-windows</TargetFramework>
     <UseWPF>True</UseWPF>
     <UseWindowsForms>True</UseWindowsForms>
     <ApplicationIcon>SciChartIconAvalonia256x256.ico</ApplicationIcon>
@@ -10,31 +11,50 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <DefineConstants>$(DefineConstants);XPF</DefineConstants>
     <OutputPath>bin\$(Configuration)</OutputPath>
+    <SciChartUsageServiceAddress>http://licensing.scichart.com</SciChartUsageServiceAddress>
   </PropertyGroup>
   <ItemGroup>
     <RuntimeHostConfigurationOption Include="AvaloniaUI.Xpf.LicenseKey" Value="YOUR_LICENSE_KEY" />
+  </ItemGroup>
+  <!-- Usage tracking server. Local builds report to the dev server (the UsageServiceAddress default in
+	     Properties\Settings.settings); the deploy script passes -p:SciChartUsageServiceAddress=<production url>,
+	     which is embedded in runtimeconfig.json and read by UsageClientConfiguration. -->
+  <ItemGroup Condition="'$(SciChartUsageServiceAddress)' != ''">
+    <RuntimeHostConfigurationOption Include="SciChart.Examples.Demo.UsageServiceAddress" Value="$(SciChartUsageServiceAddress)" />
+  </ItemGroup>
+  <!-- App.config is shared with the WPF demo. On .NET 6 binding redirects and supportedRuntime are ignored and the usage
+	     address comes from above, so don't emit SciChart.Examples.Demo.Xpf.dll.config next to the exe. Its log4net section
+	     is still needed: App.config is embedded instead, and App.ConfigureLogging reads that section from the resource. -->
+  <ItemGroup>
+    <None Remove="App.config" />
+    <EmbeddedResource Include="App.config" LogicalName="SciChart.Examples.Demo.App.config" />
   </ItemGroup>
   <ItemGroup>
     <Page Remove="MainWindow.xaml*" />
     <Content Remove="MainWindow.xaml*" />
     <Compile Remove="MainWindow.xaml*" />
   </ItemGroup>
+  <!-- The busy indicator runs a second WPF Dispatcher thread with its own Window.
+	     Avalonia XPF has a single UI thread: the off-thread Window poisons the
+	     System.Windows.Controls.Control type initializer (SystemColors goes through
+	     the Avalonia dispatcher, which throws 'Call from invalid thread'). WPF-only. -->
   <ItemGroup>
-    <None Remove="Helpers\HtmlExport\*" />
-    <None Remove="Helpers\ProjectExport\Templates\*" />
-    <None Remove="Resources\Fonts\*" />
+    <Page Remove="Controls\BusyIndicator\**" />
+    <Content Remove="Controls\BusyIndicator\**" />
+    <Compile Remove="Controls\BusyIndicator\**" />
+    <None Remove="Controls\BusyIndicator\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Helpers\HtmlExport\*.html" />
+    <None Remove="Helpers\ProjectExport\Templates\*.txt" />
     <None Remove="Resources\codeStopwords.dat" />
     <None Remove="Resources\stopwords.dat" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Helpers\HtmlExport\*" />
-    <EmbeddedResource Include="Helpers\ProjectExport\Templates\*" />
+    <EmbeddedResource Include="Helpers\HtmlExport\*.html" />
+    <EmbeddedResource Include="Helpers\ProjectExport\Templates\*.txt" />
     <EmbeddedResource Include="Resources\codeStopwords.dat" />
     <EmbeddedResource Include="Resources\stopwords.dat" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Fonts\Marlett.ttf" />
-    <Resource Include="Resources\Fonts\NEUROPOL.ttf" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="DotNetProjects.WpfToolkit.Input" Version="6.0.90" />
@@ -45,7 +65,15 @@
     <PackageReference Include="System.IO.Packaging" Version="8.0.1" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SciChart.Examples\SciChart.Examples.csproj" />
+    <ProjectReference Include="..\SciChart.Examples\SciChart.Examples.Xpf.csproj" />
+  </ItemGroup>
+  <!-- Internal dev tools (graphics backend/adapter selection, benchmark), used only when the project is next to
+	     the Demo -->
+  <PropertyGroup Condition="Exists('..\SciChart.Examples.Demo.DevTools\SciChart.Examples.Demo.DevTools.Xpf.csproj')">
+    <DefineConstants>$(DefineConstants);SCICHART_DEVTOOLS</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup Condition="Exists('..\SciChart.Examples.Demo.DevTools\SciChart.Examples.Demo.DevTools.Xpf.csproj')">
+    <ProjectReference Include="..\SciChart.Examples.Demo.DevTools\SciChart.Examples.Demo.DevTools.Xpf.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Properties\Settings.Designer.cs">
@@ -60,7 +88,21 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
+  <!--
+		SciChart's native libraries must stay on disk in runtimes\<rid>\native\ next to the exe: on XPF the
+		SciChart native loader only probes <exe folder>\runtimes\<rid>\native\ and <exe folder>\, never the
+		folder .NET extracts bundled native libraries to. So when the Demo is published as a single file with
+		IncludeNativeLibrariesForSelfExtract=true (all third-party natives inside the exe), these are kept out
+		of the bundle and published into that subfolder instead. Publish-only; normal builds are unaffected.
+	-->
+  <Target Name="PublishSciChartNativesToRuntimesFolder" AfterTargets="ComputeResolvedFilesToPublishList" Condition="'$(RuntimeIdentifier)' != ''">
+    <ItemGroup>
+      <_SciChartNativeToPublish Include="@(ResolvedFileToPublish)" Condition="'%(Filename)' == 'AbtLicensingNative' or '%(Filename)' == 'VXccelEngine2D' or '%(Filename)' == 'VXccelEngine3D' or '%(Filename)' == 'VXccelEngineCommon' or '%(Filename)' == 'D3DCompiler_47'" />
+      <ResolvedFileToPublish Remove="@(_SciChartNativeToPublish)" />
+      <ResolvedFileToPublish Include="@(_SciChartNativeToPublish)" RelativePath="runtimes\$(RuntimeIdentifier)\native\%(Filename)%(Extension)" ExcludeFromSingleFile="true" />
+    </ItemGroup>
+  </Target>
   <ItemGroup>
-    <PackageReference Include="SciChart.Avalonia.XPF" Version="2.0.0.28304" />
+    <PackageReference Include="SciChart.Avalonia.XPF" Version="3.0.0.10777" />
   </ItemGroup>
 </Project>

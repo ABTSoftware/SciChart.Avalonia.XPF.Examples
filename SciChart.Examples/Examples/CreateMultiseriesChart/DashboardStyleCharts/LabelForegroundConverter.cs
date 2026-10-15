@@ -1,17 +1,17 @@
 ﻿// *************************************************************************************
-// SCICHART® Copyright SciChart Ltd. 2011-2025. All rights reserved.
-//  
-// Web: http://www.scichart.com
-//   Support: support@scichart.com
-//   Sales:   sales@scichart.com
-// 
+// SCICHART® Copyright SciChart Ltd. 2011-2026. All rights reserved.
+//
+// Web:     http://www.scichart.com
+// Support: support@scichart.com
+// Sales:   sales@scichart.com
+//
 // LabelForegroundConverter.cs is part of the SCICHART® Examples. Permission is hereby granted
 // to modify, create derivative works, distribute and publish any part of this source
-// code whether for commercial, private or personal use. 
-// 
+// code whether for commercial, private or personal use.
+//
 // The SCICHART® examples are distributed in the hope that they will be useful, but
 // without any warranty. It is provided "AS IS" without warranty of any kind, either
-// expressed or implied. 
+// expressed or implied.
 // *************************************************************************************
 using System;
 using System.Globalization;
@@ -27,9 +27,8 @@ namespace SciChart.Examples.Examples.CreateMultiseriesChart.DashboardStyleCharts
             var color = (Color) value;
 
             var greyScale = color.R * 0.299 + color.G * 0.587 + color.B * 0.114;
-            var newColor = greyScale > 128 ? Colors.Black : Colors.White;
 
-            return newColor;
+            return greyScale > 128 ? Brushes.Black : Brushes.White;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

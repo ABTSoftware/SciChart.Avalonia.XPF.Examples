@@ -1,7 +1,7 @@
-﻿<ExampleDefinition xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<ExampleDefinition xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <View>Examples/CreateMultiSeriesChart/StackedMountainChartExampleView.xaml</View>
   <ViewModel />
-	<ImagePath>/SciChart.Examples;component/Resources/Images/StackedMountainChart.png</ImagePath>
+	<ImagePath>/SciChart.Examples;component/Resources/Images/StackedMountainChart.jpg</ImagePath>
   <IconPath>IconStackedMountain</IconPath>
   <ToolTipDescription>Shows how to create stacked mountain chart</ToolTipDescription>
   <Description>

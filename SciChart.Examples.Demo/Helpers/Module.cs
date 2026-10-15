@@ -1,9 +1,27 @@
-﻿using System;
+﻿// *************************************************************************************
+// SCICHART® Copyright SciChart Ltd. 2011-2026. All rights reserved.
+//
+// Web:     http://www.scichart.com
+// Support: support@scichart.com
+// Sales:   sales@scichart.com
+//
+// Module.cs is part of the SCICHART® Examples. Permission is hereby granted
+// to modify, create derivative works, distribute and publish any part of this source
+// code whether for commercial, private or personal use.
+//
+// The SCICHART® examples are distributed in the hope that they will be useful, but
+// without any warranty. It is provided "AS IS" without warranty of any kind, either
+// expressed or implied.
+// *************************************************************************************
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
 using SciChart.Charting.Common.Helpers;
+#if !XPF
+using SciChart.Examples.Demo.Controls.BusyIndicator;
+#endif
 using SciChart.Examples.Demo.Helpers.Navigation;
 using SciChart.Examples.Demo.ViewModels;
 using SciChart.UI.Bootstrap;
@@ -31,8 +49,13 @@ namespace SciChart.Examples.Demo.Helpers
         {
             NavigateToExampleCommand = new ActionCommand<Example>(example =>
             {
+#if !XPF
+                // Shown before the work starts, since everything below runs synchronously on the UI thread
+                BusyIndicatorService.Instance.Show();
+#endif
+
                 var lastExamplePage = CurrentExample != null ? CurrentExample.Page as ExampleAppPage : null;
-                
+
                 CurrentExample = example;
 
                 Navigator.Instance.Navigate(example);
@@ -44,9 +67,9 @@ namespace SciChart.Examples.Demo.Helpers
                     lastExamplePage.ViewModel = null;
                 }
 
-                GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced); //NOSONAR
-                GC.WaitForPendingFinalizers();
-                GC.Collect(); //NOSONAR
+                // NOTE: no GC here. Frame.Navigate() is asynchronous, so at this point the previous example's view is
+                // still alive and rooted in the frame - collecting now scans the whole heap and frees almost nothing.
+                // Navigator.OnExamplesFrameBeforeNavigation schedules the cleanup once the view has actually been released.
             });
         }
 

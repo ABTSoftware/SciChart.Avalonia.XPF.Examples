@@ -1,17 +1,17 @@
 ﻿// *************************************************************************************
-// SCICHART® Copyright SciChart Ltd. 2011-2025. All rights reserved.
-//  
-// Web: http://www.scichart.com
-//   Support: support@scichart.com
-//   Sales:   sales@scichart.com
-// 
-// SelectScatterPoint3DChart.xaml.cs is part of the SCICHART® Examples. Permission is hereby granted
+// SCICHART® Copyright SciChart Ltd. 2011-2026. All rights reserved.
+//
+// Web:     http://www.scichart.com
+// Support: support@scichart.com
+// Sales:   sales@scichart.com
+//
+// AxisBindingAndSeriesBindingViewModel.cs is part of the SCICHART® Examples. Permission is hereby granted
 // to modify, create derivative works, distribute and publish any part of this source
-// code whether for commercial, private or personal use. 
-// 
+// code whether for commercial, private or personal use.
+//
 // The SCICHART® examples are distributed in the hope that they will be useful, but
 // without any warranty. It is provided "AS IS" without warranty of any kind, either
-// expressed or implied. 
+// expressed or implied.
 // *************************************************************************************
 using System;
 using System.Windows.Media;
@@ -34,14 +34,15 @@ namespace SciChart.Examples.Examples.Charts3D.SciChartWithMvvm
             YAxis = new TimeSpanAxis3DViewModel
             {
                 StyleKey = "CustomTimeSpan3DStyle",
-                FontFamily = new FontFamily("Broadway"),
+                FontFamily = new FontFamily("Impact"),
                 VisibleRange = new DateRange(DateTime.MinValue, DateTime.MinValue.AddSeconds(10))
             };
 
             XAxis = new DateTimeAxis3DViewModel
             {
                 StyleKey = "CustomDateTime3DStyle",
-                FontFamily = new FontFamily("Comic Sans MS")
+                FontFamily = new FontFamily("Comic Sans MS"),
+                VisibleRange = new DateRange(new DateTime(2024, 8, 13), new DateTime(2024, 8, 15))
             };
 
             ZAxis = new NumericAxis3DViewModel

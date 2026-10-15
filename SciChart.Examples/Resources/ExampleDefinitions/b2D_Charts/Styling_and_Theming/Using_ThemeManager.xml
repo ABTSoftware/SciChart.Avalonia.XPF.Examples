@@ -1,7 +1,7 @@
-﻿<ExampleDefinition xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<ExampleDefinition xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<View>Examples/StyleAChart/UsingThemeManager/ChangeTheme.xaml</View>
 	<ViewModel/>
-	<ImagePath>/SciChart.Examples;component/Resources/Images/UsingThemeManager.png</ImagePath>
+	<ImagePath>/SciChart.Examples;component/Resources/Images/UsingThemeManager.jpg</ImagePath>
 	<IconPath>IconThemes</IconPath>
 	<ShowcaseDescription>SciChart Ships with 8 stunning themes, which you can apply to your charts with a single line of code. This example showcases the themes, and how they affect default Cursor, Zoom, Axis, Grid and Series colors.</ShowcaseDescription>
 	<ToolTipDescription>Demonstrates easy Xaml Styling via the ThemeManager. SciChart includes six pre-defined Themes, which provide chart pane, grid-line brushes and default colors for Renderable Series</ToolTipDescription>

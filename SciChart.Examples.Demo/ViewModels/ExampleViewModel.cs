@@ -1,4 +1,20 @@
-﻿using System;
+﻿// *************************************************************************************
+// SCICHART® Copyright SciChart Ltd. 2011-2026. All rights reserved.
+//
+// Web:     http://www.scichart.com
+// Support: support@scichart.com
+// Sales:   sales@scichart.com
+//
+// ExampleViewModel.cs is part of the SCICHART® Examples. Permission is hereby granted
+// to modify, create derivative works, distribute and publish any part of this source
+// code whether for commercial, private or personal use.
+//
+// The SCICHART® examples are distributed in the hope that they will be useful, but
+// without any warranty. It is provided "AS IS" without warranty of any kind, either
+// expressed or implied.
+// *************************************************************************************
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using SciChart.Core.Extensions;
@@ -122,13 +138,17 @@ namespace SciChart.Examples.Demo.ViewModels
                 _selectedExample = value;
                 ServiceLocator.Container.Resolve<IMainWindowViewModel>().SelectedExample = value;
 
+                // Close the Source Code pane before the new file is selected, so that switching examples
+                // never triggers a syntax highlight of code the user is not looking at
+                ShowExample = true;
+
                 SelectedFile = _selectedExample?.SourceFiles.FirstOrDefault() ?? default;
                 OnPropertyChanged("SelectedExample");
 
                 FeedbackViewModel?.ExampleChanged();
                 BreadCrumbViewModel?.UpdateSelectedExample();
 
-                ShowExample = true;
+                IsInfoVisible = true;
             }
         }
 
@@ -200,6 +220,7 @@ namespace SciChart.Examples.Demo.ViewModels
                 {
                     _showSourceCode = value;
                     OnPropertyChanged("ShowSourceCode");
+                    OnPropertyChanged("VisibleSourceCode");
 
                     ShowExample = !ShowSourceCode;
                     if (_showSourceCode && Usage != null)
@@ -227,9 +248,16 @@ namespace SciChart.Examples.Demo.ViewModels
             {
                 _selectedFile = value;
                 OnPropertyChanged("SelectedFile");
+                OnPropertyChanged("VisibleSourceCode");
                 OnPropertyChanged("SourceOpacityParams");
             }
         }
+
+        /// <summary>
+        /// Gets the source code that the Source Code pane should syntax-highlight. Returns <see cref="string.Empty"/>
+        /// while the pane is hidden, so that the expensive colorization only runs when the user can actually see it.
+        /// </summary>
+        public string VisibleSourceCode => _showSourceCode ? _selectedFile.Value ?? string.Empty : string.Empty;
 
         public IOpacityParams SourceOpacityParams => new OpacityParams { From = 0, To = 1, Duration = 100, TransitionOn = TransitionOn.Once };
 

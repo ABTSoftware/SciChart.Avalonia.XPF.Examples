@@ -1,4 +1,20 @@
-﻿using SciChart.UI.Bootstrap;
+﻿// *************************************************************************************
+// SCICHART® Copyright SciChart Ltd. 2011-2026. All rights reserved.
+//
+// Web:     http://www.scichart.com
+// Support: support@scichart.com
+// Sales:   sales@scichart.com
+//
+// UsageClientConfiguration.cs is part of the SCICHART® Examples. Permission is hereby granted
+// to modify, create derivative works, distribute and publish any part of this source
+// code whether for commercial, private or personal use.
+//
+// The SCICHART® examples are distributed in the hope that they will be useful, but
+// without any warranty. It is provided "AS IS" without warranty of any kind, either
+// expressed or implied.
+// *************************************************************************************
+using System;
+using SciChart.UI.Bootstrap;
 
 namespace SciChart.Examples.Demo.Helpers.UsageTracking
 {
@@ -10,6 +26,11 @@ namespace SciChart.Examples.Demo.Helpers.UsageTracking
     [ExportType(typeof(IUsageClientConfiguration), CreateAs.Singleton)]
     public class UsageClientConfiguration : IUsageClientConfiguration
     {
+#if XPF
+        // Set at publish time (see SciChartUsageServiceAddress in SciChart.Examples.Demo.Xpf.csproj); local builds fall back to the dev server
+        public string Address => AppContext.GetData("SciChart.Examples.Demo.UsageServiceAddress") as string ?? Properties.Settings.Default.UsageServiceAddress;
+#else
         public string Address => Properties.Settings.Default.UsageServiceAddress;
+#endif
     } 
 }

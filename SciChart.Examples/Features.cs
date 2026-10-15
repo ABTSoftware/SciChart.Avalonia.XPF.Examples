@@ -1,23 +1,24 @@
 ﻿// *************************************************************************************
-// SCICHART® Copyright SciChart Ltd. 2011-2025. All rights reserved.
-//  
-// Web: http://www.scichart.com
-//   Support: support@scichart.com
-//   Sales:   sales@scichart.com
-// 
+// SCICHART® Copyright SciChart Ltd. 2011-2026. All rights reserved.
+//
+// Web:     http://www.scichart.com
+// Support: support@scichart.com
+// Sales:   sales@scichart.com
+//
 // Features.cs is part of the SCICHART® Examples. Permission is hereby granted
 // to modify, create derivative works, distribute and publish any part of this source
-// code whether for commercial, private or personal use. 
-// 
+// code whether for commercial, private or personal use.
+//
 // The SCICHART® examples are distributed in the hope that they will be useful, but
 // without any warranty. It is provided "AS IS" without warranty of any kind, either
-// expressed or implied. 
+// expressed or implied.
 // *************************************************************************************
 namespace SciChart.Examples
 {
     public enum Features
     {
         Annotations,
+        AspectRatio,
         Area,
         Axis,
         Band,
@@ -31,6 +32,7 @@ namespace SciChart.Examples
         Custom,
         Dashed,
         DataSeries,
+        DataLabelProvider,
         ErrorBars,
         Events,
         Fan,
@@ -38,6 +40,7 @@ namespace SciChart.Examples
         Gaps,
         Gridlines,
         Heatmap,
+        VectorField,
         HighQuality,
         HiLow,
         HitTest,
@@ -49,6 +52,7 @@ namespace SciChart.Examples
         Log10,
         Logarithmic,
         LogE,
+        Map,
         Mountain,
         Mousewheel,
         MultipleAxis,
@@ -59,6 +63,8 @@ namespace SciChart.Examples
         Pan,
         Performance,
         PointCloud3D,
+        SurfaceMesh3D,
+        CustomMesh3D,
         PointMarker,
         Polar,
         Realtime,

@@ -1,7 +1,7 @@
-﻿<ExampleDefinition xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<ExampleDefinition xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <View>Examples/ModifyAxisBehaviour/ShiftedAxes/ShiftedAxes.xaml</View>
   <ViewModel />
-	<ImagePath>/SciChart.Examples;component/Resources/Images/CentralXYAxes.png</ImagePath>
+	<ImagePath>/SciChart.Examples;component/Resources/Images/CentralXYAxes.jpg</ImagePath>
   <IconPath>IconAxis3D</IconPath>
   <ToolTipDescription>Shows how to create chart with shifted X and Y axes</ToolTipDescription>
   <Description>

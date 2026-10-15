@@ -1,4 +1,19 @@
-﻿using System;
+﻿// *************************************************************************************
+// SCICHART® Copyright SciChart Ltd. 2011-2026. All rights reserved.
+//
+// Web:     http://www.scichart.com
+// Support: support@scichart.com
+// Sales:   sales@scichart.com
+//
+// MainWindowViewModel.cs is part of the SCICHART® Examples. Permission is hereby granted
+// to modify, create derivative works, distribute and publish any part of this source
+// code whether for commercial, private or personal use.
+//
+// The SCICHART® examples are distributed in the hope that they will be useful, but
+// without any warranty. It is provided "AS IS" without warranty of any kind, either
+// expressed or implied.
+// *************************************************************************************
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -152,10 +167,26 @@ namespace SciChart.Examples.Demo
         {
             get
             {
-            	return VisualXcceleratorEngine.SupportsHardwareAcceleration
-            		? (VisualXcceleratorEngine.ActiveGraphicsAPI == VxGraphicsAPI.OpenGL ? "OpenGL" : "DirectX")
-                    : "Not Available";
+                if (VisualXcceleratorEngine.SupportsHardwareAcceleration)
+                {
+                    if (VisualXcceleratorEngine.GraphicsApiInfo is DirectXGraphicsApiInfo dxInfo)
+                    {
+                        return $"{dxInfo.Name}{(dxInfo.DirectXMode == DirectXMode.DirectX12 ? 12 : 11)}";
+                    }
+                    return VisualXcceleratorEngine.GraphicsApiInfo?.Name ?? "Not Available";
+                }
+                return "Not Available";
             }
+        }
+
+        /// <summary>
+        /// Re-reads the active graphics API for the status bar. Call (async, off the
+        /// engine-restart stack) after a live renderer switch on Linux XPF so the
+        /// "Hardware Acceleration" label reflects the new backend.
+        /// </summary>
+        public void RefreshHardwareAccelerationInfo()
+        {
+            OnPropertyChanged(VXHardwareAcceleration, nameof(VXHardwareAcceleration));
         }
 
         public bool SearchBoxEnabled

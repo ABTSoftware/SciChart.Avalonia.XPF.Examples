@@ -1,7 +1,7 @@
-﻿<ExampleDefinition xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<ExampleDefinition xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <View>Examples/CreateMultiSeriesChart/DashboardStylePolarCharts/DashboardStylePolarChartsView.xaml</View>
   <ViewModel>Examples.CreateMultiseriesChart.DashboardStylePolarCharts.DashboardStylePolarChartsViewModel</ViewModel>
-	<ImagePath>/SciChart.Examples;component/Resources/Images/DashboardPolarCharts.png</ImagePath>
+	<ImagePath>/SciChart.Examples;component/Resources/Images/DashboardPolarCharts.jpg</ImagePath>
   <IconPath>IconPolar</IconPath>
   <ToolTipDescription>Shows different renderable series in polar chart</ToolTipDescription>
   <Description>

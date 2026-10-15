@@ -1,17 +1,17 @@
 ﻿// *************************************************************************************
-// SCICHART® Copyright SciChart Ltd. 2011-2025. All rights reserved.
-//  
-// Web: http://www.scichart.com
-//   Support: support@scichart.com
-//   Sales:   sales@scichart.com
-// 
+// SCICHART® Copyright SciChart Ltd. 2011-2026. All rights reserved.
+//
+// Web:     http://www.scichart.com
+// Support: support@scichart.com
+// Sales:   sales@scichart.com
+//
 // DashboardStyleChartsViewModel.cs is part of the SCICHART® Examples. Permission is hereby granted
 // to modify, create derivative works, distribute and publish any part of this source
-// code whether for commercial, private or personal use. 
-// 
+// code whether for commercial, private or personal use.
+//
 // The SCICHART® examples are distributed in the hope that they will be useful, but
 // without any warranty. It is provided "AS IS" without warranty of any kind, either
-// expressed or implied. 
+// expressed or implied.
 // *************************************************************************************
 using System;
 using System.Collections.Generic;
@@ -47,23 +47,23 @@ namespace SciChart.Examples.Examples.CreateMultiseriesChart.DashboardStyleCharts
 
         public IViewportManager ViewportManager
         {
-            get { return _viewportManager; }
+            get => _viewportManager;
         }
 
         public List<SpacingMode> SpacingModes { get; set; }
 
         public List<ChartTypeViewModel> ChartTypesSource
         {
-            get { return _chartTypesSource; }
+            get => _chartTypesSource;
         }
 
         public ChartTypeViewModel CurrentChartType
         {
-            get { return _currentChartType; }
+            get => _currentChartType;
             set
             {
                 _currentChartType = value;
-                OnPropertyChanged("CurrentChartType");             
+                OnPropertyChanged(nameof(CurrentChartType));             
    
                 // Invoke AnimateZoomExtents after binding engine has stabilised 
                 _viewportManager.BeginInvoke(() =>
@@ -76,22 +76,22 @@ namespace SciChart.Examples.Examples.CreateMultiseriesChart.DashboardStyleCharts
 
         public int SelectedChartIndex
         {
-            get { return _selectedChartIndex; }
+            get => _selectedChartIndex;
             set
             {
                 _selectedChartIndex = value;
-                CurrentChartType = ChartTypesSource[value];
-                OnPropertyChanged("SelectedChartIndex");
-            }
-        }
 
-        public bool IsZoomExtendsAnimated
-        {
-            get { return _isZoomExtendsAnimated; }
-            set
-            {
-                _isZoomExtendsAnimated = value;
-                OnPropertyChanged("IsZoomExtendsAnimated");
+                // Build a fresh ChartTypeViewModel for the main chart rather than reusing the selected
+                // ListBox item. The ListBox preview and the main chart are separate surfaces, and a series'
+                // DataLabelProvider is a stateful, single-series object - sharing the same series ViewModels
+                // (and thus the same providers) across both surfaces makes labels render with the wrong
+                // surface's geometry. Independent ViewModels per surface keep each provider attached to one series.
+                var selected = ChartTypesSource[value];
+                var newChart = ChartTypeViewModelFactory.New(selected.ChartType, selected.IsOneHundredPercent, selected.IsSideBySide);
+
+                CurrentChartType = newChart;
+
+                OnPropertyChanged(nameof(SelectedChartIndex));
             }
         }
     }
